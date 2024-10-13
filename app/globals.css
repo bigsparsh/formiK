@@ -25,3 +25,14 @@ body {
     text-wrap: balance;
   }
 }
+
+.work {
+  font-family: var(--font-work-sans);
+}
+
+.ma {
+  font-family: var(--font-ma);
+}
+.flow {
+  font-family: var(--font-flow-circular);
+}
