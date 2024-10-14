@@ -20,7 +20,6 @@ const Landing = () => {
             <input
               type="checkbox"
               className="accent-[gray] outline-none h-5 w-5 rounded-[50%]"
-              checked
             />
             <label className="flow">Check future</label>
           </HoveringCheckbox>
@@ -29,7 +28,7 @@ const Landing = () => {
               <label>Enter name: </label>
               <input
                 type="text"
-                value="hello hi how are ?"
+                // value="hello hi how are ?"
                 className="border-4 border-white bg-transparent rounded-xl text-center outline-none"
               />
               <label>Enter gender:</label>
@@ -37,7 +36,6 @@ const Landing = () => {
                 <input
                   type="radio"
                   className="accent-[gray] outline-none h-5 w-5 rounded-[50%]"
-                  checked
                 />
                 <label className="pb-1">Male Woman</label>
               </div>

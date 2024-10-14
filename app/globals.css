@@ -27,12 +27,12 @@ body {
 }
 
 .work {
-  font-family: var(--font-work-sans);
+  font-family: var(--font-work-sans) !important;
 }
 
 .ma {
-  font-family: var(--font-ma);
+  font-family: var(--font-ma) !important;
 }
 .flow {
-  font-family: var(--font-flow-circular);
+  font-family: var(--font-flow-circular) !important;
 }

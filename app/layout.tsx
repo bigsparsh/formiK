@@ -7,16 +7,19 @@ import "./globals.css";
 const work_init = Work_Sans({
   subsets: ["latin"],
   variable: "--font-work-sans",
+  display: "swap",
 });
 const flow_init = Flow_Circular({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-flow-circular",
+  display: "swap",
 });
 const ma_init = Montserrat_Alternates({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700"],
   variable: "--font-ma",
+  display: "swap",
 });
 // const ibmSerif = IBM_Plex_Serif({
 //   subsets: ["latin"],
