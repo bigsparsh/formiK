@@ -1,6 +1,10 @@
+"use client";
+import { signIn } from "next-auth/react";
+import { useRef } from "react";
 import { FaGoogle } from "react-icons/fa";
 
 const Auth = () => {
+  const emailRef = useRef<HTMLInputElement>(null);
   return (
     <div
       className="ma"
@@ -28,10 +32,24 @@ const Auth = () => {
                 Email Address:{" "}
               </label>
               <input
-                type="text"
+                type="email"
                 className="border-2 border-white bg-transparent rounded-t-3xl rounded-br-3xl px-3 py-1 outline-none"
+                ref={emailRef}
               />
-              <button className="px-3 py-1 bg-white text-[gray] w-fit self-start rounded-b-2xl font-semibold">
+              <button
+                className="px-3 py-1 bg-white text-[gray] w-fit self-start rounded-b-2xl font-semibold"
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  if (
+                    emailRef.current?.value &&
+                    emailRef.current?.value.length > 0
+                  ) {
+                    signIn("email", {
+                      email: emailRef.current.value,
+                    });
+                    e.target.disabled = true;
+                  }
+                }}
+              >
                 Continue
               </button>
             </div>
@@ -40,10 +58,16 @@ const Auth = () => {
               <p>OR</p>
               <hr className="w-full" />
             </div>
-            <div className=" px-5 py-2 bg-white rounded-3xl m-5 text-lg flex items-center gap-3 text-[gray] w-fit self-center">
+            <button
+              className=" px-5 py-2 bg-white rounded-3xl m-5 text-lg flex items-center gap-3 text-[gray] w-fit self-center"
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                signIn("google");
+                e.target.disabled = true;
+              }}
+            >
               <FaGoogle />
               <p>Continue with Google</p>
-            </div>
+            </button>
           </div>
         </div>
       </section>
