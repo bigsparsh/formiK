@@ -21,6 +21,11 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
+  pages: {
+    signIn: "/auth",
+    verifyRequest:
+      "/auth?msg=An email has been sent to your email address use that to verify yourself.",
+  },
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
 });

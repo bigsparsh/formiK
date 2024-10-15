@@ -1,25 +1,51 @@
 "use client";
+import Toast from "@/components/Toast";
+import { AnimatePresence } from "framer-motion";
 import { signIn } from "next-auth/react";
-import { useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 
 const Auth = () => {
   const emailRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const params = useSearchParams();
+  const [toastVisibility, setToastVisibility] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (params.get("msg")) {
+      setToastVisibility(true);
+      setTimeout(() => {
+        setToastVisibility(false);
+      }, 4000);
+    }
+  }, [params]);
+
   return (
     <div
-      className="ma"
+      className="ma overflow-hidden relative"
       style={{
         background:
           " linear-gradient(#ffffff10 10%, transparent 10%) 0 0/ 15px 15px , linear-gradient(90deg, #ffffff10 10%, transparent 10%) 0 0/ 15px 15px,radial-gradient(circle at 50% 150%,white, gray)",
       }}
     >
+      <AnimatePresence>
+        {toastVisibility ? (
+          <Toast message={params.get("msg") as string} />
+        ) : null}
+      </AnimatePresence>
       <section className="flex flex-col h-screen">
         <nav className="p-10">
           <h1 className="text-4xl font-semibold tracking-tight text-white">
             formiK
           </h1>
         </nav>
-        <div className="grow grid place-items-center">
+        <div
+          className={
+            "grow grid place-items-center " +
+            (loading ? "pointer-events-none animate-pulse" : "")
+          }
+        >
           <div className="flex flex-col justify-center relative border border-[gray] bg-[gray]/30 rounded-xl w-full max-w-lg overflow-clip work mb-20">
             <h1 className="font-bold text-3xl text-[gray] bg-white/50 tracking-tight ma px-5 py-3 text-center">
               Enter your credentials
@@ -46,7 +72,7 @@ const Auth = () => {
                     signIn("email", {
                       email: emailRef.current.value,
                     });
-                    e.target.disabled = true;
+                    setLoading(true);
                   }
                 }}
               >
@@ -62,7 +88,7 @@ const Auth = () => {
               className=" px-5 py-2 bg-white rounded-3xl m-5 text-lg flex items-center gap-3 text-[gray] w-fit self-center"
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 signIn("google");
-                e.target.disabled = true;
+                setLoading(true);
               }}
             >
               <FaGoogle />
