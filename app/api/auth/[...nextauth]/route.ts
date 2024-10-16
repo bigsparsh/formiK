@@ -25,6 +25,7 @@ const handler = NextAuth({
     signIn: "/auth",
     verifyRequest:
       "/auth?msg=An email has been sent to your email address use that to verify yourself.",
+    newUser: "/dashboard",
   },
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,

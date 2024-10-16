@@ -64,7 +64,7 @@ const Auth = () => {
               />
               <button
                 className="px-3 py-1 bg-white text-[gray] w-fit self-start rounded-b-2xl font-semibold"
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                onClick={() => {
                   if (
                     emailRef.current?.value &&
                     emailRef.current?.value.length > 0
@@ -86,7 +86,7 @@ const Auth = () => {
             </div>
             <button
               className=" px-5 py-2 bg-white rounded-3xl m-5 text-lg flex items-center gap-3 text-[gray] w-fit self-center"
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              onClick={() => {
                 signIn("google");
                 setLoading(true);
               }}
