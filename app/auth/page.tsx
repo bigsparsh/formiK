@@ -1,8 +1,8 @@
 "use client";
 import Toast from "@/components/Toast";
 import { AnimatePresence } from "framer-motion";
-import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 
@@ -11,6 +11,13 @@ const Auth = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const params = useSearchParams();
   const [toastVisibility, setToastVisibility] = useState<boolean>(false);
+  const session = useSession();
+
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      redirect("/dashboard");
+    }
+  }, [session]);
 
   useEffect(() => {
     if (params.get("msg")) {

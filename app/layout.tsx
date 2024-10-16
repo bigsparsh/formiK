@@ -3,6 +3,7 @@ import { Work_Sans } from "next/font/google";
 import { Montserrat_Alternates } from "next/font/google";
 import { Flow_Circular } from "next/font/google";
 import "./globals.css";
+import Providers from "./providers";
 
 const work_init = Work_Sans({
   subsets: ["latin"],
@@ -44,7 +45,7 @@ export default function RootLayout({
           work_init.variable + " " + ma_init.variable + " " + flow_init.variable
         }
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
