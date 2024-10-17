@@ -23,7 +23,7 @@ const HoveringCheckbox = ({
         willChange: "transition",
       }}
       className={
-        "opacity-50 absolute text-3xl flex justify-center items-center gap-6 px-7 py-3 border border-white/50 bg-transparent backdrop-blur rounded-2xl " +
+        "opacity-50 absolute text-3xl flex justify-center items-center gap-6 px-7 py-3 border border-white/50 bg-transparent backdrop-blur rounded-2xl pointer-events-none " +
         positions
       }
     >

@@ -14,10 +14,11 @@ const SpecialButton = ({
 }) => {
   const [optionsRef, animate] = useAnimate();
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       const rand = Math.random() * options.length;
       animate("div", { y: `-${Math.floor(rand) * 1.5}rem` });
     }, 1500);
+    return () => clearInterval(interval);
   }, [animate, options, optionsRef]);
 
   return (

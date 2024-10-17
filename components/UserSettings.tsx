@@ -1,8 +1,9 @@
 "use client";
 import { motion, useAnimationControls } from "framer-motion";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaSignOutAlt } from "react-icons/fa";
 const UserSettings = ({
   user,
 }: {
@@ -14,6 +15,7 @@ const UserSettings = ({
 }) => {
   const [menuOpen, setMenuOpen] = useState(true);
   const controls = useAnimationControls();
+  const router = useRouter();
 
   const handleClick = () => {
     if (menuOpen) {
@@ -60,26 +62,44 @@ const UserSettings = ({
         }}
         animate={controls}
       >
-        <motion.div
-          className="bg-neutral-600 px-4 py-1 w-full rounded-3xl"
-          variants={{
-            hidden: {
-              y: "-50px",
-              display: "none",
-              opacity: 0,
+        {[
+          {
+            title: "Dashboard",
+            icon: <FaHome className="" />,
+            onClick: () => {
+              router.push("/dashboard");
             },
-            visible: {
-              y: 0,
-              display: "flex",
-              opacity: 1,
+          },
+          {
+            title: "Logout",
+            icon: <FaSignOutAlt className="" />,
+            onClick: () => {
+              signOut();
             },
-          }}
-        >
-          <div className="flex gap-3 items-center" onClick={() => signOut()}>
-            <FaSignOutAlt className="" />
-            Logout
-          </div>
-        </motion.div>
+          },
+        ].map((item, i) => (
+          <motion.div
+            key={i}
+            className="bg-neutral-600 px-4 py-1 w-full rounded-3xl z-50 cursor-pointer"
+            variants={{
+              hidden: {
+                y: "-50px",
+                display: "none",
+                opacity: 0,
+              },
+              visible: {
+                y: 0,
+                display: "flex",
+                opacity: 1,
+              },
+            }}
+          >
+            <div className="flex gap-3 items-center" onClick={item.onClick}>
+              {item.icon}
+              {item.title}
+            </div>
+          </motion.div>
+        ))}
       </motion.div>
     </motion.div>
   );
