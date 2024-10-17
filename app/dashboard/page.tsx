@@ -1,6 +1,4 @@
 "use client";
-import HoveringCheckbox from "@/components/HoveringCheckbox";
-import SpecialButton from "@/components/SpecialButton";
 import UserSettings from "@/components/UserSettings";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
