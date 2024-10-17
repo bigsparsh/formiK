@@ -29,7 +29,7 @@ const UserSettings = ({
 
   return (
     <motion.div
-      className="bg-neutral-700 pl-2 pr-5 py-2 rounded-3xl font-semibold border-2 border-white/50 flex flex-col relative"
+      className="bg-neutral-700 pl-2 pr-5 py-2 rounded-3xl font-semibold border-2 border-white/50 flex flex-col relative text-white"
       onClick={handleClick}
       layout
     >

@@ -1,7 +1,7 @@
 "use client";
 import UserSettings from "@/components/UserSettings";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Dashboard = () => {
@@ -11,6 +11,7 @@ const Dashboard = () => {
     image: string;
   } | null>(null);
   const session = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (session.status === "authenticated") {
@@ -42,18 +43,14 @@ const Dashboard = () => {
           {user && <UserSettings user={user} />}
         </nav>
         <div className="grow flex relative">
-          <div className="basis-1/5 bg-neutral-600 p-5 rounded-r-3xl mb-20">
-            <h1 className="text-6xl font-semibold text-white">Dashboard</h1>
-            <p className="text-white text-lg">
-              Welcome back, {user ? user.name : "Guest"}
-            </p>
-            <div className="flex gap-4 mt-4">
-              <Link href="/form/new">
-                <button>Create Form</button>
-              </Link>
-              <Link href="/form">
-                <button>My Forms</button>
-              </Link>
+          <div className="basis-1/6 bg-neutral-600 p-2 rounded-r-3xl mb-20">
+            <div className="flex flex-col gap-2  work text-lg font-semibold">
+              <button className="border border-neutral-600 px-4 py-1 rounded-full bg-neutral-500/50">
+                Create Form
+              </button>
+              <button className="border border-neutral-600 px-4 py-1 rounded-full bg-neutral-500/50">
+                My Forms
+              </button>
             </div>
           </div>
         </div>

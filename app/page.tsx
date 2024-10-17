@@ -49,7 +49,7 @@ const Landing = () => {
           {!user ? (
             <Link
               className={
-                "bg-neutral-700 px-5 py-2 rounded-full font-semibold border-2 border-white/50 " +
+                "bg-neutral-700 px-5 py-2 rounded-full font-semibold border-2 border-white/50 text-white " +
                 (loading ? "animate-pulse pointer-events-none" : "")
               }
               href="/auth"
@@ -61,14 +61,14 @@ const Landing = () => {
           )}
         </nav>
         <div className="grow flex flex-col items-center justify-center relative">
-          <HoveringCheckbox positions="top-10 right-48">
+          <HoveringCheckbox positions="top-10 right-48 flow text-neutral-100">
             <input
               type="checkbox"
-              className="accent-[gray] outline-none h-5 w-5 rounded-[50%]"
+              className="accent-neutral-500 outline-none h-5 w-5 rounded-[50%]"
             />
             <label className="flow">Check future</label>
           </HoveringCheckbox>
-          <HoveringCheckbox positions="bottom-60 left-48 flow">
+          <HoveringCheckbox positions="bottom-60 left-48 flow text-neutral-100">
             <div className="flex flex-col">
               <label>Enter name: </label>
               <input
@@ -80,14 +80,14 @@ const Landing = () => {
               <div className="flex gap-3 items-center">
                 <input
                   type="radio"
-                  className="accent-[gray] outline-none h-5 w-5 rounded-[50%]"
+                  className="accent-neutral-500 outline-none h-5 w-5 rounded-[50%]"
                 />
                 <label className="pb-1">Male Woman</label>
               </div>
               <div className="flex gap-3 items-center">
                 <input
                   type="radio"
-                  className="accent-[gray] outline-none h-5 w-5 rounded-[50%]"
+                  className="accent-neutral-500 outline-none h-5 w-5 rounded-[50%]"
                 />
                 <label className="pb-1">Female man</label>
               </div>
@@ -107,7 +107,7 @@ const Landing = () => {
                 "Links",
                 "Text",
               ]}
-              className="text-2xl font-semibold mix-blend-difference opacity-75"
+              className="text-2xl font-semibold text-neutral-500 opacity-75"
             >
               Build a form with
             </SpecialButton>
