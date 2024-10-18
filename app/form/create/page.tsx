@@ -48,7 +48,12 @@ const CreateForm = () => {
                   {
                     type: FieldType.OPTION,
                     index: r[r.length - 1] ? r[r.length - 1].index + 1 : 0,
-                    options: [],
+                    options: [
+                      {
+                        index: 1,
+                        value: "Option",
+                      },
+                    ],
                     title: "New Option field",
                     required: false,
                   },
