@@ -1,5 +1,6 @@
 "use client";
 import { FormElement } from "@/app/form/create/page";
+import { FieldType } from "@prisma/client";
 import { Dispatch, SetStateAction, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 
@@ -29,17 +30,31 @@ const FieldAdder = ({
                 setFormFields((r) => [
                   ...r,
                   {
-                    type: "options",
-                    id: r[r.length - 1] ? r[r.length - 1].id + 1 : 0,
+                    type: FieldType.OPTION,
+                    index: r[r.length - 1] ? r[r.length - 1].index + 1 : 0,
                     options: [],
-                    label: "New Field",
+                    title: "New Option field",
+                    required: false,
                   },
                 ]);
               }}
             >
               Option Based
             </div>
-            <div className="rounded-xl hover:bg-neutral-700 px-2 py-1 cursor-pointer">
+            <div
+              className="rounded-xl hover:bg-neutral-700 px-2 py-1 cursor-pointer"
+              onClick={() => {
+                setFormFields((r) => [
+                  ...r,
+                  {
+                    type: FieldType.TEXT,
+                    index: r[r.length - 1] ? r[r.length - 1].index + 1 : 0,
+                    title: "New Text field",
+                    required: false,
+                  },
+                ]);
+              }}
+            >
               Text as Headng
             </div>
           </div>

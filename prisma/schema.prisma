@@ -27,6 +27,8 @@ model User {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Form Form[]
 }
  
 model Account {
@@ -84,28 +86,34 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
-// model Form {
-//   form_id  String    @id @default(cuid())
-//   title    String
-//   user_id  String
-//   user     User      @relation(fields: [user_id], references: [user_id])
-//   fields   Field[]
-// }
-//
-// model Field {
-//   field_id  String  @id @default(cuid())
-//   form_id   String
-//   form      Form    @relation(fields: [form_id], references: [form_id])
-//   type      FieldType
-//   required  Boolean
-//   order     Int
-//   options   Option[]
-// }
-//
-// enum FieldType {
-//   TEXT
-//   TEXTAREA
-//   RADIO
-//   CHECKBOX
-//   SELECT
-// }
+model Form {
+  form_id  String    @id @default(cuid())
+  title    String
+  user_id  String
+  user     User      @relation(fields: [user_id], references: [id])
+  fields   Field[]
+}
+
+model Field {
+  field_id  String  @id @default(cuid())
+  form_id   String
+  type      FieldType
+  title     String
+  required  Boolean
+  index     Int
+  options   Option[]
+  form      Form    @relation(fields: [form_id], references: [form_id])
+}
+
+model Option {
+  option_id String @id @default(cuid())
+  field_id  String
+  field     Field  @relation(fields: [field_id], references: [field_id])
+  value     String
+  index    Int
+}
+
+enum FieldType {
+  OPTION
+  TEXT
+}

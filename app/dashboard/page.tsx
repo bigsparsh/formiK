@@ -1,7 +1,7 @@
 "use client";
 import UserSettings from "@/components/UserSettings";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Dashboard = () => {
@@ -11,7 +11,7 @@ const Dashboard = () => {
     image: string;
   } | null>(null);
   const session = useSession();
-  const router = useRouter();
+  // const router = useRouter();
 
   useEffect(() => {
     if (session.status === "authenticated") {
@@ -32,7 +32,7 @@ const Dashboard = () => {
       className="ma h-screen"
       style={{
         background:
-          "linear-gradient(#ffffff10 10%, transparent 10%) 0 0/ 15px 15px , linear-gradient(90deg, #ffffff10 10%, transparent 10%) 0 0/ 15px 15px, radial-gradient(120% 150% at 50% 50%,transparent, #ffffff50), linear-gradient(60deg, gray 10% 40%, transparent 50% 60%, gray 70% 100%) ,radial-gradient(50% 150% at 50% 0%, #ffffff99, gray)",
+          "linear-gradient(#ffffff10 10%, transparent 10%) 0 0/ 15px 15px , linear-gradient(90deg, #ffffff10 10%, transparent 10%) 0 0/ 15px 15px, radial-gradient(120% 150% at 50% 50%,transparent, #ffffff50), linear-gradient(60deg, gray 10% 40%, transparent 50% 60%, gray 70% 100%) ,radial-gradient(25% 100% at 50% 10%, lightgray, gray)",
       }}
     >
       <div className="flex flex-col h-screen">
