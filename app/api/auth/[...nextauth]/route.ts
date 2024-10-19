@@ -22,24 +22,14 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        const existingUser = await prisma.user.findUnique({
-          where: {
-            email: user.email as string,
-          },
-        });
-        if (existingUser) {
-          // @ts-expect-error "no"
-          token.user = existingUser;
-        }
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      session.user = token.user;
-      return session;
-    },
+    // async jwt({ token, user }) {
+    //   token.user = user;
+    //   return token;
+    // },
+    // async session({ session, token }) {
+    //   session.user = token.user;
+    //   return session;
+    // },
   },
   pages: {
     signIn: "/auth",

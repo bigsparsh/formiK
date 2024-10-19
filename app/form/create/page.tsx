@@ -1,8 +1,10 @@
 "use client";
 
 import OptionField from "@/components/OptionField";
+import { currrentFormField, formElements } from "@/recoil/atoms";
 import { FieldType } from "@prisma/client";
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 export type FormElement = {
   type: FieldType;
@@ -15,10 +17,8 @@ export type FormElement = {
   }[];
 };
 
-// {user && <UserSettings user={user} />}
-
 const CreateForm = () => {
-  const [formElements, setFormElements] = useState<FormElement[]>([]);
+  const [formFields, setFormFields] = useRecoilState(formElements);
   const fieldContainer = useRef<HTMLDivElement>(null);
 
   return (
@@ -43,11 +43,13 @@ const CreateForm = () => {
             <button
               className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left"
               onClick={() => {
-                setFormElements((r) => [
-                  ...r,
+                setFormFields([
+                  ...formFields,
                   {
                     type: FieldType.OPTION,
-                    index: r[r.length - 1] ? r[r.length - 1].index + 1 : 0,
+                    index: formFields[formFields.length - 1]
+                      ? formFields[formFields.length - 1].index + 1
+                      : 0,
                     options: [
                       {
                         index: 1,
@@ -65,7 +67,7 @@ const CreateForm = () => {
             <button
               className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left"
               onClick={() => {
-                setFormElements((r) => [
+                setFormFields((r) => [
                   ...r,
                   {
                     type: FieldType.TEXT,
@@ -82,23 +84,18 @@ const CreateForm = () => {
         </div>
         <div className="grow p-10 h-[80vh] overflow-y-scroll">
           <div className="">
-            {formElements.length === 0 && (
+            {formFields.length === 0 && (
               <h1 className="p-5 rounded-l-xl border-2 border-dotted border-neutral-600">
                 Add the fields for your form here
               </h1>
             )}
             <div className="flex flex-col gap-3" ref={fieldContainer}>
-              {formElements.map((field) => {
+              {formFields.map((field) => {
                 if (field.type === FieldType.OPTION) {
                   return (
+                    // <h1 key={crypto.randomUUID()}>I am a option field</h1>
                     <OptionField
-                      id={
-                        formElements[formElements.length - 1].index
-                          ? formElements[formElements.length - 1].index + 1
-                          : 0
-                      }
-                      fieldValue={formElements}
-                      setFieldValue={setFormElements}
+                      id={field.index ? field.index : 0}
                       key={crypto.randomUUID()}
                     />
                   );

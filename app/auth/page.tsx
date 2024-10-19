@@ -2,7 +2,7 @@
 import Toast from "@/components/Toast";
 import { AnimatePresence } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
-import { redirect, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 
@@ -12,12 +12,13 @@ const Auth = () => {
   const params = useSearchParams();
   const [toastVisibility, setToastVisibility] = useState<boolean>(false);
   const session = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (session.status === "authenticated") {
-      redirect("/dashboard");
+      router.push("/dashboard");
     }
-  }, [session]);
+  }, [session, router]);
 
   useEffect(() => {
     if (params.get("msg")) {

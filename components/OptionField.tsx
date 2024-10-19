@@ -1,48 +1,45 @@
 "use client";
 import { FormElement } from "@/app/form/create/page";
-import { Dispatch, SetStateAction, useMemo, useRef } from "react";
+import {
+  currentFieldId,
+  currrentFormField,
+  formElements,
+} from "@/recoil/atoms";
+import { useEffect, useRef, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
-const OptionField = ({
-  fieldValue,
-  setFieldValue,
-  id,
-}: {
-  fieldValue: FormElement[];
-  setFieldValue: Dispatch<SetStateAction<FormElement[]>>;
-  id: number;
-}) => {
+const OptionField = ({ id }: { id: number }) => {
+  const [formFields, setFormFields] = useRecoilState(formElements);
+  const [currentField, setCurrentField] = useState<FormElement>();
+
+  useEffect(() => {
+    setCurrentField(formFields.find((ele) => ele.index === id));
+  }, [formFields, id]);
+
   const requiredRef = useRef<HTMLInputElement>(null);
-  const numOption = useRef<HTMLInputElement>(null);
-  const currentField = useMemo(() => {
-    return fieldValue.find((field) => field.index === id);
-  }, [fieldValue, id]);
 
   const handleAddOption = (index: number) => {
     if (currentField?.options?.length === 6) return;
-    currentField?.options?.splice(index + 1, 0, {
-      index: index + 1,
-      value: "Option",
-    });
-    fieldValue = fieldValue.map((ele) => {
+    const newFields = Array.from(formFields).map((ele) => {
       if (ele.index === id) {
-        return (ele = currentField as FormElement);
+        ele.options = Array.from(ele.options || []).splice(index + 1, 0, {
+          index: index + 1,
+          value: "Option",
+        });
       }
       return ele;
     });
-    setFieldValue(fieldValue);
+
+    setFormFields(newFields);
   };
 
   const handleDeleteOption = (index: number) => {
     if (currentField?.options?.length === 1) return;
     currentField?.options?.splice(index, 1);
-    fieldValue = fieldValue.map((ele) => {
-      if (ele.index === id) {
-        return (ele = currentField as FormElement);
-      }
-      return ele;
+    setFormFields((fields) => {
+      return fields.splice(id, 1);
     });
-    setFieldValue(fieldValue);
   };
 
   return (
@@ -99,7 +96,7 @@ const OptionField = ({
               min={2}
               max={6}
               className="w-full py-2 bg-neutral-700 rounded-full px-5 accent-neutral-700 outline-none"
-              ref={numOption}
+            // ref={numOption}
             />
           </div>
           <div className="flex gap-3 items-center">

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 const Landing = () => {
   const session = useSession();
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<{
+  const [userx, setUser] = useState<{
     name: string;
     email: string;
     image: string;
@@ -46,7 +46,7 @@ const Landing = () => {
           <h1 className="text-4xl font-semibold tracking-tight text-white">
             formiK
           </h1>
-          {!user ? (
+          {!userx ? (
             <Link
               className={
                 "bg-neutral-700 px-5 py-2 rounded-full font-semibold border-2 border-white/50 text-white " +
@@ -57,7 +57,7 @@ const Landing = () => {
               Login or Register
             </Link>
           ) : (
-            <UserSettings user={user} />
+            <UserSettings user={userx} />
           )}
         </nav>
         <div className="grow flex flex-col items-center justify-center relative">

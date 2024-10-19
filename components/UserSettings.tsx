@@ -37,7 +37,7 @@ const UserSettings = ({
         <div
           className="h-7 aspect-square rounded-full bg-cover bg-center"
           style={{
-            backgroundImage: `url(${user.image || "//picsum.photos/200"})`,
+            backgroundImage: `url('${user.image}')`,
           }}
         />
         <p>{user.name}</p>
