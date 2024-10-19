@@ -1,13 +1,9 @@
 "use client";
 import { FormElement } from "@/app/form/create/page";
-import {
-  currentFieldId,
-  currrentFormField,
-  formElements,
-} from "@/recoil/atoms";
+import { formElements } from "@/recoil/atoms";
 import { useEffect, useRef, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 
 const OptionField = ({ id }: { id: number }) => {
   const [formFields, setFormFields] = useRecoilState(formElements);
@@ -23,14 +19,22 @@ const OptionField = ({ id }: { id: number }) => {
     if (currentField?.options?.length === 6) return;
     const newFields = Array.from(formFields).map((ele) => {
       if (ele.index === id) {
-        ele.options = Array.from(ele.options || []).splice(index + 1, 0, {
+        const newOptions = Array.from(ele.options || []);
+        newOptions.splice(index + 1, 0, {
           index: index + 1,
           value: "Option",
         });
+        const updatedOptions = newOptions.map((option, i) => ({
+          ...option,
+          index: i,
+        }));
+        return {
+          ...ele,
+          options: updatedOptions,
+        };
       }
       return ele;
     });
-
     setFormFields(newFields);
   };
 

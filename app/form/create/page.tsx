@@ -1,10 +1,10 @@
 "use client";
 
 import OptionField from "@/components/OptionField";
-import { currrentFormField, formElements } from "@/recoil/atoms";
+import { formElements } from "@/recoil/atoms";
 import { FieldType } from "@prisma/client";
 import { useRef } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 export type FormElement = {
   type: FieldType;

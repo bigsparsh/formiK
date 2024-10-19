@@ -2,7 +2,7 @@
 import Toast from "@/components/Toast";
 import { AnimatePresence } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 
