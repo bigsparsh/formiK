@@ -6,6 +6,7 @@ import { SetterOrUpdater } from "recoil";
 
 export class FormManager {
   formFields: FormElement[];
+  formJSX: JSX.Element[];
   // parentComponent: JSX.Element | null;
   setParentComponent: SetterOrUpdater<JSX.Element> | null;
   static instance: FormManager | null;
@@ -14,9 +15,10 @@ export class FormManager {
     this.formFields = [];
     // this.parentComponent = null;
     this.setParentComponent = setPc;
+    this.formJSX = [];
   }
 
-  static getInstance(setPc: SetterOrUpdater<JSX.Element>) {
+  static getInstance(setPc?: SetterOrUpdater<JSX.Element>) {
     if (!this.instance) {
       if (!setPc) {
         throw new Error("Parent component and setter is required");
@@ -26,6 +28,20 @@ export class FormManager {
     return this.instance;
   }
 
+  addOptionToField(index: number) {
+    this.formFields[index].options?.push({
+      index: this.formFields[index].options.length,
+      value: "Option",
+    });
+    this.formJSX[index] = (
+      <OptionField
+        key={crypto.randomUUID()}
+        id={index}
+        options={this.formFields[index].options}
+      />
+    );
+  }
+
   addOptionField() {
     if (!this.setParentComponent) {
       throw new Error("Parent component and setter is required");
@@ -33,23 +49,32 @@ export class FormManager {
 
     this.formFields.push({
       type: FieldType.OPTION,
-      index: this.formFields.length - 1,
+      index: this.formFields.length,
       title: "New Option field",
       options: [
         {
-          index: 1,
+          index: 0,
           value: "Option",
         },
       ],
       required: false,
     });
 
-    this.setParentComponent((r: JSX.Element) => (
-      <>
-        {r}
-        <OptionField key={crypto.randomUUID()} id={this.formFields.length} />
-      </>
-    ));
+    this.formJSX?.push(
+      <OptionField
+        key={crypto.randomUUID()}
+        id={this.formFields.length - 1}
+        options={this.formFields[this.formFields.length - 1].options}
+      />,
+    );
+    this.update();
+  }
+
+  update() {
+    if (!this.setParentComponent) {
+      throw new Error("Parent component and setter is required");
+    }
+    this.setParentComponent(() => <>{this.formJSX?.map((jsx) => jsx)}</>);
   }
 
   addTextField() {
@@ -64,14 +89,13 @@ export class FormManager {
       required: false,
     });
 
-    this.setParentComponent((r: JSX.Element) => (
-      <>
-        {r}
-        <TextComponent
-          key={crypto.randomUUID()}
-          id={this.formFields.length - 1}
-        />
-      </>
-    ));
+    this.formJSX?.push(
+      <TextComponent
+        key={crypto.randomUUID()}
+        id={this.formFields.length - 1}
+      ></TextComponent>,
+    );
+
+    this.update();
   }
 }
