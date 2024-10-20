@@ -1,8 +1,9 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 
 const OptionField = ({ id }: { id: number }) => {
+  const [fieldState, setFieldState] = useState({});
   const requiredRef = useRef<HTMLInputElement>(null);
 
   return (

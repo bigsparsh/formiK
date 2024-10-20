@@ -49,7 +49,7 @@ const CreateForm = () => {
           </h1>
           <div className="px-5 py-2 text-lg">
             <button
-              className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left"
+              className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left outline-none"
               onClick={() => {
                 manager?.addOptionField();
                 // setFormFields([
@@ -74,8 +74,9 @@ const CreateForm = () => {
               Options
             </button>
             <button
-              className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left"
+              className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left outline-none"
               onClick={() => {
+                manager?.addTextField();
                 //   setFormFields((r) => [
                 //     ...r,
                 //     {
@@ -93,13 +94,6 @@ const CreateForm = () => {
         </div>
         <div className="grow p-10 h-[80vh] overflow-y-scroll">
           <div className="">
-            {
-              // formFields.length === 0 && (
-              <h1 className="p-5 rounded-l-xl border-2 border-dotted border-neutral-600">
-                Add the fields for your form here
-              </h1>
-              // )
-            }
             <div className="flex flex-col gap-3" ref={fieldContainer}>
               {
                 formFields

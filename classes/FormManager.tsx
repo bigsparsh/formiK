@@ -1,5 +1,6 @@
 import { FormElement } from "@/app/form/create/page";
 import OptionField from "@/components/OptionField";
+import TextComponent from "@/components/TextComponent";
 import { FieldType } from "@prisma/client";
 import { SetterOrUpdater } from "recoil";
 
@@ -32,7 +33,7 @@ export class FormManager {
 
     this.formFields.push({
       type: FieldType.OPTION,
-      index: this.formFields.length,
+      index: this.formFields.length - 1,
       title: "New Option field",
       options: [
         {
@@ -47,6 +48,29 @@ export class FormManager {
       <>
         {r}
         <OptionField key={crypto.randomUUID()} id={this.formFields.length} />
+      </>
+    ));
+  }
+
+  addTextField() {
+    if (!this.setParentComponent) {
+      throw new Error("Parent component and setter is required");
+    }
+
+    this.formFields.push({
+      type: FieldType.TEXT,
+      index: this.formFields.length,
+      title: "New Text field",
+      required: false,
+    });
+
+    this.setParentComponent((r: JSX.Element) => (
+      <>
+        {r}
+        <TextComponent
+          key={crypto.randomUUID()}
+          id={this.formFields.length - 1}
+        />
       </>
     ));
   }
