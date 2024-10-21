@@ -52,23 +52,6 @@ const CreateForm = () => {
               className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left outline-none"
               onClick={() => {
                 manager?.addOptionField();
-                // setFormFields([
-                //   ...formFields,
-                //   {
-                //     type: FieldType.OPTION,
-                //     index: formFields[formFields.length - 1]
-                //       ? formFields[formFields.length - 1].index + 1
-                //       : 0,
-                //     options: [
-                //       {
-                //         index: 1,
-                //         value: "Option",
-                //       },
-                //     ],
-                //     title: "New Option field",
-                //     required: false,
-                //   },
-                // ]);
               }}
             >
               Options
@@ -77,45 +60,24 @@ const CreateForm = () => {
               className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left outline-none"
               onClick={() => {
                 manager?.addTextField();
-                //   setFormFields((r) => [
-                //     ...r,
-                //     {
-                //       type: FieldType.TEXT,
-                //       index: r[r.length - 1] ? r[r.length - 1].index + 1 : 0,
-                //       title: "New Text field",
-                //       required: false,
-                //     },
-                //   ]);
               }}
             >
               Text
+            </button>
+            <button
+              className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left outline-none"
+              onClick={() => {
+                manager?.addImageField();
+              }}
+            >
+              Image
             </button>
           </div>
         </div>
         <div className="grow p-10 h-[80vh] overflow-y-scroll">
           <div className="">
             <div className="flex flex-col gap-3" ref={fieldContainer}>
-              {
-                formFields
-                //   formFields.map((field) => {
-                //   if (field.type === FieldType.OPTION) {
-                //     return (
-                //       // <h1 key={crypto.randomUUID()}>I am a option field</h1>
-                //       <OptionField
-                //         id={field.index ? field.index : 0}
-                //         key={crypto.randomUUID()}
-                //       />
-                //     );
-                //   }
-                //   if (field.type === FieldType.TEXT) {
-                //     return (
-                //       <h1 className="" key={crypto.randomUUID()}>
-                //         Hello 111
-                //       </h1>
-                //     );
-                //   }
-                // })
-              }
+              {formFields}
             </div>
           </div>
         </div>

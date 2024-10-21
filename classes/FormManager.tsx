@@ -1,4 +1,5 @@
 import { FormElement } from "@/app/form/create/page";
+import ImageField from "@/components/ImageField";
 import OptionField from "@/components/OptionField";
 import TextComponent from "@/components/TextComponent";
 import { FieldType } from "@prisma/client";
@@ -43,10 +44,6 @@ export class FormManager {
   }
 
   addOptionField() {
-    if (!this.setParentComponent) {
-      throw new Error("Parent component and setter is required");
-    }
-
     this.formFields.push({
       type: FieldType.OPTION,
       index: this.formFields.length,
@@ -78,10 +75,6 @@ export class FormManager {
   }
 
   addTextField() {
-    if (!this.setParentComponent) {
-      throw new Error("Parent component and setter is required");
-    }
-
     this.formFields.push({
       type: FieldType.TEXT,
       index: this.formFields.length,
@@ -94,6 +87,24 @@ export class FormManager {
         key={crypto.randomUUID()}
         id={this.formFields.length - 1}
       ></TextComponent>,
+    );
+
+    this.update();
+  }
+
+  addImageField() {
+    this.formFields.push({
+      type: FieldType.IMAGE,
+      index: this.formFields.length,
+      title: "New Image field",
+      required: false,
+    });
+
+    this.formJSX?.push(
+      <ImageField
+        key={crypto.randomUUID()}
+        id={this.formFields.length - 1}
+      ></ImageField>,
     );
 
     this.update();

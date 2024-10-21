@@ -95,14 +95,16 @@ model Form {
 }
 
 model Field {
-  field_id  String  @id @default(cuid())
-  form_id   String
-  type      FieldType
-  title     String
-  required  Boolean
-  index     Int
-  options   Option[]
-  form      Form    @relation(fields: [form_id], references: [form_id])
+  field_id    String      @id @default(cuid())
+  form_id     String
+  type        FieldType
+  title       String
+  required    Boolean
+  image       String?
+  is_heading  Boolean?
+  index       Int
+  options     Option[]
+  form        Form        @relation(fields: [form_id], references: [form_id])
 }
 
 model Option {
@@ -116,4 +118,5 @@ model Option {
 enum FieldType {
   OPTION
   TEXT
+  IMAGE
 }
