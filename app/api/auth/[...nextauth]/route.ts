@@ -24,22 +24,24 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        console.log("USER IS HERE\n");
         const existingUser = await prisma.user.findUnique({
           where: {
             email: user.email as string,
           },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            image: true,
+            createdAt: true,
+            updatedAt: true,
+            emailVerified: true,
+          },
         });
         if (existingUser) {
-          console.log("TOKEN USER SET TO EXISTING USER\n");
           token.user = existingUser;
-        } else {
-          console.log("TOKEN USER not SET TO EXISTING USER\n");
         }
-      } else {
-        console.log("USER IS not HERE\n");
       }
-      console.log("\n\n" + JSON.stringify(token) + "\n\n");
       return token;
     },
     async session({ session, token }) {

@@ -11,6 +11,7 @@ export type FormElement = {
   title: string;
   required: boolean;
   index: number;
+  image?: string | File;
   options?: {
     value: string;
     index: number;

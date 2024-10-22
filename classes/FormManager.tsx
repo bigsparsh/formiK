@@ -4,6 +4,7 @@ import ImageField from "@/components/ImageField";
 import OptionField from "@/components/OptionField";
 import TextComponent from "@/components/TextComponent";
 import { FieldType } from "@prisma/client";
+import { put } from "@vercel/blob";
 import { SetterOrUpdater } from "recoil";
 
 export class FormManager {
@@ -42,6 +43,10 @@ export class FormManager {
         options={this.formFields[index].options}
       />
     );
+  }
+
+  addImagePathToField(index: number, file?: File) {
+    this.formFields[index].image = file;
   }
 
   addOptionField() {
@@ -112,6 +117,21 @@ export class FormManager {
   }
 
   finalizeForm() {
+    this.formFields.forEach(async (field) => {
+      if (field.type === FieldType.IMAGE) {
+        field.image = (
+          await put(
+            "form-image-" + field.index + crypto.randomUUID(),
+            field.image as string,
+            {
+              access: "public",
+              token:
+                "vercel_blob_rw_ZPhL3fptqWzBDjqA_Rb3o9O1rDajr2QtBDy4Qpprd57J5sa",
+            },
+          )
+        ).url;
+      }
+    });
     createForm({
       formFields: this.formFields,
     });

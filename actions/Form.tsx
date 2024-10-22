@@ -12,7 +12,7 @@ export const createForm = async ({
 }): Promise<Form> => {
   const session = await getServerSession();
   if (!session) throw new Error("User not found: " + session);
-  console.log("\n\n" + JSON.stringify(session) + "\n\n");
+
   const user = await prisma.user.findUnique({
     where: {
       email: session.user.email,

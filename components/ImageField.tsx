@@ -1,11 +1,13 @@
 "use client";
 
+import { FormManager } from "@/classes/FormManager";
 import { useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 
 const ImageField = ({ id }: { id: number }) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const manager = FormManager.getInstance();
   return (
     <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-3 text-white">
       <input
@@ -14,7 +16,8 @@ const ImageField = ({ id }: { id: number }) => {
         className="hidden"
         accept="image/*"
         onChange={() => {
-          setFileName(fileRef.current?.files?.[0]?.name || null);
+          manager.addImagePathToField(id, fileRef.current?.files?.[0]);
+          setFileName(fileRef.current?.files?.[0].name as string);
         }}
       />
       <div
@@ -28,7 +31,9 @@ const ImageField = ({ id }: { id: number }) => {
         }}
       >
         <FaUpload className="opacity-50 text-4xl mb-4" />
-        <p className="leading-4">{fileName ? fileName : "Upload an Image"}</p>
+        <p className="leading-4">
+          {fileName ? fileName : "Upload an Image " + id}
+        </p>
         <p className="text-base font-normal"></p>
       </div>
     </div>
