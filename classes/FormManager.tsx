@@ -1,3 +1,4 @@
+import { createForm } from "@/actions/Form";
 import { FormElement } from "@/app/form/create/page";
 import ImageField from "@/components/ImageField";
 import OptionField from "@/components/OptionField";
@@ -108,5 +109,11 @@ export class FormManager {
     );
 
     this.update();
+  }
+
+  finalizeForm() {
+    createForm({
+      formFields: this.formFields,
+    });
   }
 }

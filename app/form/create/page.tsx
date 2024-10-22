@@ -73,6 +73,14 @@ const CreateForm = () => {
               Image
             </button>
           </div>
+          <button
+            className="bg-neutral-100 text-neutral-800 py-2 text-lg font-medium self-center w-full"
+            onClick={() => {
+              manager?.finalizeForm();
+            }}
+          >
+            Finalize Form
+          </button>
         </div>
         <div className="grow p-10 h-[80vh] overflow-y-scroll">
           <div className="">

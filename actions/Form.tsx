@@ -2,7 +2,7 @@
 
 import { FormElement } from "@/app/form/create/page";
 import { prisma } from "@/prisma";
-import { Form } from "@prisma/client";
+import { FieldType, Form } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
 export const createForm = async ({
@@ -11,24 +11,46 @@ export const createForm = async ({
   formFields: FormElement[];
 }): Promise<Form> => {
   const session = await getServerSession();
-
+  if (!session) throw new Error("User not found: " + session);
+  console.log("\n\n" + JSON.stringify(session) + "\n\n");
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
   const newForm = await prisma.form.create({
     data: {
-      user_id: session?.user.id as string,
-      title: "New Form",
+      user_id: user?.id as string,
+      title: "This is a new Form",
       fields: {
         create: formFields.map((field) => {
+          if (field.type === FieldType.OPTION)
+            return {
+              type: field.type,
+              title: field.title,
+              required: field.required,
+              index: field.index,
+              options: {
+                create: field.options?.map((opt) => {
+                  return {
+                    value: opt.value,
+                    index: opt.index,
+                  };
+                }),
+              },
+            };
+          if (field.type === FieldType.TEXT)
+            return {
+              type: field.type,
+              title: field.title,
+              required: field.required,
+              index: field.index,
+            };
           return {
             type: field.type,
             title: field.title,
             required: field.required,
             index: field.index,
-            create: field.options?.map((opt) => {
-              return {
-                value: opt.value,
-                index: opt.index,
-              };
-            }),
           };
         }),
       },

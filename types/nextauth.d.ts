@@ -11,8 +11,11 @@ declare module "next-auth" {
       /** The user's postal address. */
       id: string;
       email: string;
-      image: string;
-      name: string;
+      name: string | null;
+      createdAt: Date;
+      updatedAt: Date;
+      emailVerified: Date | null;
+      image: string | null;
     };
   }
 }
@@ -24,8 +27,11 @@ declare module "next-auth/jwt" {
     user: {
       id: string;
       email: string;
-      image: string;
-      name: string;
+      name: string | null;
+      createdAt: Date;
+      updatedAt: Date;
+      emailVerified: Date | null;
+      image: string | null;
     };
   }
 }

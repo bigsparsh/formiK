@@ -35,9 +35,9 @@ const UserSettings = ({
     >
       <div className="flex items-center gap-3">
         <div
-          className="h-7 aspect-square rounded-full bg-cover bg-center"
+          className="h-7 aspect-square rounded-full"
           style={{
-            backgroundImage: `url('${user.image}')`,
+            background: `url('${user.image}') center/ cover`,
           }}
         />
         <p>{user.name}</p>
