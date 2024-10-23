@@ -16,15 +16,20 @@ const ImageField = ({ id }: { id: number }) => {
         className="hidden"
         accept="image/*"
         onChange={() => {
-          manager.addImagePathToField(id, fileRef.current?.files?.[0]);
-          setFileName(fileRef.current?.files?.[0].name as string);
+          if (fileRef.current?.files?.[0]) {
+            manager.addImagePathToField(id, fileRef.current?.files?.[0]);
+            setFileName(fileRef.current?.files?.[0].name as string);
+          } else {
+            setFileName(null);
+          }
         }}
       />
       <div
-        className="h-32 w-full bg-neutral-700 rounded-xl flex flex-col  items-center justify-center font-medium text-xl text-white/50 cursor-pointer border border-neutral-500"
+        className="aspect-[3/1] bg-neutral-700 rounded-xl flex flex-col  items-center justify-center font-medium text-xl text-white/50 cursor-pointer border border-neutral-500"
         style={{
-          background:
-            "radial-gradient(100% 100% at 50% 50%, transparent ,transparent, gray)",
+          background: fileName
+            ? `url('${URL.createObjectURL(fileRef.current?.files?.[0] as File)}') center/cover`
+            : "radial-gradient(100% 100% at 50% 50%, transparent ,transparent, gray)",
         }}
         onClick={() => {
           fileRef.current?.click();

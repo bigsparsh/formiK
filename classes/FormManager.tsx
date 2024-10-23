@@ -49,11 +49,15 @@ export class FormManager {
     this.formFields[index].image = file;
   }
 
+  addTextToField(index: number, text: string) {
+    this.formFields[index].title = text;
+  }
+
   addOptionField() {
     this.formFields.push({
       type: FieldType.OPTION,
       index: this.formFields.length,
-      title: "New Option field",
+      title: "",
       options: [
         {
           index: 0,
@@ -84,7 +88,7 @@ export class FormManager {
     this.formFields.push({
       type: FieldType.TEXT,
       index: this.formFields.length,
-      title: "New Text field",
+      title: "",
       required: false,
     });
 
@@ -102,7 +106,7 @@ export class FormManager {
     this.formFields.push({
       type: FieldType.IMAGE,
       index: this.formFields.length,
-      title: "New Image field",
+      title: "",
       required: false,
     });
 
@@ -133,7 +137,7 @@ export class FormManager {
       }
     });
     createForm({
-      formFields: this.formFields,
+      formFields: JSON.parse(JSON.stringify(this.formFields)),
     });
   }
 }
