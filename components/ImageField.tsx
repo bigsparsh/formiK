@@ -17,7 +17,7 @@ const ImageField = ({ id }: { id: number }) => {
         accept="image/*"
         onChange={() => {
           if (fileRef.current?.files?.[0]) {
-            manager.addImagePathToField(id, fileRef.current?.files?.[0]);
+            manager.setImagePathToField(id, fileRef.current?.files?.[0]);
             setFileName(fileRef.current?.files?.[0].name as string);
           } else {
             setFileName(null);

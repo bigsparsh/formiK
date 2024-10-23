@@ -13,7 +13,7 @@ const TextComponent = ({ id }: { id: number }) => {
         placeholder={"Enter the title of the field " + id}
         ref={textRef}
         onChange={(e) => {
-          manager.addTextToField(id, e.target.value as string);
+          manager.setTextToField(id, e.target.value as string);
         }}
       />
     </div>

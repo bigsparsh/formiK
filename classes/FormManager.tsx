@@ -10,13 +10,11 @@ import { SetterOrUpdater } from "recoil";
 export class FormManager {
   formFields: FormElement[];
   formJSX: JSX.Element[];
-  // parentComponent: JSX.Element | null;
   setParentComponent: SetterOrUpdater<JSX.Element> | null;
   static instance: FormManager | null;
 
   private constructor(setPc: SetterOrUpdater<JSX.Element>) {
     this.formFields = [];
-    // this.parentComponent = null;
     this.setParentComponent = setPc;
     this.formJSX = [];
   }
@@ -31,7 +29,7 @@ export class FormManager {
     return this.instance;
   }
 
-  addOptionToField(index: number) {
+  setOptionToField(index: number) {
     this.formFields[index].options?.push({
       index: this.formFields[index].options.length,
       value: "Option",
@@ -45,12 +43,44 @@ export class FormManager {
     );
   }
 
-  addImagePathToField(index: number, file?: File) {
+  setImagePathToField(index: number, file?: File) {
     this.formFields[index].image = file;
   }
 
-  addTextToField(index: number, text: string) {
+  setTextToField(index: number, text: string) {
     this.formFields[index].title = text;
+  }
+
+  setTextToOptionField(
+    field_index: number,
+    option_index: number,
+    text: string,
+  ) {
+    if (this.formFields[field_index].options)
+      this.formFields[field_index].options[option_index].value = text;
+  }
+
+  setRequired(index: number, required: boolean) {
+    this.formFields[index].required = required;
+  }
+
+  editOptionCount(index: number, amount: number) {
+    this.formFields[index].options = [];
+    for (let i = 0; i < amount; i++) {
+      this.formFields[index].options.push({
+        index: i,
+        value: "Option " + (i + 1),
+      });
+    }
+    console.log(this.formFields[index].options);
+    this.formJSX[index] = (
+      <OptionField
+        key={this.formJSX[index].key}
+        id={index}
+        options={this.formFields[index].options}
+      />
+    );
+    this.update();
   }
 
   addOptionField() {
@@ -134,10 +164,10 @@ export class FormManager {
             },
           )
         ).url;
+        createForm({
+          formFields: JSON.parse(JSON.stringify(this.formFields)),
+        });
       }
-    });
-    createForm({
-      formFields: JSON.parse(JSON.stringify(this.formFields)),
     });
   }
 }

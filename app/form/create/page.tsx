@@ -21,7 +21,6 @@ export type FormElement = {
 const CreateForm = () => {
   const [formFields, setFormFields] = useRecoilState(formElements);
   const [manager, setManager] = useState<FormManager | null>(null);
-  // const [fieldRefs, setFieldRefs] = useState<RefObject<HTMLDivElement>[]>();
   const fieldContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

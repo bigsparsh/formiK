@@ -1,8 +1,7 @@
 "use client";
 import { FormElement } from "@/app/form/create/page";
 import { FormManager } from "@/classes/FormManager";
-import { useEffect, useRef, useState } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { useRef } from "react";
 
 const OptionField = ({
   id,
@@ -11,14 +10,11 @@ const OptionField = ({
   id: number;
   options: FormElement["options"];
 }) => {
-  const [manager, setManager] = useState<FormManager | null>(null);
-  const [reRender, setReRender] = useState(false);
+  // const [reRender, setReRender] = useState(false);
   const requiredRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    setManager(FormManager.getInstance());
-  }, []);
+  const manager = FormManager.getInstance();
 
-  useEffect(() => { }, [reRender]);
+  // useEffect(() => { }, [reRender, options]);
 
   return (
     <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-3 text-white">
@@ -26,6 +22,9 @@ const OptionField = ({
         type="text"
         className="w-full py-2 bg-neutral-700 rounded-full px-5"
         placeholder="Enter the title of the field"
+        onChange={(e) => {
+          manager.setTextToField(id, e.target.value);
+        }}
       />
       <div className="flex w-full justify-between">
         <div className="flex flex-col gap-2">
@@ -40,28 +39,36 @@ const OptionField = ({
                     type="text"
                     className="w-full py-1 bg-neutral-700 rounded-r-xl px-5"
                     placeholder={"Option"}
+                    onChange={(e) => {
+                      manager.setTextToOptionField(
+                        id,
+                        opt.index,
+                        e.target.value,
+                      );
+                    }}
                   />
                 </div>
-                <div className="flex">
-                  <button
-                    className="bg-neutral-700 w-9 h-full rounded-l-xl grid place-items-center"
-                    onClick={() => {
-                      // handleDeleteOption(index);
-                    }}
-                  >
-                    <FaTrash />
-                  </button>
-                  <button
-                    className="bg-neutral-800 w-9 h-full rounded-r-xl grid place-items-center"
-                    onClick={() => {
-                      manager?.addOptionToField(id);
-                      setReRender(!reRender);
-                      // handleAddOption(opt.index);
-                    }}
-                  >
-                    <FaPlus />
-                  </button>
-                </div>
+                {
+                  // <div className="flex">
+                  //   <button
+                  //     className="bg-neutral-700 w-9 h-full rounded-l-xl grid place-items-center"
+                  //     onClick={() => {
+                  //       // handleDeleteOption(index);
+                  //     }}
+                  //   >
+                  //     <FaTrash />
+                  //   </button>
+                  //   <button
+                  //     className="bg-neutral-800 w-9 h-full rounded-r-xl grid place-items-center"
+                  //     onClick={() => {
+                  //       manager?.setOptionToField(id);
+                  //       setReRender(!reRender);
+                  //     }}
+                  //   >
+                  //     <FaPlus />
+                  //   </button>
+                  // </div>
+                }
               </div>
             );
           })}
@@ -76,7 +83,9 @@ const OptionField = ({
               min={2}
               max={6}
               className="w-full py-2 bg-neutral-700 rounded-full px-5 accent-neutral-700 outline-none"
-            // ref={numOption}
+              onChange={(e) => {
+                manager.editOptionCount(id, parseInt(e.target.value));
+              }}
             />
           </div>
           <div className="flex gap-3 items-center">
@@ -89,10 +98,12 @@ const OptionField = ({
                     requiredRef.current.checked = false;
                     (e.target as HTMLButtonElement).className =
                       "hover:cursor-pointer rounded-xl px-3 py-1 border border-neutral-600";
+                    manager.setRequired(id, false);
                   } else {
                     requiredRef.current.checked = true;
                     (e.target as HTMLButtonElement).className =
                       "hover:cursor-pointer rounded-xl px-3 py-1 bg-neutral-600 border";
+                    manager.setRequired(id, true);
                   }
               }}
             >
