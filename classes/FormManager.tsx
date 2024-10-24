@@ -91,7 +91,11 @@ export class FormManager {
       options: [
         {
           index: 0,
-          value: "Option",
+          value: "",
+        },
+        {
+          index: 1,
+          value: "",
         },
       ],
       required: false,
@@ -150,8 +154,8 @@ export class FormManager {
     this.update();
   }
 
-  finalizeForm() {
-    this.formFields.forEach(async (field) => {
+  async finalizeForm() {
+    const updatedFields = this.formFields.map(async (field) => {
       if (field.type === FieldType.IMAGE) {
         field.image = (
           await put(
@@ -164,10 +168,15 @@ export class FormManager {
             },
           )
         ).url;
-        createForm({
-          formFields: JSON.parse(JSON.stringify(this.formFields)),
-        });
       }
+      return field;
     });
+    this.formFields = await Promise.all(updatedFields);
+    createForm({
+      formFields: this.formFields,
+    });
+  }
+  makeForm() {
+    console.log(this.formFields);
   }
 }

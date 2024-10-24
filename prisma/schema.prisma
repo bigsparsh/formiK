@@ -90,7 +90,7 @@ model Form {
   form_id  String    @id @default(cuid())
   title    String
   user_id  String
-  user     User      @relation(fields: [user_id], references: [id])
+  user     User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   fields   Field[]
 }
 
@@ -104,13 +104,13 @@ model Field {
   is_heading  Boolean?
   index       Int
   options     Option[]
-  form        Form        @relation(fields: [form_id], references: [form_id])
+  form        Form        @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
 }
 
 model Option {
   option_id String @id @default(cuid())
   field_id  String
-  field     Field  @relation(fields: [field_id], references: [field_id])
+  field     Field  @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
   value     String
   index    Int
 }

@@ -1,6 +1,7 @@
 "use client";
 import { motion, useAnimationControls } from "framer-motion";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaHome, FaSignOutAlt } from "react-icons/fa";
@@ -34,11 +35,12 @@ const UserSettings = ({
       layout
     >
       <div className="flex items-center gap-3">
-        <div
-          className="h-7 aspect-square rounded-full"
-          style={{
-            background: `url('${user.image}') center/ cover`,
-          }}
+        <Image
+          className="h-7 aspect-square rounded-full bg-cover bg-center"
+          width={30}
+          height={10}
+          src={user.image ? user.image : "//picsum.photos/100"}
+          alt="profile"
         />
         <p>{user.name}</p>
       </div>

@@ -9,7 +9,8 @@ export const createForm = async ({
   formFields,
 }: {
   formFields: FormElement[];
-}): Promise<Form> => {
+  // }): Promise<Form> => {
+}): Promise<void> => {
   const session = await getServerSession();
   if (!session) throw new Error("User not found: " + session);
 
@@ -45,6 +46,14 @@ export const createForm = async ({
               title: field.title,
               required: field.required,
               index: field.index,
+            };
+          if (field.type === FieldType.IMAGE)
+            return {
+              title: field.title,
+              type: field.type,
+              required: field.required,
+              index: field.index,
+              image: field.image,
             };
           return {
             type: field.type,

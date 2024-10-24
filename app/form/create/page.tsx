@@ -4,6 +4,7 @@ import { FormManager } from "@/classes/FormManager";
 import { formElements } from "@/recoil/atoms";
 import { FieldType } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
+import { FaArrowLeft } from "react-icons/fa";
 import { useRecoilState } from "recoil";
 
 export type FormElement = {
@@ -85,7 +86,14 @@ const CreateForm = () => {
         <div className="grow p-10 h-[80vh] overflow-y-scroll">
           <div className="">
             <div className="flex flex-col gap-3" ref={fieldContainer}>
-              {formFields}
+              {manager?.formFields.length === 0 ? (
+                <div className="border4 border-neutral-800 border-dashed px-5 py-10 rounded-xl work text-xl font-medium">
+                  <FaArrowLeft className="animate-bounce" />
+                  Start adding fields to your form
+                </div>
+              ) : (
+                formFields
+              )}
             </div>
           </div>
         </div>
