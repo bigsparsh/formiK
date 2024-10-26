@@ -46,7 +46,6 @@ const UserSettings = ({
       </div>
       <motion.div
         className="flex flex-col absolute top-12 left-0  w-full z-60 gap-1"
-        // ref={menuRef}
         initial="hidden"
         variants={{
           hidden: {

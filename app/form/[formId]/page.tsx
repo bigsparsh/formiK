@@ -1,15 +1,16 @@
 "use client";
 
 import { getFormFields } from "@/actions/Form";
+import { FormOutputManager } from "@/classes/FormOutputManager";
 import NavBar from "@/components/NavBar";
+import { formOutputElements } from "@/recoil/atoms";
 import { FieldType } from "@prisma/client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 
 export type FullFormType = {
   form_id: string;
   title: string;
-  field_id: string;
   user_id: string;
   fields: {
     title: string;
@@ -36,15 +37,19 @@ const FormPage = ({
     formId: string;
   };
 }) => {
-  const [form, setForm] = useState<FullFormType>();
+  const [formFields, setFormFields] =
+    useRecoilState<JSX.Element>(formOutputElements);
+  const [manager, setManager] = useState<FormOutputManager>();
 
   const gets = async () => {
-    setForm((await getFormFields(formId)) as FullFormType);
+    setManager(
+      FormOutputManager.getInstance(setFormFields, await getFormFields(formId)),
+    );
   };
 
   useEffect(() => {
     gets();
-    console.log(form);
+    manager?.createFrontendForm();
   }, []);
   return (
     <div
@@ -56,36 +61,9 @@ const FormPage = ({
     >
       <NavBar />
       <div className="w-full max-w-6xl bg-neutral-500 margin-auto mx-10 rounded-none xl:rounded-3xl backdrop-blur-lg overflow-clip">
-        <h1 className="p-5 bg-neutral-600 ma text-neutral-50 font-bold text-3xl">
-          {" "}
-          {form?.title}{" "}
-        </h1>
-        <form className="text-neutral-200 flex flex-col gap-2">
-          {form?.fields.map((field) => {
-            switch (field.type) {
-              case FieldType.TEXT:
-                return (
-                  <h2
-                    key={crypto.randomUUID()}
-                    className="px-4 py-2 text-2xl font-semibold"
-                  >
-                    {field.title}
-                  </h2>
-                );
-              case FieldType.IMAGE:
-                return (
-                  <Image
-                    src={field.image || ""}
-                    alt={field.title}
-                    width={500}
-                    height={500}
-                    className=" mx-10 rounded-3xl bg-cover bg-center h-[300px] self-center"
-                  />
-                );
-              case FieldType.OPTION:
-                return <h1 key={crypto.randomUUID()}>hello options</h1>;
-            }
-          })}
+        <form className="text-neutral-200 flex flex-col gap-2 px-10">
+          {formFields}
+          <button className="hello">Submit Form</button>
         </form>
       </div>
     </div>

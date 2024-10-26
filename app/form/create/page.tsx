@@ -1,7 +1,7 @@
 "use client";
 
-import { FormManager } from "@/classes/FormManager";
-import { formElements } from "@/recoil/atoms";
+import { FormInputManager } from "@/classes/FormInputManager";
+import { formInputElements } from "@/recoil/atoms";
 import { FieldType } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
@@ -20,13 +20,13 @@ export type FormElement = {
 };
 
 const CreateForm = () => {
-  const [formFields, setFormFields] = useRecoilState(formElements);
-  const [manager, setManager] = useState<FormManager | null>(null);
+  const [formFields, setFormFields] = useRecoilState(formInputElements);
+  const [manager, setManager] = useState<FormInputManager | null>(null);
   const fieldContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!manager) {
-      setManager(FormManager.getInstance(setFormFields));
+      setManager(FormInputManager.getInstance(setFormFields));
     }
   }, [manager, setFormFields]);
 

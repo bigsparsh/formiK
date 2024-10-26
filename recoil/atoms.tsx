@@ -1,22 +1,12 @@
 import React from "react";
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
-export const formElements = atom<JSX.Element>({
-  key: "formElements",
+export const formInputElements = atom<JSX.Element>({
+  key: "formInputElements",
   default: <></>,
 });
 
-// export const currentFieldId = atom<number>({
-//   key: "currentFormId",
-//   default: 0,
-// });
-//
-// export const currrentFormField = selector({
-//   key: "currrentUserForm",
-//   get: ({ get }) => {
-//     const filter = get(currentFieldId);
-//     const allElements = get(formElements);
-//
-//     return allElements.find((ele) => ele.index === filter);
-//   },
-// });
+export const formOutputElements = atom<JSX.Element>({
+  key: "formOutputElements",
+  default: <></>,
+});

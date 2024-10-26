@@ -1,13 +1,13 @@
 "use client";
 
-import { FormManager } from "@/classes/FormManager";
+import { FormInputManager } from "@/classes/FormInputManager";
 import { useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 
 const ImageInputField = ({ id }: { id: number }) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const manager = FormManager.getInstance();
+  const manager = FormInputManager.getInstance();
   return (
     <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-3 text-white">
       <input

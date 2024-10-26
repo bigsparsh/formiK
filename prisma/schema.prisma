@@ -28,7 +28,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Form Form[]
+  forms Form[]
+  responses Response[]
 }
  
 model Account {
@@ -91,6 +92,7 @@ model Form {
   title    String
   user_id  String
   user     User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  responses Response[]
   fields   Field[]
 }
 
@@ -104,6 +106,7 @@ model Field {
   is_heading  Boolean?
   index       Int
   options     Option[]
+  field_responses FieldResponse[]
   form        Form        @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
 }
 
@@ -113,6 +116,25 @@ model Option {
   field     Field  @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
   value     String
   index    Int
+}
+
+model Response {
+  response_id String @id @default(cuid())
+  form_id     String
+  user_id     String
+  fields      FieldResponse[]
+  form        Form   @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
+  user        User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model FieldResponse {
+  field_response_id String @id @default(cuid())
+  field_id          String
+  response_id       String
+  option_index      Int?
+  text              String?
+  field             Field    @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
+  response          Response @relation(fields: [response_id], references: [response_id], onDelete: Cascade)
 }
 
 enum FieldType {

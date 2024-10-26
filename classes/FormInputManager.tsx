@@ -7,11 +7,11 @@ import { FieldType } from "@prisma/client";
 import { put } from "@vercel/blob";
 import { SetterOrUpdater } from "recoil";
 
-export class FormManager {
+export class FormInputManager {
   formFields: FormElement[];
   formJSX: JSX.Element[];
   setParentComponent: SetterOrUpdater<JSX.Element> | null;
-  static instance: FormManager | null;
+  static instance: FormInputManager | null;
 
   private constructor(setPc: SetterOrUpdater<JSX.Element>) {
     this.formFields = [];
@@ -24,7 +24,7 @@ export class FormManager {
       if (!setPc) {
         throw new Error("Parent component and setter is required");
       }
-      this.instance = new FormManager(setPc);
+      this.instance = new FormInputManager(setPc);
     }
     return this.instance;
   }

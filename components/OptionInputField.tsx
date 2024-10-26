@@ -1,6 +1,6 @@
 "use client";
 import { FormElement } from "@/app/form/create/page";
-import { FormManager } from "@/classes/FormManager";
+import { FormInputManager } from "@/classes/FormInputManager";
 import { useRef } from "react";
 
 const OptionInputField = ({
@@ -12,7 +12,7 @@ const OptionInputField = ({
 }) => {
   // const [reRender, setReRender] = useState(false);
   const requiredRef = useRef<HTMLInputElement>(null);
-  const manager = FormManager.getInstance();
+  const manager = FormInputManager.getInstance();
 
   // useEffect(() => { }, [reRender, options]);
 
