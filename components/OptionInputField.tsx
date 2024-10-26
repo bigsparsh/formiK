@@ -3,7 +3,7 @@ import { FormElement } from "@/app/form/create/page";
 import { FormManager } from "@/classes/FormManager";
 import { useRef } from "react";
 
-const OptionField = ({
+const OptionInputField = ({
   id,
   options,
 }: {
@@ -20,7 +20,7 @@ const OptionField = ({
     <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-3 text-white">
       <input
         type="text"
-        className="w-full py-2 bg-neutral-700 rounded-full px-5"
+        className="w-full py-2 bg-neutral-700 rounded-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
         placeholder="Enter the title of the field"
         onChange={(e) => {
           manager.setTextToField(id, e.target.value);
@@ -37,7 +37,7 @@ const OptionField = ({
                   </p>
                   <input
                     type="text"
-                    className="w-full py-1 bg-neutral-700 rounded-r-xl px-5"
+                    className="w-full py-1 bg-neutral-700 rounded-r-xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
                     placeholder={"Option"}
                     onChange={(e) => {
                       manager.setTextToOptionField(
@@ -115,4 +115,4 @@ const OptionField = ({
     </div>
   );
 };
-export default OptionField;
+export default OptionInputField;

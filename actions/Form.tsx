@@ -9,8 +9,8 @@ export const createForm = async ({
   formFields,
 }: {
   formFields: FormElement[];
-  // }): Promise<Form> => {
-}): Promise<void> => {
+}): Promise<Form> => {
+  // }): Promise<void> => {
   const session = await getServerSession();
   if (!session) throw new Error("User not found: " + session);
 
@@ -19,51 +19,46 @@ export const createForm = async ({
       email: session.user.email,
     },
   });
-  const newForm = await prisma.form.create({
-    data: {
-      user_id: user?.id as string,
-      title: "This is a new Form",
-      fields: {
-        create: formFields.map((field) => {
-          if (field.type === FieldType.OPTION)
-            return {
-              type: field.type,
-              title: field.title,
-              required: field.required,
-              index: field.index,
-              options: {
-                create: field.options?.map((opt) => {
-                  return {
-                    value: opt.value,
-                    index: opt.index,
-                  };
-                }),
-              },
-            };
-          if (field.type === FieldType.TEXT)
-            return {
-              type: field.type,
-              title: field.title,
-              required: field.required,
-              index: field.index,
-            };
-          if (field.type === FieldType.IMAGE)
-            return {
-              title: field.title,
-              type: field.type,
-              required: field.required,
-              index: field.index,
-              image: field.image,
-            };
+  const newFormData = {
+    user_id: user?.id as string,
+    title: "This is a new Form",
+    fields: {
+      create: formFields.map((field) => {
+        if (field.type === FieldType.OPTION)
           return {
-            type: field.type,
+            type: FieldType.OPTION,
             title: field.title,
             required: field.required,
             index: field.index,
+            options: {
+              create: field.options?.map((opt) => {
+                return {
+                  value: opt.value,
+                  index: opt.index,
+                };
+              }),
+            },
           };
-        }),
-      },
+        if (field.type === FieldType.IMAGE)
+          return {
+            title: field.title,
+            type: FieldType.IMAGE,
+            required: field.required,
+            index: field.index,
+            image: field.image,
+          };
+        return {
+          type: FieldType.TEXT,
+          title: field.title,
+          required: field.required,
+          index: field.index,
+        };
+      }),
     },
+  };
+  const newForm = await prisma.form.create({
+    // @ts-expect-error "no"
+    data: newFormData,
     include: {
       fields: {
         include: {
@@ -83,8 +78,15 @@ export const getFormFields = async (formId: string) => {
     },
     include: {
       fields: {
+        orderBy: {
+          index: "asc",
+        },
         include: {
-          options: true,
+          options: {
+            orderBy: {
+              index: "asc",
+            },
+          },
         },
       },
     },

@@ -1,8 +1,8 @@
 import { createForm } from "@/actions/Form";
 import { FormElement } from "@/app/form/create/page";
-import ImageField from "@/components/ImageField";
-import OptionField from "@/components/OptionField";
-import TextComponent from "@/components/TextComponent";
+import ImageInputField from "@/components/ImageInputField";
+import OptionInputField from "@/components/OptionInputField";
+import TextInputField from "@/components/TextInputField";
 import { FieldType } from "@prisma/client";
 import { put } from "@vercel/blob";
 import { SetterOrUpdater } from "recoil";
@@ -35,7 +35,7 @@ export class FormManager {
       value: "Option",
     });
     this.formJSX[index] = (
-      <OptionField
+      <OptionInputField
         key={crypto.randomUUID()}
         id={index}
         options={this.formFields[index].options}
@@ -72,9 +72,8 @@ export class FormManager {
         value: "Option " + (i + 1),
       });
     }
-    console.log(this.formFields[index].options);
     this.formJSX[index] = (
-      <OptionField
+      <OptionInputField
         key={this.formJSX[index].key}
         id={index}
         options={this.formFields[index].options}
@@ -102,7 +101,7 @@ export class FormManager {
     });
 
     this.formJSX?.push(
-      <OptionField
+      <OptionInputField
         key={crypto.randomUUID()}
         id={this.formFields.length - 1}
         options={this.formFields[this.formFields.length - 1].options}
@@ -127,10 +126,10 @@ export class FormManager {
     });
 
     this.formJSX?.push(
-      <TextComponent
+      <TextInputField
         key={crypto.randomUUID()}
         id={this.formFields.length - 1}
-      ></TextComponent>,
+      ></TextInputField>,
     );
 
     this.update();
@@ -145,10 +144,10 @@ export class FormManager {
     });
 
     this.formJSX?.push(
-      <ImageField
+      <ImageInputField
         key={crypto.randomUUID()}
         id={this.formFields.length - 1}
-      ></ImageField>,
+      ></ImageInputField>,
     );
 
     this.update();
@@ -175,8 +174,5 @@ export class FormManager {
     createForm({
       formFields: this.formFields,
     });
-  }
-  makeForm() {
-    console.log(this.formFields);
   }
 }

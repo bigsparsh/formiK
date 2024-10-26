@@ -85,3 +85,14 @@ body {
     @apply bg-background text-foreground;
   }
 }
+*::selection {
+  @apply bg-neutral-800;
+  @apply text-neutral-200;
+}
+::-webkit-scrollbar {
+  @apply w-2;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-700;
+  @apply rounded-xl;
+}

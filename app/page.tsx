@@ -1,38 +1,8 @@
-"use client";
 import HoveringCheckbox from "@/components/HoveringCheckbox";
+import NavBar from "@/components/NavBar";
 import SpecialButton from "@/components/SpecialButton";
-import UserSettings from "@/components/UserSettings";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
 
 const Landing = () => {
-  const session = useSession();
-  const [loading, setLoading] = useState(true);
-  const [userx, setUser] = useState<{
-    name: string;
-    email: string;
-    image: string;
-  } | null>(null);
-  useEffect(() => {
-    if (session.status === "loading") {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
-    if (session.status === "authenticated") {
-      setUser({
-        name: (session.data.user?.name
-          ? session.data.user.name
-          : session.data.user?.email?.split("@")[0]) as string,
-        email: session.data.user?.email as string,
-        image: session.data.user?.image as string,
-      });
-    } else {
-      setUser(null);
-    }
-  }, [session]);
-
   return (
     <div
       className="ma"
@@ -42,24 +12,7 @@ const Landing = () => {
       }}
     >
       <div className="flex flex-col h-screen">
-        <nav className="p-10 flex justify-between">
-          <h1 className="text-4xl font-semibold tracking-tight text-white">
-            formiK
-          </h1>
-          {!userx ? (
-            <Link
-              className={
-                "bg-neutral-700 px-5 py-2 rounded-full font-semibold border-2 border-white/50 text-white " +
-                (loading ? "animate-pulse pointer-events-none" : "")
-              }
-              href="/auth"
-            >
-              Login or Register
-            </Link>
-          ) : (
-            <UserSettings user={userx} />
-          )}
-        </nav>
+        <NavBar />
         <div className="grow flex flex-col items-center justify-center relative">
           <HoveringCheckbox positions="top-10 right-48 flow text-neutral-100">
             <input

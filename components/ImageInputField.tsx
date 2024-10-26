@@ -4,7 +4,7 @@ import { FormManager } from "@/classes/FormManager";
 import { useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 
-const ImageField = ({ id }: { id: number }) => {
+const ImageInputField = ({ id }: { id: number }) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const manager = FormManager.getInstance();
@@ -44,4 +44,4 @@ const ImageField = ({ id }: { id: number }) => {
     </div>
   );
 };
-export default ImageField;
+export default ImageInputField;

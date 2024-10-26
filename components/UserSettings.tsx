@@ -39,7 +39,7 @@ const UserSettings = ({
           className="h-7 aspect-square rounded-full bg-cover bg-center"
           width={30}
           height={10}
-          src={user.image ? user.image : "//picsum.photos/100"}
+          src={user.image ? user.image : "https://picsum.photos/100"}
           alt="profile"
         />
         <p>{user.name}</p>
@@ -47,6 +47,7 @@ const UserSettings = ({
       <motion.div
         className="flex flex-col absolute top-12 left-0  w-full z-60 gap-1"
         // ref={menuRef}
+        initial="hidden"
         variants={{
           hidden: {
             display: "none",
