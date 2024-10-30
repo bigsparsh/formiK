@@ -10,10 +10,12 @@ const OptionOutputField = ({
   title,
   options,
   field_id,
+  className,
 }: {
   title: string;
   options: FormElement["options"];
   field_id: string;
+  className?: string;
 }) => {
   const [check, animate] = useAnimate();
   const manager = FormOutputManager.getInstance();
@@ -29,18 +31,18 @@ const OptionOutputField = ({
   }, [formState, animate, field_id, check]);
 
   return (
-    <div className="w-full px-10 py-3 space-y-3">
+    <div className={"w-full px-10 py-3 space-y-3 " + className}>
       <h1 className="text-xl">{title}</h1>
       <div className="space-y-2 relative">
         <div
-          className="absolute w-3 h-3 rounded-full bg-neutral-400 left-2 top-2"
+          className="absolute w-3 h-3 rounded-full bg-neutral-50 left-2 top-2"
           ref={check}
         ></div>
         {options?.map((option) => {
           return (
             <div
               key={crypto.randomUUID()}
-              className="flex text-lg bg-neutral-700 w-1/4 gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer"
+              className="flex text-lg bg-neutral-600 mix-blend-hard-light w-1/4 gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white"
               onClick={() => {
                 manager.checkRadioField(field_id, option.index);
               }}

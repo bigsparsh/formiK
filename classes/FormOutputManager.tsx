@@ -59,7 +59,15 @@ export class FormOutputManager {
       switch (field.type) {
         case FieldType.TEXT:
           this.formJSX.push(
-            <TextOutputField key={crypto.randomUUID()} title={field.title} />,
+            <TextOutputField
+              key={crypto.randomUUID()}
+              title={field.title}
+              className={
+                this.formJSX.length % 2 === 0
+                  ? "bg-neutral-600"
+                  : "bg-neutral-700"
+              }
+            />,
           );
           break;
         case FieldType.OPTION:
@@ -69,6 +77,11 @@ export class FormOutputManager {
               title={field.title}
               options={field.options}
               field_id={field.field_id}
+              className={
+                this.formJSX.length % 2 === 0
+                  ? "bg-neutral-600"
+                  : "bg-neutral-700"
+              }
             />,
           );
           this.formState = [
@@ -92,7 +105,11 @@ export class FormOutputManager {
               alt={field.title}
               width={500}
               height={500}
-              className="self-center rounded-xl"
+              className={
+                this.formJSX.length % 2 === 0
+                  ? "bg-neutral-600"
+                  : "bg-neutral-700"
+              }
             />,
           );
       }

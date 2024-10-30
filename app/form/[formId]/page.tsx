@@ -6,7 +6,7 @@ import NavBar from "@/components/NavBar";
 import { formOutputElements, formStateAtom } from "@/recoil/atoms";
 import { FieldType } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 export type FullFormType = {
   form_id: string;
@@ -40,7 +40,7 @@ const FormPage = ({
   const [formFields, setFormFields] =
     useRecoilState<JSX.Element>(formOutputElements);
   const [manager, setManager] = useState<FormOutputManager>();
-  const [_, setFormState] = useRecoilState<FormState[]>(formStateAtom);
+  const setFormState = useSetRecoilState<FormState[]>(formStateAtom);
 
   const gets = async () => {
     setManager(
@@ -70,9 +70,11 @@ const FormPage = ({
     >
       <NavBar />
       <div className="w-full max-w-6xl bg-neutral-600 margin-auto mx-10 rounded-none xl:rounded-3xl backdrop-blur-lg overflow-clip">
-        <form className="text-neutral-200 flex flex-col gap-2">
+        <form className="text-neutral-200 flex flex-col">
           {formFields}
-          <button className="hello">Submit Form</button>
+          <button className="w-full ma bg-neutral-300 text-neutral-800 font-semibold text-2xl py-2">
+            Submit Form
+          </button>
         </form>
       </div>
     </div>
