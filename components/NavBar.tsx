@@ -33,9 +33,12 @@ const NavBar = () => {
 
   return (
     <nav className="p-10 flex justify-between w-full">
-      <h1 className="text-4xl font-semibold tracking-tight text-white">
+      <Link
+        className="text-4xl font-semibold tracking-tight text-white"
+        href="/"
+      >
         formiK
-      </h1>
+      </Link>
       {!userx ? (
         <Link
           className={

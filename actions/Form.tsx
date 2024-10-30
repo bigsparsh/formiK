@@ -71,6 +71,34 @@ export const createForm = async ({
   return newForm;
 };
 
+export const getForms = async () => {
+  const session = await getServerSession();
+  if (!session) throw new Error("User not found: " + session);
+  const form = await prisma.form.findMany({
+    where: {
+      user: {
+        email: session.user.email,
+      },
+    },
+    include: {
+      fields: {
+        orderBy: {
+          index: "asc",
+        },
+        include: {
+          options: {
+            orderBy: {
+              index: "asc",
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return form;
+};
+
 export const getFormFields = async (formId: string) => {
   const form = await prisma.form.findUnique({
     where: {

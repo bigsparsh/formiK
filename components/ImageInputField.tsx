@@ -29,7 +29,7 @@ const ImageInputField = ({ id }: { id: number }) => {
         style={{
           background: fileName
             ? `url('${URL.createObjectURL(fileRef.current?.files?.[0] as File)}') center/cover`
-            : "radial-gradient(100% 100% at 50% 50%, transparent ,transparent, gray)",
+            : "radial-gradient(100% 100% at 50% 50%, transparent ,transparent, gray), linear-gradient(#80808050 0% 1%, transparent 25% 75%, #80808050 99% 100%), linear-gradient(90deg, #80808050 0% 1%, transparent 25% 75%, #80808050 99% 100%)",
         }}
         onClick={() => {
           fileRef.current?.click();

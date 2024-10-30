@@ -54,6 +54,7 @@ const FormPage = ({
 
   useEffect(() => {
     gets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

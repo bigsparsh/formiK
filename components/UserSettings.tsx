@@ -14,7 +14,7 @@ const UserSettings = ({
     email: string;
   };
 }) => {
-  const [menuOpen, setMenuOpen] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
   const controls = useAnimationControls();
   const router = useRouter();
 
@@ -30,7 +30,7 @@ const UserSettings = ({
 
   return (
     <motion.div
-      className="bg-neutral-700 pl-2 pr-5 py-2 rounded-3xl font-semibold border-2 border-white/50 flex flex-col relative text-white"
+      className="bg-neutral-700 pl-2 pr-5 py-2 rounded-3xl font-semibold border-2 border-white/50 flex flex-col relative text-white cursor-pointer"
       onClick={handleClick}
       layout
     >
@@ -56,6 +56,7 @@ const UserSettings = ({
             y: 0,
             display: "flex",
             opacity: 1,
+            zIndex: 50,
             transition: {
               delayChildren: 0,
               staggerChildren: 0.25,
@@ -82,10 +83,10 @@ const UserSettings = ({
         ].map((item, i) => (
           <motion.div
             key={i}
-            className="bg-neutral-600 px-4 py-1 w-full rounded-3xl z-50 cursor-pointer"
+            className="bg-neutral-600 px-4 py-1 w-full rounded-3xl cursor-pointer"
             variants={{
               hidden: {
-                y: "-50px",
+                y: "0",
                 display: "none",
                 opacity: 0,
               },
@@ -96,10 +97,10 @@ const UserSettings = ({
               },
             }}
           >
-            <div className="flex gap-3 items-center" onClick={item.onClick}>
+            <button className="flex gap-3 items-center" onClick={item.onClick}>
               {item.icon}
               {item.title}
-            </div>
+            </button>
           </motion.div>
         ))}
       </motion.div>
