@@ -1,9 +1,9 @@
 "use client";
 
 import { getFormFields } from "@/actions/Form";
-import { FormOutputManager } from "@/classes/FormOutputManager";
+import { FormOutputManager, FormState } from "@/classes/FormOutputManager";
 import NavBar from "@/components/NavBar";
-import { formOutputElements } from "@/recoil/atoms";
+import { formOutputElements, formStateAtom } from "@/recoil/atoms";
 import { FieldType } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -40,17 +40,26 @@ const FormPage = ({
   const [formFields, setFormFields] =
     useRecoilState<JSX.Element>(formOutputElements);
   const [manager, setManager] = useState<FormOutputManager>();
+  const [_, setFormState] = useRecoilState<FormState[]>(formStateAtom);
 
   const gets = async () => {
     setManager(
-      FormOutputManager.getInstance(setFormFields, await getFormFields(formId)),
+      FormOutputManager.getInstance(
+        setFormFields,
+        setFormState,
+        await getFormFields(formId),
+      ),
     );
   };
 
   useEffect(() => {
     gets();
-    manager?.createFrontendForm();
   }, []);
+
+  useEffect(() => {
+    manager?.createFrontendForm();
+  }, [manager]);
+
   return (
     <div
       className="ma h-screen text-neutral-900 flex flex-col items-center"
@@ -60,8 +69,8 @@ const FormPage = ({
       }}
     >
       <NavBar />
-      <div className="w-full max-w-6xl bg-neutral-500 margin-auto mx-10 rounded-none xl:rounded-3xl backdrop-blur-lg overflow-clip">
-        <form className="text-neutral-200 flex flex-col gap-2 px-10">
+      <div className="w-full max-w-6xl bg-neutral-600 margin-auto mx-10 rounded-none xl:rounded-3xl backdrop-blur-lg overflow-clip">
+        <form className="text-neutral-200 flex flex-col gap-2">
           {formFields}
           <button className="hello">Submit Form</button>
         </form>

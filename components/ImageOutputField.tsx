@@ -15,15 +15,13 @@ const ImageOutputField = ({
   className: string;
 }) => {
   return (
-    <div className="">
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        className={className}
-      />
-    </div>
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      className={className}
+    />
   );
 };
 

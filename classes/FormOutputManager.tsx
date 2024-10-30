@@ -1,66 +1,136 @@
 import { FullFormType } from "@/app/form/[formId]/page";
 import ImageOutputField from "@/components/ImageOutputField";
 import OptionOutputField from "@/components/OptionOutputField";
+import OutputRenderer from "@/components/OuputRenderer";
 import TextOutputField from "@/components/TextOutputField";
 import { FieldType } from "@prisma/client";
 import { SetterOrUpdater } from "recoil";
+
+export type FormState = {
+  index: number;
+  field_id: string;
+  options?: {
+    index: number;
+    checked: boolean;
+  }[];
+};
 
 export class FormOutputManager {
   formFields: FullFormType;
   formJSX: JSX.Element[];
   setParentComponent: SetterOrUpdater<JSX.Element> | null;
+  setFormState: SetterOrUpdater<FormState[]> | null;
+  formState: FormState[];
   static instance: FormOutputManager | null;
 
   private constructor(
     setPc: SetterOrUpdater<JSX.Element>,
+    setFs: SetterOrUpdater<FormState[]>,
     formFields: FullFormType,
   ) {
     this.formFields = formFields;
     this.setParentComponent = setPc;
     this.formJSX = [];
+    this.setFormState = setFs;
+    this.formState = [];
   }
 
   static getInstance(
     setPc?: SetterOrUpdater<JSX.Element>,
+    setFs?: SetterOrUpdater<FormState[]>,
     formFields?: FullFormType,
   ) {
     if (!this.instance) {
-      if (!setPc || !formFields) {
+      if (!setPc || !formFields || !setFs) {
         throw new Error(
           "Parent component and setter is required and also form fields",
         );
       }
-      this.instance = new FormOutputManager(setPc, formFields);
+      this.instance = new FormOutputManager(setPc, setFs, formFields);
     }
     return this.instance;
   }
 
   createFrontendForm() {
-    if (!this.formFields) {
-      throw new Error("Form fields not found");
+    if (!this.formFields || !this.setFormState) {
+      throw new Error("Form fields and form state setter is required");
     }
     this.formFields.fields.map((field) => {
       switch (field.type) {
         case FieldType.TEXT:
-          this.formJSX.push(<TextOutputField title={field.title} />);
+          this.formJSX.push(
+            <TextOutputField key={crypto.randomUUID()} title={field.title} />,
+          );
           break;
         case FieldType.OPTION:
           this.formJSX.push(
-            <OptionOutputField title={field.title} options={field.options} />,
+            <OptionOutputField
+              key={crypto.randomUUID()}
+              title={field.title}
+              options={field.options}
+              field_id={field.field_id}
+            />,
           );
+          this.formState = [
+            ...this.formState,
+            {
+              field_id: field.field_id,
+              index: field.index,
+              options: field.options?.map((option) => ({
+                index: option.index,
+                checked: false,
+              })),
+            },
+          ];
+          this.setFormStateSetter();
           break;
         case FieldType.IMAGE:
           this.formJSX.push(
             <ImageOutputField
+              key={crypto.randomUUID()}
               src={(field.image as string) || ""}
               alt={field.title}
               width={500}
               height={500}
-              className="self-center"
+              className="self-center rounded-xl"
             />,
           );
       }
     });
+    this.update();
+  }
+
+  setFormStateSetter() {
+    if (!this.setFormState) {
+      throw new Error("Form state setter is required");
+    }
+    this.setFormState(this.formState);
+  }
+
+  checkRadioField(field_id: string, option_index: number) {
+    this.formState = this.formState.map((field) => {
+      if (field.field_id === field_id) {
+        return {
+          index: field.index,
+          field_id: field.field_id,
+          options: field.options?.map((option) => {
+            if (option.index === option_index) {
+              return {
+                index: option.index,
+                checked: true,
+              };
+            }
+            return {
+              index: option.index,
+              checked: false,
+            };
+          }),
+        };
+      }
+      return field;
+    });
+    this.setFormStateSetter();
+    this.update();
   }
 
   update() {
@@ -68,12 +138,7 @@ export class FormOutputManager {
       throw new Error("Parent component, form fields and form JSX is required");
     }
     this.setParentComponent(
-      <>
-        <h1 className="p-5 bg-neutral-600 ma text-neutral-50 font-bold text-3xl">
-          {this.formFields.title}
-        </h1>
-        {this.formJSX}
-      </>,
+      <OutputRenderer formJSX={this.formJSX} formFields={this.formFields} />,
     );
   }
 }

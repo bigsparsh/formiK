@@ -48,27 +48,6 @@ const OptionInputField = ({
                     }}
                   />
                 </div>
-                {
-                  // <div className="flex">
-                  //   <button
-                  //     className="bg-neutral-700 w-9 h-full rounded-l-xl grid place-items-center"
-                  //     onClick={() => {
-                  //       // handleDeleteOption(index);
-                  //     }}
-                  //   >
-                  //     <FaTrash />
-                  //   </button>
-                  //   <button
-                  //     className="bg-neutral-800 w-9 h-full rounded-r-xl grid place-items-center"
-                  //     onClick={() => {
-                  //       manager?.setOptionToField(id);
-                  //       setReRender(!reRender);
-                  //     }}
-                  //   >
-                  //     <FaPlus />
-                  //   </button>
-                  // </div>
-                }
               </div>
             );
           })}
