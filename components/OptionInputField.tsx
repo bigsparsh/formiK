@@ -10,11 +10,8 @@ const OptionInputField = ({
   id: number;
   options: FormElement["options"];
 }) => {
-  // const [reRender, setReRender] = useState(false);
   const requiredRef = useRef<HTMLInputElement>(null);
   const manager = FormInputManager.getInstance();
-
-  // useEffect(() => { }, [reRender, options]);
 
   return (
     <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-3 text-white">

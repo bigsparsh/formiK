@@ -22,8 +22,6 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -71,44 +69,32 @@ model VerificationToken {
   @@id([identifier, token])
 }
  
-// Optional for WebAuthn support
-model Authenticator {
-  credentialID         String  @unique
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
- 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-  @@id([userId, credentialID])
-}
 
 model Form {
-  form_id  String    @id @default(cuid())
-  title    String
-  user_id  String
-  created_at DateTime @default(now())
-  user     User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  responses Response[]
-  fields   Field[]
+  form_id     String    @id @default(cuid())
+  title       String
+  cover_image String  
+  user_id     String
+  created_at  DateTime  @default(now())
+  user        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  responses   Response[]
+  fields      Field[]
 }
 
 model Field {
-  field_id    String      @id @default(cuid())
-  form_id     String
-  type        FieldType
-  title       String
-  required    Boolean
-  image       String?
-  is_heading  Boolean?
-  index       Int
-  options     Option[]
+  field_id        String      @id @default(cuid())
+  form_id         String
+  type            FieldType
+  title           String
+  required        Boolean
+  image           String?
+  index           Int
+  text_field_type TextFieldType?
+  multi_select    Boolean?
+  options         Option[]
   field_responses FieldResponse[]
-  form        Form        @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
+  text_style      TextStyle[]
+  form            Form        @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
 }
 
 model Option {
@@ -138,8 +124,37 @@ model FieldResponse {
   response          Response @relation(fields: [response_id], references: [response_id], onDelete: Cascade)
 }
 
+model TextStyle {
+  text_id           String @id @default(cuid())
+  field_id          String
+  format            FontFormat?
+  size              FontSize
+  field             Field    @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
+}
+
 enum FieldType {
   OPTION
   TEXT
+  TEXT_IMAGE
+  TEXT_INPUT
   IMAGE
+}
+
+enum TextFieldType {
+  TEXT
+  EMAIL
+  NUMBER
+}
+
+enum FontSize {
+  XL
+  LG
+  MD
+  SM
+}
+
+enum FontFormat {
+  BOLD
+  ITALIC
+  UNDERLINE
 }
