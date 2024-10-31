@@ -22,6 +22,7 @@ export const createForm = async ({
   const newFormData = {
     user_id: user?.id as string,
     title: "This is a new Form",
+    cover_image: "https://picsum.photos/1920/1080",
     fields: {
       create: formFields.map((field) => {
         if (field.type === FieldType.OPTION)

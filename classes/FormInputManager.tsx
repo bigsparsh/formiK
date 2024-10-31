@@ -64,6 +64,10 @@ export class FormInputManager {
     this.formFields[index].required = required;
   }
 
+  setMultipleChoice(index: number, multiple: boolean) {
+    this.formFields[index].multi_select = multiple;
+  }
+
   editOptionCount(index: number, amount: number) {
     this.formFields[index].options = [];
     for (let i = 0; i < amount; i++) {
@@ -156,10 +160,11 @@ export class FormInputManager {
   async finalizeForm() {
     const updatedFields = this.formFields.map(async (field) => {
       if (field.type === FieldType.IMAGE) {
+        console.log(field.image, field.index);
         field.image = (
           await put(
             "form-image-" + field.index + crypto.randomUUID(),
-            field.image as string,
+            field.image as File,
             {
               access: "public",
               token:

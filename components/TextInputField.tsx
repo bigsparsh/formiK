@@ -6,24 +6,24 @@ import { FaUpload } from "react-icons/fa";
 
 const TextInputField = ({ id }: { id: number }) => {
   const manager = FormInputManager.getInstance();
-  const textRef = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [fontSize, setFontSize] = useState<FontSize>();
   const [formatting, setFormatting] = useState<FontFormat[]>([]);
 
   return (
-    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-3 text-white">
-      <input
-        type="text"
-        className="w-full py-2 bg-neutral-700 rounded-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-2 text-white">
+      <textarea
+        className="w-full py-2 bg-neutral-700 rounded-3xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 placeholder:px-5 resize-none"
         placeholder={"Enter the title of the field " + id}
         ref={textRef}
+        rows={2}
         onChange={(e) => {
           manager.setTextToField(id, e.target.value as string);
         }}
-      />
-      <div className="flex gap-4">
+      ></textarea>
+      <div className="flex gap-2">
         <div
           className="basis-1/2 bg-neutral-700 rounded-3xl flex flex-col justify-center items-center  gap-2"
           style={{

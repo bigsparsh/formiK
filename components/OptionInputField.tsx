@@ -1,7 +1,7 @@
 "use client";
 import { FormElement } from "@/app/form/create/page";
 import { FormInputManager } from "@/classes/FormInputManager";
-import { useRef } from "react";
+import { useState } from "react";
 
 const OptionInputField = ({
   id,
@@ -10,7 +10,8 @@ const OptionInputField = ({
   id: number;
   options: FormElement["options"];
 }) => {
-  const requiredRef = useRef<HTMLInputElement>(null);
+  const [required, setRequired] = useState<boolean>(false);
+  const [mutliSelect, setMultiSelect] = useState<boolean>(false);
   const manager = FormInputManager.getInstance();
 
   return (
@@ -29,12 +30,12 @@ const OptionInputField = ({
             return (
               <div className="flex gap-3" key={crypto.randomUUID()}>
                 <div className="flex">
-                  <p className="bg-neutral-800 grid place-items-center w-[4ch] h-full rounded-l-xl">
+                  <p className="bg-neutral-800 grid place-items-center w-[4ch] h-full rounded-l-full">
                     {opt.index}
                   </p>
                   <input
                     type="text"
-                    className="w-full py-1 bg-neutral-700 rounded-r-xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+                    className="w-full py-1 bg-neutral-700 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
                     placeholder={"Option"}
                     onChange={(e) => {
                       manager.setTextToOptionField(
@@ -49,8 +50,8 @@ const OptionInputField = ({
             );
           })}
         </div>
-        <div className="basis-1/4 self-end py-2 px-4 bg-neutral-700 rounded-xl flex flex-col gap-1">
-          <div>
+        <div className="basis-1/4 self-end p-3 bg-neutral-700 rounded-3xl flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <label className="font-medium px-2">
               Enter the number of options:
             </label>
@@ -58,33 +59,38 @@ const OptionInputField = ({
               type="range"
               min={2}
               max={6}
-              className="w-full py-2 bg-neutral-700 rounded-full px-5 accent-neutral-700 outline-none"
+              className="w-full  bg-neutral-700 rounded-full px-5 accent-neutral-700 outline-none"
               onChange={(e) => {
                 manager.editOptionCount(id, parseInt(e.target.value));
               }}
             />
           </div>
-          <div className="flex gap-3 items-center">
-            <input type="checkbox" className="hidden" ref={requiredRef} />
-            <button
-              className="hover:cursor-pointer rounded-xl px-3 py-1 border border-neutral-600 box-border"
-              onClick={(e) => {
-                if (requiredRef.current)
-                  if (requiredRef.current?.checked) {
-                    requiredRef.current.checked = false;
-                    (e.target as HTMLButtonElement).className =
-                      "hover:cursor-pointer rounded-xl px-3 py-1 border border-neutral-600";
-                    manager.setRequired(id, false);
-                  } else {
-                    requiredRef.current.checked = true;
-                    (e.target as HTMLButtonElement).className =
-                      "hover:cursor-pointer rounded-xl px-3 py-1 bg-neutral-600 border";
-                    manager.setRequired(id, true);
-                  }
-              }}
-            >
-              Field Required
-            </button>
+          <div className="flex flex-col gap-1">
+            <h1 className="font-medium px-2">Attributes:</h1>
+            <div className="flex gap-3 items-center">
+              <button
+                className={
+                  "hover:cursor-pointer rounded-full px-3 py-1 border box-border outline-none " +
+                  (required ? "bg-neutral-600" : "border-neutral-600")
+                }
+                onClick={() => {
+                  setRequired(!required);
+                }}
+              >
+                Field Required
+              </button>
+              <button
+                className={
+                  "hover:cursor-pointer rounded-full px-3 py-1 border box-border outline-none " +
+                  (mutliSelect ? "bg-neutral-600" : "border-neutral-600")
+                }
+                onClick={() => {
+                  setMultiSelect(!mutliSelect);
+                }}
+              >
+                Multi Select
+              </button>
+            </div>
           </div>
         </div>
       </div>

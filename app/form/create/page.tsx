@@ -2,7 +2,7 @@
 
 import { FormInputManager } from "@/classes/FormInputManager";
 import { formInputElements } from "@/recoil/atoms";
-import { FieldType } from "@prisma/client";
+import { FieldType, FontFormat, FontSize, TextFieldType } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRecoilState } from "recoil";
@@ -12,6 +12,12 @@ export type FormElement = {
   title: string;
   required: boolean;
   index: number;
+  multi_select?: boolean;
+  text_style?: {
+    format?: FontFormat;
+    size: FontSize;
+  };
+  text_field_type?: TextFieldType;
   image?: string | File;
   options?: {
     value: string;

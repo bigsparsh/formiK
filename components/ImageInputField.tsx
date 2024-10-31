@@ -2,7 +2,7 @@
 
 import { FormInputManager } from "@/classes/FormInputManager";
 import { useRef, useState } from "react";
-import { FaUpload } from "react-icons/fa";
+import { FaImage, FaImages, FaUpload } from "react-icons/fa";
 
 const ImageInputField = ({ id }: { id: number }) => {
   const [fileName, setFileName] = useState<string | null>(null);
@@ -25,16 +25,18 @@ const ImageInputField = ({ id }: { id: number }) => {
         }}
       />
       <div
-        className="aspect-[3/1] bg-neutral-700 rounded-xl flex flex-col  items-center justify-center font-medium text-xl text-white/50 cursor-pointer border border-neutral-500"
+        className="aspect-[3/1] bg-neutral-700 rounded-xl flex flex-col  items-center justify-center font-medium text-xl text-white/50 cursor-pointer border border-neutral-500/50 relative overflow-clip"
         style={{
           background: fileName
             ? `url('${URL.createObjectURL(fileRef.current?.files?.[0] as File)}') center/cover`
-            : "radial-gradient(100% 100% at 50% 50%, transparent ,transparent, gray), linear-gradient(#80808050 0% 1%, transparent 25% 75%, #80808050 99% 100%), linear-gradient(90deg, #80808050 0% 1%, transparent 25% 75%, #80808050 99% 100%)",
+            : "radial-gradient(100% 100% at 50% 50%, gray ,transparent, transparent)",
         }}
         onClick={() => {
           fileRef.current?.click();
         }}
       >
+        <FaImage className="absolute top-10 left-16 text-neutral-500/50 scale-[10] -rotate-12" />
+        <FaImages className="absolute bottom-10 right-20 text-neutral-500/50 scale-[10] rotate-12" />
         <FaUpload className="opacity-50 text-4xl mb-4" />
         <p className="leading-4">
           {fileName ? fileName : "Upload an Image " + id}

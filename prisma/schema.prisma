@@ -28,6 +28,8 @@ model User {
 
   forms Form[]
   responses Response[]
+
+  @@index([id, email])
 }
  
 model Account {
@@ -73,12 +75,13 @@ model VerificationToken {
 model Form {
   form_id     String    @id @default(cuid())
   title       String
-  cover_image String  
+  cover_image String?
   user_id     String
   created_at  DateTime  @default(now())
   user        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   responses   Response[]
   fields      Field[]
+  @@index([form_id, user_id])
 }
 
 model Field {
@@ -95,6 +98,7 @@ model Field {
   field_responses FieldResponse[]
   text_style      TextStyle[]
   form            Form        @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
+  @@index([field_id, form_id])
 }
 
 model Option {
@@ -103,6 +107,7 @@ model Option {
   field     Field  @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
   value     String
   index    Int
+  @@index([option_id, field_id])
 }
 
 model Response {
@@ -112,6 +117,7 @@ model Response {
   fields      FieldResponse[]
   form        Form   @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
   user        User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@index([response_id, form_id])
 }
 
 model FieldResponse {
@@ -122,6 +128,7 @@ model FieldResponse {
   text              String?
   field             Field    @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
   response          Response @relation(fields: [response_id], references: [response_id], onDelete: Cascade)
+  @@index([field_response_id, field_id])
 }
 
 model TextStyle {
@@ -130,6 +137,7 @@ model TextStyle {
   format            FontFormat?
   size              FontSize
   field             Field    @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
+  @@index([text_id, field_id])
 }
 
 enum FieldType {
