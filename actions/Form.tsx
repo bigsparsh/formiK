@@ -10,7 +10,6 @@ export const createForm = async ({
 }: {
   formFields: FormElement[];
 }): Promise<Form> => {
-  // }): Promise<void> => {
   const session = await getServerSession();
   if (!session) throw new Error("User not found: " + session);
 
@@ -116,6 +115,7 @@ export const getFormFields = async (formId: string) => {
               index: "asc",
             },
           },
+          text_style: true,
         },
       },
     },

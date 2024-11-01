@@ -4,31 +4,18 @@ import { getFormFields } from "@/actions/Form";
 import { FormOutputManager, FormState } from "@/classes/FormOutputManager";
 import NavBar from "@/components/NavBar";
 import { formOutputElements, formStateAtom } from "@/recoil/atoms";
-import { FieldType } from "@prisma/client";
+import { Field, Form, Option, TextStyle } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
-export type FullFormType = {
-  form_id: string;
-  title: string;
-  user_id: string;
-  fields: {
-    title: string;
-    field_id: string;
-    type: FieldType;
-    form_id: string;
-    required: boolean;
-    image: string | null;
-    is_heading: boolean | null;
-    index: number;
-    options: {
-      field_id: string;
-      index: number;
-      option_id: string;
-      value: string;
-    }[];
-  }[];
-} | null;
+export type FullFormType =
+  | (Form & {
+    fields: (Field & {
+      options: Option[];
+      text_style: TextStyle[];
+    })[];
+  })
+  | null;
 
 const FormPage = ({
   params: { formId },

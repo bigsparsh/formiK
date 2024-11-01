@@ -11,7 +11,7 @@ const OptionInputField = ({
   options: FormElement["options"];
 }) => {
   const [required, setRequired] = useState<boolean>(false);
-  const [mutliSelect, setMultiSelect] = useState<boolean>(false);
+  const [multiSelect, setMultiSelect] = useState<boolean>(false);
   const manager = FormInputManager.getInstance();
 
   return (
@@ -74,7 +74,11 @@ const OptionInputField = ({
                   (required ? "bg-neutral-600" : "border-neutral-600")
                 }
                 onClick={() => {
-                  setRequired(!required);
+                  setRequired((r) => {
+                    r = !r;
+                    manager.setRequired(id, r);
+                    return r;
+                  });
                 }}
               >
                 Field Required
@@ -82,10 +86,14 @@ const OptionInputField = ({
               <button
                 className={
                   "hover:cursor-pointer rounded-full px-3 py-1 border box-border outline-none " +
-                  (mutliSelect ? "bg-neutral-600" : "border-neutral-600")
+                  (multiSelect ? "bg-neutral-600" : "border-neutral-600")
                 }
                 onClick={() => {
-                  setMultiSelect(!mutliSelect);
+                  setMultiSelect((r) => {
+                    r = !r;
+                    manager.setMultipleChoice(id, r);
+                    return r;
+                  });
                 }}
               >
                 Multi Select

@@ -102,6 +102,7 @@ export class FormInputManager {
         },
       ],
       required: false,
+      multi_select: false,
     });
 
     this.formJSX?.push(

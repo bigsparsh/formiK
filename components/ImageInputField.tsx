@@ -38,9 +38,15 @@ const ImageInputField = ({ id }: { id: number }) => {
         <FaImage className="absolute top-10 left-16 text-neutral-500/50 scale-[10] -rotate-12" />
         <FaImages className="absolute bottom-10 right-20 text-neutral-500/50 scale-[10] rotate-12" />
         <FaUpload className="opacity-50 text-4xl mb-4" />
-        <p className="leading-4">
-          {fileName ? fileName : "Upload an Image " + id}
-        </p>
+        {!fileName ? (
+          <p className="leading-4">
+            {fileName ? fileName : "Upload an Image " + id}
+          </p>
+        ) : (
+          <p className="bg-neutral-700 text-neutral-200 px-2 py-1 text-base rounded-full ">
+            {fileName}
+          </p>
+        )}
         <p className="text-base font-normal"></p>
       </div>
     </div>
