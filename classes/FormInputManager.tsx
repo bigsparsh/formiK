@@ -3,9 +3,10 @@ import { FormElement } from "@/app/form/create/page";
 import ImageInputField from "@/components/ImageInputField";
 import OptionInputField from "@/components/OptionInputField";
 import TextInputField from "@/components/TextInputField";
-import { FieldType } from "@prisma/client";
+import { FieldType, FontSize } from "@prisma/client";
 import { put } from "@vercel/blob";
 import { SetterOrUpdater } from "recoil";
+import { FontFormat } from "@/components/TextInputField";
 
 export class FormInputManager {
   formFields: FormElement[];
@@ -29,6 +30,7 @@ export class FormInputManager {
     return this.instance;
   }
 
+  // Sets all the options
   setOptionToField(index: number) {
     this.formFields[index].options?.push({
       index: this.formFields[index].options.length,
@@ -43,8 +45,25 @@ export class FormInputManager {
     );
   }
 
+  // Sets the Image in a field
   setImagePathToField(index: number, file?: File) {
+    if (!file) {
+      delete this.formFields[index].image;
+      return;
+    }
     this.formFields[index].image = file;
+  }
+
+  // Sets the size of the text i.e SM, MD, LG, XL
+  setTextSize(index: number, size: FontSize) {
+    if (this.formFields[index].text_style)
+      this.formFields[index].text_style.size = size;
+  }
+
+  // Sets the format of the text i.e BOLD, ITALIC, UNDERLINE
+  setTextFormat(index: number, format: FontFormat[]) {
+    if (this.formFields[index].text_style)
+      this.formFields[index].text_style.format = format;
   }
 
   setTextToField(index: number, text: string) {
@@ -128,6 +147,9 @@ export class FormInputManager {
       index: this.formFields.length,
       title: "",
       required: false,
+      text_style: {
+        size: FontSize.MD,
+      },
     });
 
     this.formJSX?.push(
@@ -160,8 +182,7 @@ export class FormInputManager {
 
   async finalizeForm() {
     const updatedFields = this.formFields.map(async (field) => {
-      if (field.type === FieldType.IMAGE) {
-        console.log(field.image, field.index);
+      if (field.image) {
         field.image = (
           await put(
             "form-image-" + field.index + crypto.randomUUID(),

@@ -87,16 +87,16 @@ model Form {
 model Field {
   field_id        String      @id @default(cuid())
   form_id         String
-  type            FieldType
-  title           String
-  required        Boolean
-  image           String?
-  index           Int
-  text_field_type TextFieldType?
-  multi_select    Boolean?
-  options         Option[]
-  field_responses FieldResponse[]
-  text_style      TextStyle[]
+  type            FieldType  //common
+  title           String // common
+  required        Boolean // common
+  image           String? // type: image, text
+  index           Int // common
+  text_field_type TextFieldType? // type: text
+  multi_select    Boolean? // type: option
+  options         Option[] // type: option
+  field_responses FieldResponse[] 
+  text_style      TextStyle? // type: text
   form            Form        @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
   @@index([field_id, form_id])
 }
@@ -133,8 +133,10 @@ model FieldResponse {
 
 model TextStyle {
   text_id           String @id @default(cuid())
-  field_id          String
-  format            FontFormat?
+  field_id          String @unique
+  bold              Boolean?
+  italic            Boolean?
+  underline         Boolean?
   size              FontSize
   field             Field    @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
   @@index([text_id, field_id])
@@ -161,8 +163,3 @@ enum FontSize {
   SM
 }
 
-enum FontFormat {
-  BOLD
-  ITALIC
-  UNDERLINE
-}

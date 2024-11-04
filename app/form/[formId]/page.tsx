@@ -12,7 +12,7 @@ export type FullFormType =
   | (Form & {
     fields: (Field & {
       options: Option[];
-      text_style: TextStyle[];
+      text_style: TextStyle;
     })[];
   })
   | null;
@@ -34,7 +34,7 @@ const FormPage = ({
       FormOutputManager.getInstance(
         setFormFields,
         setFormState,
-        await getFormFields(formId),
+        (await getFormFields(formId)) as FullFormType,
       ),
     );
   };

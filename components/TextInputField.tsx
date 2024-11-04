@@ -1,16 +1,30 @@
 "use client";
 import { FormInputManager } from "@/classes/FormInputManager";
-import { FontFormat, FontSize } from "@prisma/client";
-import { useRef, useState } from "react";
+import { FontSize } from "@prisma/client";
+import { useEffect, useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
+
+export enum FontFormat {
+  BOLD = "BOLD",
+  ITALIC = "ITALIC",
+  UNDERLINE = "UNDERLINE",
+}
 
 const TextInputField = ({ id }: { id: number }) => {
   const manager = FormInputManager.getInstance();
   const textRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
-  const [fontSize, setFontSize] = useState<FontSize>();
+  const [fontSize, setFontSize] = useState<FontSize>(FontSize.MD);
   const [formatting, setFormatting] = useState<FontFormat[]>([]);
+
+  useEffect(() => {
+    manager.setTextFormat(id, formatting);
+  }, [formatting, id, manager]);
+
+  useEffect(() => {
+    manager.setTextSize(id, fontSize);
+  }, [fontSize, id, manager]);
 
   return (
     <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-2 text-white">
@@ -20,6 +34,7 @@ const TextInputField = ({ id }: { id: number }) => {
         ref={textRef}
         rows={2}
         onChange={(e) => {
+          console.log(manager.formFields);
           manager.setTextToField(id, e.target.value as string);
         }}
       ></textarea>
@@ -55,6 +70,7 @@ const TextInputField = ({ id }: { id: number }) => {
                 manager.setImagePathToField(id, fileRef.current?.files?.[0]);
                 setFileName(fileRef.current?.files?.[0].name as string);
               } else {
+                manager.setImagePathToField(id);
                 setFileName(null);
               }
             }}
