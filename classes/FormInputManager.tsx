@@ -10,6 +10,10 @@ import { FontFormat } from "@/components/TextInputField";
 
 export class FormInputManager {
   formFields: FormElement[];
+  formProperties: {
+    title?: string;
+    cover?: string;
+  };
   formJSX: JSX.Element[];
   setParentComponent: SetterOrUpdater<JSX.Element> | null;
   static instance: FormInputManager | null;
@@ -18,6 +22,7 @@ export class FormInputManager {
     this.formFields = [];
     this.setParentComponent = setPc;
     this.formJSX = [];
+    this.formProperties = {};
   }
 
   static getInstance(setPc?: SetterOrUpdater<JSX.Element>) {
@@ -64,6 +69,19 @@ export class FormInputManager {
   setTextFormat(index: number, format: FontFormat[]) {
     if (this.formFields[index].text_style)
       this.formFields[index].text_style.format = format;
+  }
+
+  setFormTitle(title: string) {
+    this.formProperties.title = title;
+  }
+
+  async setFormCover(image: File) {
+    this.formProperties.cover = (
+      await put("form-cover-" + crypto.randomUUID(), image, {
+        access: "public",
+        token: "vercel_blob_rw_ZPhL3fptqWzBDjqA_Rb3o9O1rDajr2QtBDy4Qpprd57J5sa",
+      })
+    ).url;
   }
 
   setTextToField(index: number, text: string) {
@@ -180,7 +198,8 @@ export class FormInputManager {
     this.update();
   }
 
-  async finalizeForm() {
+  async finalizeForm(cover: File) {
+    await this.setFormCover(cover);
     const updatedFields = this.formFields.map(async (field) => {
       if (field.image) {
         field.image = (
@@ -199,6 +218,7 @@ export class FormInputManager {
     });
     this.formFields = await Promise.all(updatedFields);
     createForm({
+      formProperties: this.formProperties,
       formFields: this.formFields,
     });
   }

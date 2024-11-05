@@ -29,7 +29,7 @@ model User {
   forms Form[]
   responses Response[]
 
-  @@index([id, email])
+  @@index([id])
 }
  
 model Account {
@@ -81,7 +81,7 @@ model Form {
   user        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   responses   Response[]
   fields      Field[]
-  @@index([form_id, user_id])
+  @@index([form_id])
 }
 
 model Field {
@@ -98,7 +98,7 @@ model Field {
   field_responses FieldResponse[] 
   text_style      TextStyle? // type: text
   form            Form        @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
-  @@index([field_id, form_id])
+  @@index([field_id])
 }
 
 model Option {
@@ -107,7 +107,7 @@ model Option {
   field     Field  @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
   value     String
   index    Int
-  @@index([option_id, field_id])
+  @@index([option_id])
 }
 
 model Response {
@@ -117,7 +117,7 @@ model Response {
   fields      FieldResponse[]
   form        Form   @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
   user        User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  @@index([response_id, form_id])
+  @@index([response_id])
 }
 
 model FieldResponse {
@@ -128,7 +128,7 @@ model FieldResponse {
   text              String?
   field             Field    @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
   response          Response @relation(fields: [response_id], references: [response_id], onDelete: Cascade)
-  @@index([field_response_id, field_id])
+  @@index([field_response_id])
 }
 
 model TextStyle {
@@ -139,7 +139,7 @@ model TextStyle {
   underline         Boolean?
   size              FontSize
   field             Field    @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
-  @@index([text_id, field_id])
+  @@index([text_id])
 }
 
 enum FieldType {

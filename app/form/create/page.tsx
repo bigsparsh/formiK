@@ -4,7 +4,7 @@ import { FormInputManager } from "@/classes/FormInputManager";
 import { formInputElements } from "@/recoil/atoms";
 import { FieldType, FontSize, TextFieldType } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { useRecoilState } from "recoil";
 import { FontFormat } from "@/components/TextInputField";
 
@@ -29,6 +29,8 @@ export type FormElement = {
 const CreateForm = () => {
   const [formFields, setFormFields] = useRecoilState(formInputElements);
   const [manager, setManager] = useState<FormInputManager | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
   const fieldContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -84,7 +86,7 @@ const CreateForm = () => {
           <button
             className="bg-neutral-100 text-neutral-800 py-2 text-lg font-medium self-center w-full"
             onClick={() => {
-              manager?.finalizeForm();
+              manager?.finalizeForm(fileRef.current?.files?.[0] as File);
             }}
           >
             Finalize Form
@@ -93,11 +95,48 @@ const CreateForm = () => {
         <div className="grow p-10 h-[80vh] overflow-y-scroll">
           <div className="">
             <div className="flex flex-col gap-3" ref={fieldContainer}>
+              <div
+                className="w-full rounded-3xl bg-neutral-600 flex justify-between items-end h-28 overflow-clip"
+                style={{
+                  background: (fileName &&
+                    `url('${URL.createObjectURL(fileRef.current?.files?.[0] as File)}') center/cover`) as string,
+                }}
+              >
+                <input
+                  type="file"
+                  ref={fileRef}
+                  className="hidden"
+                  accept="image/*"
+                  onChange={() => {
+                    if (fileRef.current?.files?.[0]) {
+                      setFileName(fileRef.current?.files?.[0].name as string);
+                    } else {
+                      setFileName(null);
+                    }
+                  }}
+                />
+                <input
+                  type="text"
+                  className="py-2 text-3xl mix-blend-hard-light bg-neutral-700/50 hover:bg-neutral-700 focus:bg-neutral-700 rounded-r-full px-5 outline-none duration-200 w-1/2 text-white font-semibold placeholder-neutral-100"
+                  defaultValue={"Untitled Form"}
+                  onChange={(e) => {
+                    manager?.setFormTitle(e.target.value);
+                  }}
+                />
+                <FaEdit
+                  className="self-start m-4 text-white text-2xl cursor-pointer"
+                  onClick={() => {
+                    fileRef.current?.click();
+                  }}
+                />
+              </div>
               {manager?.formFields.length === 0 ? (
-                <div className="border4 border-neutral-800 border-dashed px-5 py-10 rounded-xl work text-xl font-medium">
-                  <FaArrowLeft className="animate-bounce" />
-                  Start adding fields to your form
-                </div>
+                <>
+                  <div className="border4 border-neutral-800 border-dashed px-5 py-10 rounded-xl work text-xl font-medium">
+                    <FaArrowLeft className="animate-bounce" />
+                    Start adding fields to your form
+                  </div>
+                </>
               ) : (
                 formFields
               )}

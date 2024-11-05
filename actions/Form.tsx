@@ -7,8 +7,13 @@ import { getServerSession } from "next-auth";
 import { FontFormat } from "@/components/TextInputField";
 
 export const createForm = async ({
+  formProperties,
   formFields,
 }: {
+  formProperties: {
+    title?: string;
+    cover?: string;
+  };
   formFields: FormElement[];
 }): Promise<Form> => {
   const session = await getServerSession();
@@ -22,59 +27,55 @@ export const createForm = async ({
   const newForm = await prisma.form.create({
     data: {
       user_id: user?.id as string,
-      title: "This is a new Form",
-      cover_image: "https://picsum.photos/1920/1080",
+      title: formProperties.title || "Untitled Form",
+      cover_image: formProperties.cover || "https://picsum.photos/1920/1080",
       fields: {
-        createMany: {
-          data: formFields.map((field) => {
-            const commonData = {
-              index: field.index,
-              title: field.title,
-              required: field.required,
-              type: field.type as FieldType,
-            };
+        create: formFields.map((field) => {
+          const commonData = {
+            index: field.index,
+            title: field.title,
+            required: field.required,
+            type: field.type as FieldType,
+          };
 
-            switch (field.type) {
-              case FieldType.TEXT:
-                return {
-                  ...commonData,
-                  text_field_type: TextFieldType.TEXT,
-                  image: field.image as string,
-                  text_style: {
-                    create: {
-                      size: field.text_style
-                        ? field.text_style.format
-                        : FontSize.MD,
-                      bold: field.text_style?.format?.includes(FontFormat.BOLD),
-                      italic: field.text_style?.format?.includes(
-                        FontFormat.ITALIC,
-                      ),
-                      underline: field.text_style?.format?.includes(
-                        FontFormat.UNDERLINE,
-                      ),
-                    },
+          switch (field.type) {
+            case FieldType.TEXT:
+              return {
+                ...commonData,
+                text_field_type: TextFieldType.TEXT,
+                image: field.image as string,
+                text_style: {
+                  create: {
+                    size: field.text_style
+                      ? field.text_style.size
+                      : FontSize.MD,
+                    bold: field.text_style?.format?.includes(FontFormat.BOLD),
+                    italic: field.text_style?.format?.includes(
+                      FontFormat.ITALIC,
+                    ),
+                    underline: field.text_style?.format?.includes(
+                      FontFormat.UNDERLINE,
+                    ),
                   },
-                };
-              case FieldType.IMAGE:
-                return {
-                  ...commonData,
-                  image: field.image as string,
-                };
-              case FieldType.OPTION:
-                return {
-                  ...commonData,
-                  multi_select: field.multi_select,
-                  options: {
-                    createMany: {
-                      data: field.options,
-                    },
-                  },
-                };
-              default:
-                throw new Error("Invalid field type: " + field.type);
-            }
-          }),
-        },
+                },
+              };
+            case FieldType.IMAGE:
+              return {
+                ...commonData,
+                image: field.image as string,
+              };
+            case FieldType.OPTION:
+              return {
+                ...commonData,
+                multi_select: field.multi_select,
+                options: {
+                  create: field.options,
+                },
+              };
+            default:
+              throw new Error("Invalid field type: " + field.type);
+          }
+        }),
       },
     },
     include: {
