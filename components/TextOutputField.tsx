@@ -1,7 +1,9 @@
 import { FontSize } from "@prisma/client";
+import Image from "next/image";
 
 const TextOutputField = ({
   title,
+  image,
   className,
   size,
   bold,
@@ -9,6 +11,7 @@ const TextOutputField = ({
   underline,
 }: {
   title: string;
+  image?: string;
   className?: string;
   size?: FontSize;
   bold?: boolean | null;
@@ -16,21 +19,32 @@ const TextOutputField = ({
   underline?: boolean | null;
 }) => {
   return (
-    <div
-      className={`px-10 py-2 ${bold && "font-semibold"} ${italic && "italic"} ${underline && "underline"}} ${() => {
-        switch (size) {
-          case FontSize.MD:
-            return "text-md";
-          case FontSize.LG:
-            return "text-lg";
-          case FontSize.XL:
-            return "text-xl";
-          default:
-            return "text-base";
-        }
-      }} ${className}`}
-    >
-      {title}
+    <div className="flex flex-col">
+      <h1
+        className={`px-10 py-2 ${bold && "font-semibold"} ${italic && "italic"} ${underline && "underline"}} ${() => {
+          switch (size) {
+            case FontSize.MD:
+              return "text-base";
+            case FontSize.LG:
+              return "text-lg";
+            case FontSize.XL:
+              return "text-xl";
+            default:
+              return "text-base";
+          }
+        }} ${className}`}
+      >
+        {title}
+      </h1>
+      {image && (
+        <Image
+          src={image}
+          alt="hello"
+          width={500}
+          height={500}
+          className="self-center rounded-3xl my-4"
+        />
+      )}
     </div>
   );
 };

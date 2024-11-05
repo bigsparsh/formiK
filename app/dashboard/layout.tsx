@@ -1,8 +1,12 @@
 import NavBar from "@/components/NavBar";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { FaClipboardList, FaHome, FaPaperclip } from "react-icons/fa";
 
-const Dashboard = ({ children }: { children: JSX.Element }) => {
+const Dashboard = async ({ children }: { children: JSX.Element }) => {
+  const session = await getServerSession();
+  if (!session) redirect("/auth");
   return (
     <div
       className="ma h-screen overflow-hidden"
