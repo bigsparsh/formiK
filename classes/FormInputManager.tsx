@@ -5,6 +5,7 @@ import OptionInputField from "@/components/OptionInputField";
 import TextInputField from "@/components/TextInputField";
 import { FieldType, FontSize } from "@prisma/client";
 import { put } from "@vercel/blob";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { SetterOrUpdater } from "recoil";
 
 export class FormInputManager {
@@ -211,7 +212,7 @@ export class FormInputManager {
     this.update();
   }
 
-  async finalizeForm(cover: File) {
+  async finalizeForm(cover: File, router: AppRouterInstance) {
     await this.setFormCover(cover);
     const updatedFields = this.formFields.map(async (field) => {
       if (field.image) {
@@ -234,5 +235,6 @@ export class FormInputManager {
       formProperties: this.formProperties,
       formFields: this.formFields,
     });
+    router.push("/dashboard/myforms");
   }
 }

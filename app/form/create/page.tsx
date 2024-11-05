@@ -3,6 +3,7 @@
 import { FormInputManager } from "@/classes/FormInputManager";
 import { formInputElements } from "@/recoil/atoms";
 import { FieldType, FontSize, TextFieldType } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { useRecoilState } from "recoil";
@@ -33,6 +34,7 @@ const CreateForm = () => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const fieldContainer = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (!manager) {
@@ -87,7 +89,10 @@ const CreateForm = () => {
           <button
             className="bg-neutral-100 text-neutral-800 py-2 text-lg font-medium self-center w-full"
             onClick={() => {
-              manager?.finalizeForm(fileRef.current?.files?.[0] as File);
+              manager?.finalizeForm(
+                fileRef.current?.files?.[0] as File,
+                router,
+              );
             }}
           >
             Finalize Form
