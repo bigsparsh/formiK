@@ -5,7 +5,7 @@ import { FaClipboardList, FaHome, FaPaperclip } from "react-icons/fa";
 const Dashboard = ({ children }: { children: JSX.Element }) => {
   return (
     <div
-      className="ma h-screen"
+      className="ma h-screen overflow-hidden"
       style={{
         background:
           "linear-gradient(#ffffff10 10%, transparent 10%) 0 0/ 15px 15px , linear-gradient(90deg, #ffffff10 10%, transparent 10%) 0 0/ 15px 15px, radial-gradient(120% 150% at 50% 50%,transparent, #ffffff50), linear-gradient(60deg, gray 10% 40%, transparent 50% 60%, gray 70% 100%) ,radial-gradient(25% 100% at 50% 10%, lightgray, gray)",

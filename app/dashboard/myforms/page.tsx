@@ -5,14 +5,14 @@ import { FaEye } from "react-icons/fa";
 const MyForms = async () => {
   const forms = await getForms();
   return (
-    <div className="bg-neutral-700 flex flex-col p-3 rounded-t-3xl grow mr-3 gap-2">
+    <div className="bg-neutral-700 flex flex-col p-3 rounded-3xl grow mr-3 gap-2 overflow-auto h-[85vh]">
       {forms.map((form) => {
         return (
           <div
             className="bg-neutral-600 rounded-xl text-neutral-50 px-4 py-2 flex justify-between items-center border border-neutral-500"
             key={crypto.randomUUID()}
             style={{
-              background: `linear-gradient(90deg, gray, gray, transparent), url(${form.fields.find((field) => field.image)?.image}) center/cover`,
+              background: `linear-gradient(90deg, gray, gray, transparent), url(${form.cover_image || form.fields.find((field) => field.image)?.image}) center/cover`,
             }}
           >
             <div className="flex flex-col gap-2">

@@ -16,11 +16,13 @@ const TextInputField = ({ id }: { id: number }) => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [fontSize, setFontSize] = useState<FontSize>(FontSize.MD);
-  const [formatting, setFormatting] = useState<FontFormat[]>([]);
+  const [bold, setBold] = useState<boolean>(false);
+  const [italic, setItalic] = useState<boolean>(false);
+  const [underline, setUnderline] = useState<boolean>(false);
 
   useEffect(() => {
-    manager.setTextFormat(id, formatting);
-  }, [formatting, id, manager]);
+    manager.setTextFormat(id, bold, italic, underline);
+  }, [bold, id, italic, manager, underline]);
 
   useEffect(() => {
     manager.setTextSize(id, fontSize);
@@ -34,7 +36,6 @@ const TextInputField = ({ id }: { id: number }) => {
         ref={textRef}
         rows={2}
         onChange={(e) => {
-          console.log(manager.formFields);
           manager.setTextToField(id, e.target.value as string);
         }}
       ></textarea>
@@ -129,18 +130,10 @@ const TextInputField = ({ id }: { id: number }) => {
             <button
               className={
                 "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (formatting?.includes(FontFormat.BOLD)
-                  ? "bg-neutral-600"
-                  : "bg-neutral-700")
+                (bold ? "bg-neutral-600" : "bg-neutral-700")
               }
               onClick={() => {
-                if (formatting?.includes(FontFormat.BOLD)) {
-                  setFormatting(
-                    formatting?.filter((f) => f !== FontFormat.BOLD),
-                  );
-                } else {
-                  setFormatting([...formatting, FontFormat.BOLD]);
-                }
+                setBold(!bold);
               }}
             >
               Bold
@@ -148,18 +141,10 @@ const TextInputField = ({ id }: { id: number }) => {
             <button
               className={
                 "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (formatting?.includes(FontFormat.ITALIC)
-                  ? "bg-neutral-600"
-                  : "bg-neutral-700")
+                (italic ? "bg-neutral-600" : "bg-neutral-700")
               }
               onClick={() => {
-                if (formatting?.includes(FontFormat.ITALIC)) {
-                  setFormatting(
-                    formatting?.filter((f) => f !== FontFormat.ITALIC),
-                  );
-                } else {
-                  setFormatting([...formatting, FontFormat.ITALIC]);
-                }
+                setItalic(!italic);
               }}
             >
               Italics
@@ -167,18 +152,10 @@ const TextInputField = ({ id }: { id: number }) => {
             <button
               className={
                 "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (formatting?.includes(FontFormat.UNDERLINE)
-                  ? "bg-neutral-600"
-                  : "bg-neutral-700")
+                (underline ? "bg-neutral-600" : "bg-neutral-700")
               }
               onClick={() => {
-                if (formatting?.includes(FontFormat.UNDERLINE)) {
-                  setFormatting(
-                    formatting?.filter((f) => f !== FontFormat.UNDERLINE),
-                  );
-                } else {
-                  setFormatting([...formatting, FontFormat.UNDERLINE]);
-                }
+                setUnderline(!underline);
               }}
             >
               Underline

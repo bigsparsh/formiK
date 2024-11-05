@@ -57,6 +57,14 @@ const FormPage = ({
       }}
     >
       <NavBar />
+      <h1
+        className="px-5 pt-28 pb-3 bg-neutral-700 ma text-neutral-50 font-bold text-3xl mb-10 max-w-6xl rounded-3xl w-full"
+        style={{
+          background: `linear-gradient(transparent, #404040 ), url(${manager?.formFields?.cover_image}) center/cover`,
+        }}
+      >
+        {manager?.formFields?.title}
+      </h1>
       <div className="w-full max-w-6xl bg-neutral-600 margin-auto mx-10 rounded-none xl:rounded-3xl backdrop-blur-lg overflow-clip">
         <form className="text-neutral-200 flex flex-col">
           {formFields}

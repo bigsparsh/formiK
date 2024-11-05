@@ -6,7 +6,6 @@ import TextInputField from "@/components/TextInputField";
 import { FieldType, FontSize } from "@prisma/client";
 import { put } from "@vercel/blob";
 import { SetterOrUpdater } from "recoil";
-import { FontFormat } from "@/components/TextInputField";
 
 export class FormInputManager {
   formFields: FormElement[];
@@ -66,9 +65,17 @@ export class FormInputManager {
   }
 
   // Sets the format of the text i.e BOLD, ITALIC, UNDERLINE
-  setTextFormat(index: number, format: FontFormat[]) {
-    if (this.formFields[index].text_style)
-      this.formFields[index].text_style.format = format;
+  setTextFormat(
+    index: number,
+    bold: boolean,
+    italic: boolean,
+    underline: boolean,
+  ) {
+    if (this.formFields[index].text_style) {
+      this.formFields[index].text_style.bold = bold;
+      this.formFields[index].text_style.italic = italic;
+      this.formFields[index].text_style.underline = underline;
+    }
   }
 
   setFormTitle(title: string) {
@@ -76,12 +83,15 @@ export class FormInputManager {
   }
 
   async setFormCover(image: File) {
-    this.formProperties.cover = (
-      await put("form-cover-" + crypto.randomUUID(), image, {
-        access: "public",
-        token: "vercel_blob_rw_ZPhL3fptqWzBDjqA_Rb3o9O1rDajr2QtBDy4Qpprd57J5sa",
-      })
-    ).url;
+    if (!image) this.formProperties.cover = "https://picsum.photos/1920/1080";
+    else
+      this.formProperties.cover = (
+        await put("form-cover-" + crypto.randomUUID(), image, {
+          access: "public",
+          token:
+            "vercel_blob_rw_ZPhL3fptqWzBDjqA_Rb3o9O1rDajr2QtBDy4Qpprd57J5sa",
+        })
+      ).url;
   }
 
   setTextToField(index: number, text: string) {
@@ -166,6 +176,9 @@ export class FormInputManager {
       title: "",
       required: false,
       text_style: {
+        bold: false,
+        italic: false,
+        underline: false,
         size: FontSize.MD,
       },
     });

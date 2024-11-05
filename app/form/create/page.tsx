@@ -6,7 +6,6 @@ import { FieldType, FontSize, TextFieldType } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { useRecoilState } from "recoil";
-import { FontFormat } from "@/components/TextInputField";
 
 export type FormElement = {
   type: FieldType;
@@ -15,7 +14,9 @@ export type FormElement = {
   index: number;
   multi_select?: boolean;
   text_style?: {
-    format?: FontFormat[];
+    bold: boolean;
+    italic: boolean;
+    underline: boolean;
     size: FontSize;
   };
   text_field_type?: TextFieldType;

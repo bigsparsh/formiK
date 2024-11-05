@@ -62,6 +62,10 @@ export class FormOutputManager {
             <TextOutputField
               key={crypto.randomUUID()}
               title={field.title}
+              size={field.text_style.size}
+              bold={field.text_style.bold}
+              italic={field.text_style.italic}
+              underline={field.text_style.underline}
               className={
                 this.formJSX.length % 2 === 0
                   ? "bg-neutral-600"
@@ -155,7 +159,9 @@ export class FormOutputManager {
       throw new Error("Parent component, form fields and form JSX is required");
     }
     this.setParentComponent(
-      <OutputRenderer formJSX={this.formJSX} formFields={this.formFields} />,
+      <>
+        <OutputRenderer formJSX={this.formJSX} formFields={this.formFields} />,
+      </>,
     );
   }
 }
