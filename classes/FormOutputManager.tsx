@@ -5,6 +5,7 @@ import OutputRenderer from "@/components/OuputRenderer";
 import TextOutputField from "@/components/TextOutputField";
 import { FieldType } from "@prisma/client";
 import { SetterOrUpdater } from "recoil";
+import { FormResponseManager } from "./FormResponseManager";
 
 export type FormState = {
   index: number;
@@ -21,6 +22,7 @@ export class FormOutputManager {
   setParentComponent: SetterOrUpdater<JSX.Element> | null;
   setFormState: SetterOrUpdater<FormState[]> | null;
   formState: FormState[];
+  formResponseManager: FormResponseManager;
   static instance: FormOutputManager | null;
 
   private constructor(
@@ -33,6 +35,7 @@ export class FormOutputManager {
     this.formJSX = [];
     this.setFormState = setFs;
     this.formState = [];
+    this.formResponseManager = FormResponseManager.getInstance(formFields);
   }
 
   static getInstance(
@@ -82,6 +85,7 @@ export class FormOutputManager {
               title={field.title}
               options={field.options}
               field_id={field.field_id}
+              responseManager={this.formResponseManager}
               className={
                 this.formJSX.length % 2 === 0
                   ? "bg-neutral-600"

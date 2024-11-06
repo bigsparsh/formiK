@@ -1,6 +1,6 @@
 "use client";
 import { FormInputManager } from "@/classes/FormInputManager";
-import { FontSize } from "@prisma/client";
+import { FontSize, TextFieldType } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 
@@ -19,6 +19,7 @@ const TextInputField = ({ id }: { id: number }) => {
   const [bold, setBold] = useState<boolean>(false);
   const [italic, setItalic] = useState<boolean>(false);
   const [underline, setUnderline] = useState<boolean>(false);
+  const [fieldType, setFieldType] = useState<TextFieldType>(TextFieldType.TEXT);
 
   useEffect(() => {
     manager.setTextFormat(id, bold, italic, underline);
@@ -159,6 +160,48 @@ const TextInputField = ({ id }: { id: number }) => {
               }}
             >
               Underline
+            </button>
+          </div>
+          <h1 className="text-lg mt-2 px-2 font-semibold">Field Type</h1>
+          <div className="flex gap-2">
+            <button
+              className={
+                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                (fieldType === TextFieldType.EMAIL
+                  ? "bg-neutral-600"
+                  : "bg-neutral-700")
+              }
+              onClick={() => {
+                setFieldType(TextFieldType.EMAIL);
+              }}
+            >
+              Email
+            </button>
+            <button
+              className={
+                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                (fieldType === TextFieldType.TEXT
+                  ? "bg-neutral-600"
+                  : "bg-neutral-700")
+              }
+              onClick={() => {
+                setFieldType(TextFieldType.TEXT);
+              }}
+            >
+              Text
+            </button>
+            <button
+              className={
+                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                (fieldType === TextFieldType.NUMBER
+                  ? "bg-neutral-600"
+                  : "bg-neutral-700")
+              }
+              onClick={() => {
+                setFieldType(TextFieldType.NUMBER);
+              }}
+            >
+              Number
             </button>
           </div>
         </div>

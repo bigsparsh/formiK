@@ -1,9 +1,10 @@
 "use client";
 import { FormElement } from "@/app/form/create/page";
 import { FormOutputManager } from "@/classes/FormOutputManager";
+import { FormResponseManager } from "@/classes/FormResponseManager";
 import { formStateAtom } from "@/recoil/atoms";
-import { useAnimate } from "framer-motion";
-import { useEffect } from "react";
+import { useAnimate, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 
 const OptionOutputField = ({
@@ -11,33 +12,41 @@ const OptionOutputField = ({
   options,
   field_id,
   className,
+  responseManager,
 }: {
   title: string;
   options: FormElement["options"];
   field_id: string;
   className?: string;
+  responseManager: FormResponseManager;
 }) => {
   const [check, animate] = useAnimate();
+  const [checked, setChecked] = useState<number>(0);
   const manager = FormOutputManager.getInstance();
   const formState = useRecoilValue(formStateAtom);
 
   useEffect(() => {
+    responseManager.checkRadioField(field_id, checked);
+  }, [checked, field_id, responseManager]);
+
+  useEffect(() => {
     if (!formState || !animate) return;
-    const current = formState.find((state) => state.field_id === field_id);
-    const checked = current?.options?.find((option) => option.checked);
     animate(check.current, {
-      y: (checked?.index as number) * 300 + "%",
+      y: checked * 300 + "%",
     });
-  }, [formState, animate, field_id, check]);
+  }, [formState, animate, check, checked]);
 
   return (
     <div className={"w-full px-10 py-3 space-y-3 " + className}>
       <h1 className="text-xl">{title}</h1>
       <div className="space-y-2 relative">
-        <div
+        <motion.div
+          initial={{
+            y: "0%",
+          }}
           className="absolute w-3 h-3 rounded-full bg-neutral-50 left-2 top-2"
           ref={check}
-        ></div>
+        />
         {options?.map((option) => {
           return (
             <div
@@ -45,6 +54,7 @@ const OptionOutputField = ({
               className="flex text-lg bg-neutral-600 mix-blend-hard-light w-1/4 gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white"
               onClick={() => {
                 manager.checkRadioField(field_id, option.index);
+                setChecked(option.index);
               }}
             >
               <input
@@ -52,6 +62,8 @@ const OptionOutputField = ({
                 value={option.index}
                 className="hidden"
                 radioGroup="this"
+                checked={checked === option.index}
+                onChange={() => { }}
               />
               <div className="w-7 h-7 bg-neutral-800 "> </div>
               <label>{option.value}</label>

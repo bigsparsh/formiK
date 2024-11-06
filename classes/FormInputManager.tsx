@@ -3,7 +3,7 @@ import { FormElement } from "@/app/form/create/page";
 import ImageInputField from "@/components/ImageInputField";
 import OptionInputField from "@/components/OptionInputField";
 import TextInputField from "@/components/TextInputField";
-import { FieldType, FontSize } from "@prisma/client";
+import { FieldType, FontSize, TextFieldType } from "@prisma/client";
 import { put } from "@vercel/blob";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { SetterOrUpdater } from "recoil";
@@ -115,6 +115,9 @@ export class FormInputManager {
   setMultipleChoice(index: number, multiple: boolean) {
     this.formFields[index].multi_select = multiple;
   }
+  setTextFieldType(index: number, fieldType: TextFieldType) {
+    this.formFields[index].text_field_type = fieldType;
+  }
 
   editOptionCount(index: number, amount: number) {
     this.formFields[index].options = [];
@@ -176,6 +179,7 @@ export class FormInputManager {
       index: this.formFields.length,
       title: "",
       required: false,
+      text_field_type: TextFieldType.TEXT,
       text_style: {
         bold: false,
         italic: false,
