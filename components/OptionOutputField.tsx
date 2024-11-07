@@ -33,11 +33,17 @@ const OptionOutputField = ({
     if (!formState || !animate) return;
     animate(check.current, {
       y: checked * 300 + "%",
+      scale: [1, 2, 1],
     });
   }, [formState, animate, check, checked]);
 
   return (
-    <div className={"w-full px-10 py-3 space-y-3 " + className}>
+    <div
+      className={
+        "w-full px-10 py-5 space-y-3 border border-neutral-600 rounded-3xl bg-neutral-700 " +
+        className
+      }
+    >
       <h1 className="text-xl">{title}</h1>
       <div className="space-y-2 relative">
         <motion.div
@@ -51,7 +57,7 @@ const OptionOutputField = ({
           return (
             <div
               key={crypto.randomUUID()}
-              className="flex text-lg bg-neutral-600 mix-blend-hard-light w-1/4 gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white"
+              className="flex text-lg bg-neutral-600 w-1/4 gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white"
               onClick={() => {
                 manager.checkRadioField(field_id, option.index);
                 setChecked(option.index);
@@ -65,7 +71,7 @@ const OptionOutputField = ({
                 checked={checked === option.index}
                 onChange={() => { }}
               />
-              <div className="w-7 h-7 bg-neutral-800 "> </div>
+              <div className="w-7 h-7 bg-neutral-800/90 "> </div>
               <label>{option.value}</label>
             </div>
           );

@@ -114,9 +114,9 @@ model Response {
   response_id String @id @default(cuid())
   form_id     String
   user_id     String
-  fields      FieldResponse[]
   form        Form   @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
   user        User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  fields      FieldResponse[]
   @@index([response_id])
 }
 

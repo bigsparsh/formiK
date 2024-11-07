@@ -1,3 +1,4 @@
+import { submitForm } from "@/actions/Form";
 import { FullFormType } from "@/app/form/[formId]/page";
 import { FieldType } from "@prisma/client";
 
@@ -43,7 +44,10 @@ export class FormResponseManager {
             text: "",
           });
           break;
+        case FieldType.IMAGE:
+          break;
         default:
+          console.log(field.type);
           throw new Error("Invalid field type");
       }
     });
@@ -62,5 +66,8 @@ export class FormResponseManager {
     });
   }
 
-  // submitForm() { }
+  submitForm() {
+    if (!this.form) throw new Error("Form is required");
+    submitForm(this.form.form_id, this.formResponseState);
+  }
 }

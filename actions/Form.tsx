@@ -1,6 +1,7 @@
 "use server";
 
 import { FormElement } from "@/app/form/create/page";
+import { formResponseState } from "@/classes/FormResponseManager";
 import { prisma } from "@/prisma";
 import { FieldType, FontSize, Form, TextFieldType } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -138,6 +139,45 @@ export const getFormFields = async (formId: string) => {
   return form;
 };
 
-// const submitForm = async () => {
-// const response  =
-// }
+export const submitForm = async (
+  formId: string,
+  responseState: formResponseState[],
+) => {
+  const session = await getServerSession();
+
+  if (!session) throw new Error("User not found: " + session);
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
+
+  if (!user) throw new Error("User not found: " + session);
+
+  return await prisma.response.create({
+    data: {
+      form_id: formId,
+      user_id: user.id,
+      fields: {
+        create: responseState.map((field) => {
+          if (field.option) {
+            return {
+              field_id: field.field_id,
+              option_index: field.option,
+            };
+          }
+          if (field.text) {
+            return {
+              field_id: field.field_id,
+              text: field.text,
+            };
+          }
+          return {
+            field_id: field.field_id,
+          };
+        }),
+      },
+    },
+  });
+};

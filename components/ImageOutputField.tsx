@@ -17,7 +17,8 @@ const ImageOutputField = ({
   return (
     <div
       className={
-        className + " grid place-items-center py-0 relative overflow-clip"
+        className +
+        " grid place-items-center py-0 relative overflow-clip border border-neutral-600 rounded-3xl bg-neutral-700"
       }
     >
       <Image

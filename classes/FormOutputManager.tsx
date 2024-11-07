@@ -70,11 +70,7 @@ export class FormOutputManager {
               bold={field.text_style.bold}
               italic={field.text_style.italic}
               underline={field.text_style.underline}
-              className={
-                this.formJSX.length % 2 === 0
-                  ? "bg-neutral-600"
-                  : "bg-neutral-700"
-              }
+              className={""}
             />,
           );
           break;
@@ -86,11 +82,7 @@ export class FormOutputManager {
               options={field.options}
               field_id={field.field_id}
               responseManager={this.formResponseManager}
-              className={
-                this.formJSX.length % 2 === 0
-                  ? "bg-neutral-600"
-                  : "bg-neutral-700"
-              }
+              className={""}
             />,
           );
           this.formState = [
@@ -114,11 +106,7 @@ export class FormOutputManager {
               alt={field.title}
               width={500}
               height={500}
-              className={
-                this.formJSX.length % 2 === 0
-                  ? "bg-neutral-600"
-                  : "bg-neutral-700"
-              }
+              className={""}
             />,
           );
       }
@@ -157,6 +145,10 @@ export class FormOutputManager {
     });
     this.setFormStateSetter();
     this.update();
+  }
+
+  submitForm() {
+    this.formResponseManager.submitForm();
   }
 
   update() {
