@@ -1,14 +1,20 @@
+"use client";
+import { FormResponseManager } from "@/classes/FormResponseManager";
 import Image from "next/image";
 
 const TextPromptField = ({
+  id,
   title,
   image,
   className,
 }: {
+  id: string;
   title: string;
   image?: string;
   className: string;
 }) => {
+  const manager = FormResponseManager.getInstance();
+
   return (
     <div
       className={
@@ -31,6 +37,9 @@ const TextPromptField = ({
         className="w-full py-2 bg-neutral-600 rounded-3xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 placeholder:px-5 resize-none"
         placeholder={"Enter your response"}
         rows={2}
+        onChange={(e) => {
+          manager.setText(id, e.target.value);
+        }}
       ></textarea>
     </div>
   );

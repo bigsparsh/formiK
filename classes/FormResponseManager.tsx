@@ -1,6 +1,7 @@
 import { submitForm } from "@/actions/Form";
 import { FullFormType } from "@/app/form/[formId]/page";
 import { FieldType } from "@prisma/client";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export type formResponseState = {
   field_id: string;
@@ -68,8 +69,22 @@ export class FormResponseManager {
     });
   }
 
-  submitForm() {
+  setText(field_id: string, text: string) {
+    this.formResponseState = this.formResponseState.map((state) => {
+      if (state.field_id == field_id) {
+        return {
+          text: text,
+          field_id: state.field_id,
+          option: state.option,
+        };
+      }
+      return state;
+    });
+  }
+
+  async submitForm(router: AppRouterInstance) {
     if (!this.form) throw new Error("Form is required");
-    submitForm(this.form.form_id, this.formResponseState);
+    await submitForm(this.form.form_id, this.formResponseState);
+    router.push("/dashboard");
   }
 }

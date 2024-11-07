@@ -104,6 +104,9 @@ export class FormInputManager {
   setTextToField(index: number, text: string) {
     this.formFields[index].title = text;
   }
+  editTextFieldType(index: number, fieldType: TextFieldType) {
+    this.formFields[index].text_field_type = fieldType;
+  }
 
   setTextToOptionField(
     field_index: number,
@@ -245,6 +248,6 @@ export class FormInputManager {
       formProperties: this.formProperties,
       formFields: this.formFields,
     });
-    router.push("/dashboard/myforms");
+    router.push("/dashboard");
   }
 }

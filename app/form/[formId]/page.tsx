@@ -5,6 +5,7 @@ import { FormOutputManager, FormState } from "@/classes/FormOutputManager";
 import NavBar from "@/components/NavBar";
 import { formOutputElements, formStateAtom } from "@/recoil/atoms";
 import { Field, Form, Option, TextStyle } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -29,6 +30,7 @@ const FormPage = ({
     useRecoilState<JSX.Element>(formOutputElements);
   const [manager, setManager] = useState<FormOutputManager>();
   const setFormState = useSetRecoilState<FormState[]>(formStateAtom);
+  const router = useRouter();
 
   const gets = async () => {
     setManager(
@@ -73,7 +75,7 @@ const FormPage = ({
             className="w-full ma bg-neutral-300 relative text-neutral-800 font-semibold text-2xl py-2 outline-none hover:bg-neutral-50 duration-200 rounded-3xl mt-4 group overflow-clip"
             onClick={(e) => {
               e.preventDefault();
-              manager?.submitForm();
+              manager?.submitForm(router);
             }}
           >
             <FaCheckCircle className="top-0 left-10 absolute scale-[4] opacity-50 rotate-12 group-hover:rotate-0 duration-200 group-hover:scale-[2] group-hover:text-green-600" />

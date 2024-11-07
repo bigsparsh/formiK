@@ -25,6 +25,11 @@ const TextInputField = ({ id }: { id: number }) => {
   const [isInput, setIsInput] = useState<boolean>(false);
 
   useEffect(() => {
+    manager.editTextFieldType(id, fieldType);
+    console.log(JSON.stringify(manager.formFields));
+  }, [fieldType, id, manager]);
+
+  useEffect(() => {
     if (isInput) {
       tbAnimate(tbRef.current, { x: "100%" });
     } else {

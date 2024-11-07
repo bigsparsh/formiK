@@ -41,7 +41,6 @@ export const createForm = async ({
           case FieldType.TEXT:
             return {
               ...commonData,
-              text_field_type: TextFieldType.TEXT,
               image: field.image as string,
               text_style: {
                 create: {
@@ -55,16 +54,8 @@ export const createForm = async ({
           case FieldType.TEXT_INPUT:
             return {
               ...commonData,
-              text_field_type: TextFieldType.TEXT,
+              text_field_type: field.text_field_type,
               image: field.image as string,
-              text_style: {
-                create: {
-                  size: field.text_style ? field.text_style.size : FontSize.MD,
-                  bold: field.text_style?.bold,
-                  italic: field.text_style?.italic,
-                  underline: field.text_style?.underline,
-                },
-              },
             };
           case FieldType.IMAGE:
             return {

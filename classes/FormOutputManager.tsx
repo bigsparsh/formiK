@@ -7,6 +7,7 @@ import { FieldType } from "@prisma/client";
 import { SetterOrUpdater } from "recoil";
 import { FormResponseManager } from "./FormResponseManager";
 import TextPromptField from "@/components/TextPromptField";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export type FormState = {
   index: number;
@@ -80,6 +81,7 @@ export class FormOutputManager {
           this.formJSX.push(
             <TextPromptField
               key={crypto.randomUUID()}
+              id={field.field_id}
               title={field.title}
               image={field.image as string}
               className={""}
@@ -159,8 +161,8 @@ export class FormOutputManager {
     this.update();
   }
 
-  submitForm() {
-    this.formResponseManager.submitForm();
+  submitForm(router: AppRouterInstance) {
+    this.formResponseManager.submitForm(router);
   }
 
   update() {
