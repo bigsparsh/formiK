@@ -6,6 +6,7 @@ import TextOutputField from "@/components/TextOutputField";
 import { FieldType } from "@prisma/client";
 import { SetterOrUpdater } from "recoil";
 import { FormResponseManager } from "./FormResponseManager";
+import TextPromptField from "@/components/TextPromptField";
 
 export type FormState = {
   index: number;
@@ -70,6 +71,17 @@ export class FormOutputManager {
               bold={field.text_style.bold}
               italic={field.text_style.italic}
               underline={field.text_style.underline}
+              className={""}
+            />,
+          );
+          break;
+
+        case FieldType.TEXT_INPUT:
+          this.formJSX.push(
+            <TextPromptField
+              key={crypto.randomUUID()}
+              title={field.title}
+              image={field.image as string}
               className={""}
             />,
           );

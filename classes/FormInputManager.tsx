@@ -79,6 +79,12 @@ export class FormInputManager {
     }
   }
 
+  setTextInput(index: number, isInput: boolean) {
+    this.formFields[index].type = isInput
+      ? FieldType.TEXT_INPUT
+      : FieldType.TEXT;
+  }
+
   setFormTitle(title: string) {
     this.formProperties.title = title;
   }

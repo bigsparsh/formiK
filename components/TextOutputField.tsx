@@ -43,6 +43,7 @@ const TextOutputField = ({
           width={500}
           height={500}
           className={"self-center rounded-3xl my-4"}
+          loading="lazy"
         />
       )}
     </div>

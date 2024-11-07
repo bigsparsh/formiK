@@ -1,6 +1,7 @@
 "use client";
 import { FormInputManager } from "@/classes/FormInputManager";
 import { FontSize, TextFieldType } from "@prisma/client";
+import { useAnimate } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 
@@ -14,12 +15,23 @@ const TextInputField = ({ id }: { id: number }) => {
   const manager = FormInputManager.getInstance();
   const textRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [tbRef, tbAnimate] = useAnimate();
   const [fileName, setFileName] = useState<string | null>(null);
   const [fontSize, setFontSize] = useState<FontSize>(FontSize.MD);
   const [bold, setBold] = useState<boolean>(false);
   const [italic, setItalic] = useState<boolean>(false);
   const [underline, setUnderline] = useState<boolean>(false);
   const [fieldType, setFieldType] = useState<TextFieldType>(TextFieldType.TEXT);
+  const [isInput, setIsInput] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isInput) {
+      tbAnimate(tbRef.current, { x: "100%" });
+    } else {
+      tbAnimate(tbRef.current, { x: "0%" });
+    }
+    manager.setTextInput(id, isInput);
+  }, [id, isInput, manager, tbAnimate, tbRef]);
 
   useEffect(() => {
     manager.setTextFormat(id, bold, italic, underline);
@@ -33,7 +45,7 @@ const TextInputField = ({ id }: { id: number }) => {
     <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-2 text-white">
       <textarea
         className="w-full py-2 bg-neutral-700 rounded-3xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 placeholder:px-5 resize-none"
-        placeholder={"Enter the title of the field " + id}
+        placeholder={!isInput ? "Enter text here" : "Enter placeholder here"}
         ref={textRef}
         rows={2}
         onChange={(e) => {
@@ -78,130 +90,174 @@ const TextInputField = ({ id }: { id: number }) => {
             }}
           />
         </div>
-        <div className="flex flex-col bg-neutral-700 px-3 pb-3 basis-1/2 rounded-3xl">
-          <h1 className="text-lg mt-2 px-2 font-semibold">Font Size</h1>
-          <div className="flex gap-2">
-            <button
+        <div className="flex  bg-neutral-700 px-3 pb-3 basis-1/2 rounded-3xl">
+          <div className="basis-2/3 flex flex-col ">
+            <div
               className={
-                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (fontSize === FontSize.XL ? "bg-neutral-600" : "bg-neutral-700")
+                "rounded-3xl duration-200 " +
+                (!isInput ? "" : "blur-sm pointer-events-none")
               }
-              onClick={() => {
-                setFontSize(FontSize.XL);
-              }}
             >
-              Xtra Large
-            </button>
-            <button
+              <h1 className="text-lg mt-2 px-2 font-semibold">Font Size</h1>
+              <div className="flex gap-2">
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (fontSize === FontSize.XL
+                      ? "bg-neutral-600"
+                      : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setFontSize(FontSize.XL);
+                  }}
+                >
+                  Xtra Large
+                </button>
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (fontSize === FontSize.LG
+                      ? "bg-neutral-600"
+                      : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setFontSize(FontSize.LG);
+                  }}
+                >
+                  Large
+                </button>
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (fontSize === FontSize.MD
+                      ? "bg-neutral-600"
+                      : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setFontSize(FontSize.MD);
+                  }}
+                >
+                  Medium
+                </button>
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (fontSize === FontSize.SM
+                      ? "bg-neutral-600"
+                      : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setFontSize(FontSize.SM);
+                  }}
+                >
+                  Small
+                </button>
+              </div>
+              <h1 className="text-lg mt-2 px-2 font-semibold">Formatting</h1>
+              <div className="flex gap-2">
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (bold ? "bg-neutral-600" : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setBold(!bold);
+                  }}
+                >
+                  Bold
+                </button>
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (italic ? "bg-neutral-600" : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setItalic(!italic);
+                  }}
+                >
+                  Italics
+                </button>
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (underline ? "bg-neutral-600" : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setUnderline(!underline);
+                  }}
+                >
+                  Underline
+                </button>
+              </div>
+            </div>
+            <div
               className={
-                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (fontSize === FontSize.LG ? "bg-neutral-600" : "bg-neutral-700")
+                "rounded-3xl duration-200 " +
+                (isInput ? "" : "blur-sm pointer-events-none")
               }
-              onClick={() => {
-                setFontSize(FontSize.LG);
-              }}
             >
-              Large
-            </button>
-            <button
-              className={
-                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (fontSize === FontSize.MD ? "bg-neutral-600" : "bg-neutral-700")
-              }
-              onClick={() => {
-                setFontSize(FontSize.MD);
-              }}
-            >
-              Medium
-            </button>
-            <button
-              className={
-                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (fontSize === FontSize.SM ? "bg-neutral-600" : "bg-neutral-700")
-              }
-              onClick={() => {
-                setFontSize(FontSize.SM);
-              }}
-            >
-              Small
-            </button>
+              <h1 className="text-lg mt-2 px-2 font-semibold">Field Type</h1>
+              <div className="flex gap-2">
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (fieldType === TextFieldType.EMAIL
+                      ? "bg-neutral-600"
+                      : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setFieldType(TextFieldType.EMAIL);
+                  }}
+                >
+                  Email
+                </button>
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (fieldType === TextFieldType.TEXT
+                      ? "bg-neutral-600"
+                      : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setFieldType(TextFieldType.TEXT);
+                  }}
+                >
+                  Text
+                </button>
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (fieldType === TextFieldType.NUMBER
+                      ? "bg-neutral-600"
+                      : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setFieldType(TextFieldType.NUMBER);
+                  }}
+                >
+                  Number
+                </button>
+              </div>
+            </div>
           </div>
-          <h1 className="text-lg mt-2 px-2 font-semibold">Formatting</h1>
-          <div className="flex gap-2">
+
+          <div>
+            <h1 className="text-lg mt-2 px-2 font-semibold">
+              Show as an input
+            </h1>
             <button
               className={
-                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (bold ? "bg-neutral-600" : "bg-neutral-700")
+                "h-4 w-10 rounded-full mx-3 my-2 relative flex items-center outline-none " +
+                (isInput ? "bg-neutral-500 border" : "bg-neutral-600")
               }
               onClick={() => {
-                setBold(!bold);
+                setIsInput(!isInput);
               }}
             >
-              Bold
-            </button>
-            <button
-              className={
-                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (italic ? "bg-neutral-600" : "bg-neutral-700")
-              }
-              onClick={() => {
-                setItalic(!italic);
-              }}
-            >
-              Italics
-            </button>
-            <button
-              className={
-                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (underline ? "bg-neutral-600" : "bg-neutral-700")
-              }
-              onClick={() => {
-                setUnderline(!underline);
-              }}
-            >
-              Underline
-            </button>
-          </div>
-          <h1 className="text-lg mt-2 px-2 font-semibold">Field Type</h1>
-          <div className="flex gap-2">
-            <button
-              className={
-                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (fieldType === TextFieldType.EMAIL
-                  ? "bg-neutral-600"
-                  : "bg-neutral-700")
-              }
-              onClick={() => {
-                setFieldType(TextFieldType.EMAIL);
-              }}
-            >
-              Email
-            </button>
-            <button
-              className={
-                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (fieldType === TextFieldType.TEXT
-                  ? "bg-neutral-600"
-                  : "bg-neutral-700")
-              }
-              onClick={() => {
-                setFieldType(TextFieldType.TEXT);
-              }}
-            >
-              Text
-            </button>
-            <button
-              className={
-                "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                (fieldType === TextFieldType.NUMBER
-                  ? "bg-neutral-600"
-                  : "bg-neutral-700")
-              }
-              onClick={() => {
-                setFieldType(TextFieldType.NUMBER);
-              }}
-            >
-              Number
+              <div
+                className="h-5 w-5 bg-white rounded-full absolute"
+                ref={tbRef}
+              />
             </button>
           </div>
         </div>

@@ -39,12 +39,14 @@ export class FormResponseManager {
           });
           break;
         case FieldType.TEXT:
+          break;
+        case FieldType.IMAGE:
+          break;
+        case FieldType.TEXT_INPUT:
           this.formResponseState.push({
             ...commonData,
             text: "",
           });
-          break;
-        case FieldType.IMAGE:
           break;
         default:
           console.log(field.type);
