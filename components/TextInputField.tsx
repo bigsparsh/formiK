@@ -1,9 +1,9 @@
 "use client";
 import { FormInputManager } from "@/classes/FormInputManager";
 import { FontSize, TextFieldType } from "@prisma/client";
-import { useAnimate } from "framer-motion";
+import { AnimatePresence, useAnimate, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { FaUpload } from "react-icons/fa";
+import { FaAsterisk, FaUpload } from "react-icons/fa";
 
 export enum FontFormat {
   BOLD = "BOLD",
@@ -16,6 +16,7 @@ const TextInputField = ({ id }: { id: number }) => {
   const textRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [tbRef, tbAnimate] = useAnimate();
+  const [tbRef2, tbAnimate2] = useAnimate();
   const [fileName, setFileName] = useState<string | null>(null);
   const [fontSize, setFontSize] = useState<FontSize>(FontSize.MD);
   const [bold, setBold] = useState<boolean>(false);
@@ -23,6 +24,7 @@ const TextInputField = ({ id }: { id: number }) => {
   const [underline, setUnderline] = useState<boolean>(false);
   const [fieldType, setFieldType] = useState<TextFieldType>(TextFieldType.TEXT);
   const [isInput, setIsInput] = useState<boolean>(false);
+  const [required, setRequired] = useState<boolean>(false);
 
   useEffect(() => {
     manager.editTextFieldType(id, fieldType);
@@ -34,9 +36,19 @@ const TextInputField = ({ id }: { id: number }) => {
       tbAnimate(tbRef.current, { x: "100%" });
     } else {
       tbAnimate(tbRef.current, { x: "0%" });
+      setRequired(false);
     }
     manager.setTextInput(id, isInput);
   }, [id, isInput, manager, tbAnimate, tbRef]);
+
+  useEffect(() => {
+    if (required) {
+      tbAnimate2(tbRef2.current, { x: "100%" });
+    } else {
+      tbAnimate2(tbRef2.current, { x: "0%" });
+    }
+    manager.setRequired(id, required);
+  }, [id, manager, required, tbAnimate2, tbRef2]);
 
   useEffect(() => {
     manager.setTextFormat(id, bold, italic, underline);
@@ -47,7 +59,23 @@ const TextInputField = ({ id }: { id: number }) => {
   }, [fontSize, id, manager]);
 
   return (
-    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-2 text-white">
+    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl p-3 work gap-2 text-white relative">
+      <AnimatePresence>
+        {required && (
+          <motion.div
+            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0 }}
+            exit={{ opacity: 0, scale: 0 }}
+            className="absolute -top-2 -right-2"
+          >
+            <FaAsterisk
+              width={16}
+              height={16}
+              className="text-3xl font-semibold  bg-neutral-600 border-neutral-300 p-2 rounded-2xl"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <textarea
         className="w-full py-2 bg-neutral-700 rounded-3xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 placeholder:px-5 resize-none"
         placeholder={!isInput ? "Enter text here" : "Enter placeholder here"}
@@ -259,24 +287,44 @@ const TextInputField = ({ id }: { id: number }) => {
             </div>
           </div>
 
-          <div>
-            <h1 className="text-lg mt-2 px-2 font-semibold">
-              Show as an input
-            </h1>
-            <button
-              className={
-                "h-4 w-10 rounded-full mx-3 my-2 relative flex items-center outline-none " +
-                (isInput ? "bg-neutral-500 border" : "bg-neutral-600")
-              }
-              onClick={() => {
-                setIsInput(!isInput);
-              }}
-            >
-              <div
-                className="h-5 w-5 bg-white rounded-full absolute"
-                ref={tbRef}
-              />
-            </button>
+          <div className="flex flex-col">
+            <div>
+              <h1 className="text-lg mt-2 px-2 font-semibold">
+                Show as an input
+              </h1>
+              <button
+                className={
+                  "h-4 w-10 rounded-full mx-2 my-1 relative flex items-center outline-none " +
+                  (isInput ? "bg-neutral-500 border" : "bg-neutral-600")
+                }
+                onClick={() => {
+                  setIsInput(!isInput);
+                }}
+              >
+                <div
+                  className="h-5 w-5 bg-white rounded-full absolute"
+                  ref={tbRef}
+                />
+              </button>
+            </div>
+
+            <div className={"" + (!isInput ? "blur-sm" : "")}>
+              <h1 className="text-lg mt-2 px-2 font-semibold">Required</h1>
+              <button
+                className={
+                  "h-4 w-10 rounded-full mx-2 my-1 relative flex items-center outline-none " +
+                  (required ? "bg-neutral-500 border" : "bg-neutral-600")
+                }
+                onClick={() => {
+                  setRequired(!required);
+                }}
+              >
+                <div
+                  className="h-5 w-5 bg-white rounded-full absolute"
+                  ref={tbRef2}
+                />
+              </button>
+            </div>
           </div>
         </div>
       </div>

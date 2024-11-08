@@ -25,7 +25,12 @@ const TextPromptField = ({
         className
       }
     >
-      <h1 className="font-semibold text-white text-xl px-2">{title}</h1>
+      <div className="flex gap-4 justify-between items-start">
+        <h1 className="font-semibold text-white text-xl px-2">{title}</h1>
+        <div className="bg-neutral-600 rounded-full px-3 py-0 text-sm h-fit">
+          {type}
+        </div>
+      </div>
       {image && (
         <Image
           src={image}

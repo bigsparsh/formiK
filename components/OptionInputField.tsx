@@ -1,7 +1,9 @@
 "use client";
 import { FormElement } from "@/app/form/create/page";
 import { FormInputManager } from "@/classes/FormInputManager";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { FaAsterisk } from "react-icons/fa";
 
 const OptionInputField = ({
   id,
@@ -15,7 +17,23 @@ const OptionInputField = ({
   const manager = FormInputManager.getInstance();
 
   return (
-    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-3 text-white">
+    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl p-3 work gap-3 text-white relative">
+      <AnimatePresence>
+        {required && (
+          <motion.div
+            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0 }}
+            exit={{ opacity: 0, scale: 0 }}
+            className="absolute -top-2 -right-2"
+          >
+            <FaAsterisk
+              width={16}
+              height={16}
+              className="text-3xl font-semibold  bg-neutral-600 border-neutral-300 p-2 rounded-2xl"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <input
         type="text"
         className="w-full py-2 bg-neutral-700 rounded-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
