@@ -16,3 +16,8 @@ export const formStateAtom = atom<FormState[]>({
   key: "formStateAtom",
   default: [],
 });
+
+export const errorAtom = atom<string | null>({
+  key: "errorAtom",
+  default: null,
+});

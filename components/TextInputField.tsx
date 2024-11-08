@@ -232,6 +232,19 @@ const TextInputField = ({ id }: { id: number }) => {
                 <button
                   className={
                     "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    (fieldType === TextFieldType.TEXTAREA
+                      ? "bg-neutral-600"
+                      : "bg-neutral-700")
+                  }
+                  onClick={() => {
+                    setFieldType(TextFieldType.TEXTAREA);
+                  }}
+                >
+                  TextArea
+                </button>
+                <button
+                  className={
+                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
                     (fieldType === TextFieldType.NUMBER
                       ? "bg-neutral-600"
                       : "bg-neutral-700")

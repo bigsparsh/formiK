@@ -1,6 +1,7 @@
 "use client";
 
 import { FormInputManager } from "@/classes/FormInputManager";
+import NavBar from "@/components/NavBar";
 import { formInputElements } from "@/recoil/atoms";
 import { FieldType, FontSize, TextFieldType } from "@prisma/client";
 import { useRouter } from "next/navigation";
@@ -14,6 +15,7 @@ export type FormElement = {
   required: boolean;
   index: number;
   multi_select?: boolean;
+  max_chars?: number;
   text_style?: {
     bold: boolean;
     italic: boolean;
@@ -50,11 +52,7 @@ const CreateForm = () => {
           "linear-gradient(#ffffff10 10%, transparent 10%) 0 0/ 15px 15px , linear-gradient(90deg, #ffffff10 10%, transparent 10%) 0 0/ 15px 15px, radial-gradient(120% 150% at 50% 50%,transparent, #ffffff50), linear-gradient(60deg, gray 10% 40%, transparent 50% 60%, gray 70% 100%) ,radial-gradient(25% 100% at 50% 10%, lightgray, gray)",
       }}
     >
-      <nav className="p-10 flex justify-between">
-        <h1 className="text-4xl font-semibold tracking-tight text-white">
-          formiK
-        </h1>
-      </nav>
+      <NavBar />
       <div className="flex h-fit">
         <div className="basis-1/6 bg-neutral-600 mb-20 rounded-r-3xl overflow-clip text-white work sticky top-12 h-fit">
           <h1 className="px-4 py-2 text-center font-medium text-xl bg-neutral-700">

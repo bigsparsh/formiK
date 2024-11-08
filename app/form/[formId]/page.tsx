@@ -3,8 +3,10 @@
 import { getFormFields } from "@/actions/Form";
 import { FormOutputManager, FormState } from "@/classes/FormOutputManager";
 import NavBar from "@/components/NavBar";
-import { formOutputElements, formStateAtom } from "@/recoil/atoms";
+import Toast from "@/components/Toast";
+import { errorAtom, formOutputElements, formStateAtom } from "@/recoil/atoms";
 import { Field, Form, Option, TextStyle } from "@prisma/client";
+import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
@@ -29,6 +31,8 @@ const FormPage = ({
   const [formFields, setFormFields] =
     useRecoilState<JSX.Element>(formOutputElements);
   const [manager, setManager] = useState<FormOutputManager>();
+  const [toastVisibility, setToastVisibility] = useState<boolean>(false);
+  const [error, setError] = useRecoilState<string | null>(errorAtom);
   const setFormState = useSetRecoilState<FormState[]>(formStateAtom);
   const router = useRouter();
 
@@ -38,11 +42,25 @@ const FormPage = ({
         setFormFields,
         setFormState,
         (await getFormFields(formId)) as FullFormType,
+        setError,
       ),
     );
   };
 
   useEffect(() => {
+    if (error) {
+      setError(error);
+      setToastVisibility(true);
+      setTimeout(() => {
+        setError(null);
+        setToastVisibility(false);
+      }, 4000);
+    }
+  }, [error, setError]);
+
+  useEffect(() => {
+    setError("hello");
+    setToastVisibility(true);
     gets();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -60,6 +78,9 @@ const FormPage = ({
       }}
     >
       <NavBar />
+      <AnimatePresence>
+        {toastVisibility && error ? <Toast message={error} /> : null}
+      </AnimatePresence>
       <h1
         className="px-5 pt-28 pb-3 bg-neutral-700 ma text-neutral-50 font-bold text-3xl mb-10 max-w-6xl rounded-3xl w-full"
         style={{
@@ -73,7 +94,7 @@ const FormPage = ({
           {formFields}
           <button
             className="w-full ma bg-neutral-300 relative text-neutral-800 font-semibold text-2xl py-2 outline-none hover:bg-neutral-50 duration-200 rounded-3xl mt-4 group overflow-clip"
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
               manager?.submitForm(router);
             }}

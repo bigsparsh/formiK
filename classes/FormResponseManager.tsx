@@ -1,27 +1,41 @@
 import { submitForm } from "@/actions/Form";
 import { FullFormType } from "@/app/form/[formId]/page";
-import { FieldType } from "@prisma/client";
+import { FieldType, TextFieldType } from "@prisma/client";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { SetterOrUpdater } from "recoil";
+import { z } from "zod";
+
+const emailValidator = z.string().email();
+const numberValidator = z.string().regex(/^\d+$/);
 
 export type formResponseState = {
   field_id: string;
+  text_type?: TextFieldType;
   option?: number;
   text?: string;
 };
 export class FormResponseManager {
   formResponseState: formResponseState[] = [];
   form: FullFormType;
+  setError: SetterOrUpdater<string | null>;
   static instance: FormResponseManager;
 
-  private constructor(form: FullFormType) {
+  private constructor(
+    form: FullFormType,
+    setError: SetterOrUpdater<string | null>,
+  ) {
     this.form = form;
     this.generateResponseState();
+    this.setError = setError;
   }
 
-  static getInstance(form?: FullFormType) {
+  static getInstance(
+    form?: FullFormType,
+    setError?: SetterOrUpdater<string | null>,
+  ) {
     if (!this.instance) {
-      if (!form) throw new Error("Form is required");
-      this.instance = new FormResponseManager(form);
+      if (!form || !setError) throw new Error("Form and error setter required");
+      this.instance = new FormResponseManager(form, setError);
     }
     return this.instance;
   }
@@ -46,6 +60,7 @@ export class FormResponseManager {
         case FieldType.TEXT_INPUT:
           this.formResponseState.push({
             ...commonData,
+            text_type: field.text_field_type as TextFieldType,
             text: "",
           });
           break;
@@ -75,6 +90,7 @@ export class FormResponseManager {
         return {
           text: text,
           field_id: state.field_id,
+          text_type: state.text_type,
           option: state.option,
         };
       }
@@ -84,7 +100,33 @@ export class FormResponseManager {
 
   async submitForm(router: AppRouterInstance) {
     if (!this.form) throw new Error("Form is required");
+    try {
+      this.formResponseState.map((state) => {
+        if (state.text_type) {
+          switch (state.text_type) {
+            case TextFieldType.NUMBER:
+              if (numberValidator.safeParse(state.text).success === false) {
+                throw new Error("Invalid number");
+              }
+              break;
+            case TextFieldType.EMAIL:
+              if (emailValidator.safeParse(state.text).success === false) {
+                throw new Error("Invalid email");
+              }
+              break;
+            default:
+              break;
+          }
+        }
+      });
+    } catch (e) {
+      // @ts-expect-error "no"
+      this.setError(e.message);
+      return;
+    }
+
     await submitForm(this.form.form_id, this.formResponseState);
     router.push("/dashboard");
+    return null;
   }
 }

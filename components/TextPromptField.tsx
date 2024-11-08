@@ -1,5 +1,6 @@
 "use client";
 import { FormResponseManager } from "@/classes/FormResponseManager";
+import { TextFieldType } from "@prisma/client";
 import Image from "next/image";
 
 const TextPromptField = ({
@@ -7,11 +8,13 @@ const TextPromptField = ({
   title,
   image,
   className,
+  type,
 }: {
   id: string;
   title: string;
   image?: string;
   className: string;
+  type: TextFieldType;
 }) => {
   const manager = FormResponseManager.getInstance();
 
@@ -33,14 +36,43 @@ const TextPromptField = ({
           loading="lazy"
         />
       )}
-      <textarea
-        className="w-full py-2 bg-neutral-600 rounded-3xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 placeholder:px-5 resize-none"
-        placeholder={"Enter your response"}
-        rows={2}
-        onChange={(e) => {
-          manager.setText(id, e.target.value);
-        }}
-      ></textarea>
+      {type === TextFieldType.TEXTAREA ? (
+        <textarea
+          className="w-full py-2 bg-neutral-600 rounded-3xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 placeholder:px-5 resize-none"
+          placeholder={"Enter your response"}
+          rows={2}
+          onChange={(e) => {
+            manager.setText(id, e.target.value);
+          }}
+        ></textarea>
+      ) : type === TextFieldType.TEXT ? (
+        <input
+          type="text"
+          className="w-full py-2 bg-neutral-600 rounded-3xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 placeholder:px-5 resize-none"
+          placeholder={"Enter your response"}
+          onChange={(e) => {
+            manager.setText(id, e.target.value);
+          }}
+        />
+      ) : type === TextFieldType.EMAIL ? (
+        <input
+          type="email"
+          className="w-full py-2 bg-neutral-600 rounded-3xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 placeholder:px-5 resize-none"
+          placeholder={"Enter your response"}
+          onChange={(e) => {
+            manager.setText(id, e.target.value);
+          }}
+        />
+      ) : type === TextFieldType.NUMBER ? (
+        <input
+          type="number"
+          className="w-full py-2 bg-neutral-600 rounded-3xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 placeholder:px-5 resize-none"
+          placeholder={"Enter your response"}
+          onChange={(e) => {
+            manager.setText(id, e.target.value);
+          }}
+        />
+      ) : null}
     </div>
   );
 };

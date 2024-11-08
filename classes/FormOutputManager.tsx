@@ -3,7 +3,7 @@ import ImageOutputField from "@/components/ImageOutputField";
 import OptionOutputField from "@/components/OptionOutputField";
 import OutputRenderer from "@/components/OuputRenderer";
 import TextOutputField from "@/components/TextOutputField";
-import { FieldType } from "@prisma/client";
+import { FieldType, TextFieldType } from "@prisma/client";
 import { SetterOrUpdater } from "recoil";
 import { FormResponseManager } from "./FormResponseManager";
 import TextPromptField from "@/components/TextPromptField";
@@ -25,33 +25,40 @@ export class FormOutputManager {
   setFormState: SetterOrUpdater<FormState[]> | null;
   formState: FormState[];
   formResponseManager: FormResponseManager;
+  setError: SetterOrUpdater<string | null>;
   static instance: FormOutputManager | null;
 
   private constructor(
     setPc: SetterOrUpdater<JSX.Element>,
     setFs: SetterOrUpdater<FormState[]>,
     formFields: FullFormType,
+    setError: SetterOrUpdater<string | null>,
   ) {
     this.formFields = formFields;
     this.setParentComponent = setPc;
     this.formJSX = [];
     this.setFormState = setFs;
     this.formState = [];
-    this.formResponseManager = FormResponseManager.getInstance(formFields);
+    this.formResponseManager = FormResponseManager.getInstance(
+      formFields,
+      setError,
+    );
+    this.setError = setError;
   }
 
   static getInstance(
     setPc?: SetterOrUpdater<JSX.Element>,
     setFs?: SetterOrUpdater<FormState[]>,
     formFields?: FullFormType,
+    setError?: SetterOrUpdater<string | null>,
   ) {
     if (!this.instance) {
-      if (!setPc || !formFields || !setFs) {
+      if (!setPc || !formFields || !setFs || !setError) {
         throw new Error(
           "Parent component and setter is required and also form fields",
         );
       }
-      this.instance = new FormOutputManager(setPc, setFs, formFields);
+      this.instance = new FormOutputManager(setPc, setFs, formFields, setError);
     }
     return this.instance;
   }
@@ -80,6 +87,7 @@ export class FormOutputManager {
         case FieldType.TEXT_INPUT:
           this.formJSX.push(
             <TextPromptField
+              type={field.text_field_type as TextFieldType}
               key={crypto.randomUUID()}
               id={field.field_id}
               title={field.title}

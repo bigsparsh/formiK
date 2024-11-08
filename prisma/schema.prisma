@@ -94,6 +94,7 @@ model Field {
   index           Int // common
   text_field_type TextFieldType? // type: text
   multi_select    Boolean? // type: option
+  max_char        Int? // type: text_input
   options         Option[] // type: option
   field_responses FieldResponse[] 
   text_style      TextStyle? // type: text
@@ -151,6 +152,7 @@ enum FieldType {
 }
 
 enum TextFieldType {
+  TEXTAREA
   TEXT
   EMAIL
   NUMBER
