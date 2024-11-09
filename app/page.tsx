@@ -16,7 +16,7 @@ const Landing = () => {
         <div className="grow flex flex-col items-center justify-center relative">
           <HoveringCheckbox
             delay={0.4}
-            positions="top-36 md:top-20 xl:top-10 right-7 md:right-36 xl:right-48 flow text-neutral-100"
+            positions="top-0 -right-7 md:right-36 xl:right-48 flow text-neutral-100"
           >
             <input
               type="checkbox"
@@ -26,7 +26,7 @@ const Landing = () => {
           </HoveringCheckbox>
           <HoveringCheckbox
             delay={0}
-            positions="bottom-60 left-7 md:left-28 xl:left-48 flow text-neutral-100"
+            positions="bottom-28 -left-10 md:left-28 xl:left-48 flow text-neutral-100"
           >
             <div className="flex flex-col">
               <label>Enter name: </label>
@@ -52,8 +52,7 @@ const Landing = () => {
               </div>
             </div>
           </HoveringCheckbox>
-          <div className="flex flex-col gap-2 md:gap-3 xl:gap-5 mb-48 relative">
-            <div className="absolute h-[120%] -translate-x-16 translate-y-[-1rem] w-[120%] top-0 blur-3xl z-20 backdrop-blur-lg rounded-full" />
+          <div className="flex flex-col gap-2 md:gap-3 xl:gap-5 mb-48 ">
             <h1 className="font-semibold text-3xl px-3 md:text-4xl xl:text-5xl text-center text-white mix-blend-difference z-30">
               Ask the right questions and reach <br />
               concensus with formiK

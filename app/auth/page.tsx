@@ -2,6 +2,7 @@
 import Toast from "@/components/Toast";
 import { AnimatePresence } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
@@ -43,10 +44,13 @@ const Auth = () => {
         ) : null}
       </AnimatePresence>
       <section className="flex flex-col h-screen">
-        <nav className="p-10">
-          <h1 className="text-4xl font-semibold tracking-tight text-white">
+        <nav className="p-3 md:p-5 xl:p-10  w-full">
+          <Link
+            className="text-3xl xl:text-4xl font-semibold tracking-tight text-white"
+            href="/"
+          >
             formiK
-          </h1>
+          </Link>
         </nav>
         <div
           className={
@@ -54,14 +58,14 @@ const Auth = () => {
             (loading ? "pointer-events-none animate-pulse" : "")
           }
         >
-          <div className="flex flex-col justify-center relative border border-[gray] bg-[gray]/30 rounded-xl w-full max-w-lg overflow-clip work mb-20">
-            <h1 className="font-bold text-3xl text-[gray] bg-white/50 tracking-tight ma px-5 py-3 text-center">
+          <div className="flex flex-col justify-center relative border border-[gray] bg-[gray]/30 sm:rounded-3xl w-full max-w-lg overflow-clip work mb-20">
+            <h1 className="font-bold text-xl md:text-2xl xl:text-3xl text-[gray] bg-white/50 tracking-tight ma px-5 py-3 text-center">
               Enter your credentials
-              <span className="text-sm block  tracking-normal font-medium px-1">
+              <span className="text-xs md:text-sm block leading-3 tracking-normal font-medium px-1">
                 Create a new account or log into existing account
               </span>
             </h1>
-            <div className="p-5 flex flex-col text-white text-lg grow">
+            <div className="p-5 flex flex-col text-white text-sm md:text-lg grow">
               <label className=" px-2 font-semibold py-1">
                 Email Address:{" "}
               </label>
@@ -87,13 +91,13 @@ const Auth = () => {
                 Continue
               </button>
             </div>
-            <div className="px-5 flex gap-3 justify-center items-center text-white">
+            <div className="px-5 flex gap-3 justify-center items-center text-white text-xs md:text-base">
               <hr className="w-full" />
               <p>OR</p>
               <hr className="w-full" />
             </div>
             <button
-              className=" px-5 py-2 bg-white rounded-3xl m-5 text-lg flex items-center gap-3 text-[gray] w-fit self-center"
+              className=" px-5 py-2 bg-white rounded-3xl m-5 text-sm md:text-lg flex items-center gap-3 text-[gray] w-fit self-center"
               onClick={() => {
                 signIn("google");
                 setLoading(true);

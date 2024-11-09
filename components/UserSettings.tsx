@@ -30,13 +30,13 @@ const UserSettings = ({
 
   return (
     <motion.div
-      className="bg-neutral-700 pl-2 pr-5 py-2 rounded-3xl font-semibold border-2 border-white/50 flex flex-col relative text-white cursor-pointer"
+      className="bg-neutral-700 text-xs md:text-sm lg:text-base pl-1 md:pl-2 pr-3 md:pr-4 xl:pr-5 py-1 md:py-2 rounded-3xl font-semibold border-2 border-white/50 flex flex-col relative text-white cursor-pointer"
       onClick={handleClick}
       layout
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 md:gap-3">
         <Image
-          className="h-7 aspect-square rounded-full bg-cover bg-center"
+          className="h-5 w-5 md:h-7 md:w-7 rounded-full bg-cover bg-center"
           width={30}
           height={10}
           src={user.image ? user.image : "https://picsum.photos/100"}
