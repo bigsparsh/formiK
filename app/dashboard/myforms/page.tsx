@@ -12,7 +12,7 @@ const MyForms = async () => {
             className="bg-neutral-600 rounded-xl text-neutral-50 px-4 py-2 flex justify-between items-center border border-neutral-500"
             key={crypto.randomUUID()}
             style={{
-              background: `linear-gradient(90deg, gray, gray, transparent), url(${form.cover_image || form.fields.find((field) => field.image)?.image}) center/cover`,
+              background: `linear-gradient(90deg, gray, gray, transparent), url(${form.cover_image || form.fields.find((field) => field.image)?.image}) ${form.cover_image?.split("/")[2] !== "picsum.photos" ? "center/cover" : "center/cover fixed"}`,
             }}
           >
             <div className="flex flex-col gap-2">

@@ -5,6 +5,7 @@ import { FormResponseManager } from "@/classes/FormResponseManager";
 import { formStateAtom } from "@/recoil/atoms";
 import { useAnimate, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { FaAsterisk, FaCircle } from "react-icons/fa";
 import { useRecoilValue } from "recoil";
 
 const OptionOutputField = ({
@@ -13,7 +14,9 @@ const OptionOutputField = ({
   field_id,
   className,
   responseManager,
+  required,
 }: {
+  required: boolean;
   title: string;
   options: FormElement["options"];
   field_id: string;
@@ -31,28 +34,46 @@ const OptionOutputField = ({
 
   useEffect(() => {
     if (!formState || !animate) return;
-    animate(check.current, {
-      y: checked * 300 + "%",
-      scale: [1, 2, 1],
-    });
+    animate(
+      check.current,
+      {
+        y: checked * 275 + "%",
+        scale: [1, 2, 1],
+      },
+      {
+        duration: 0.25,
+        ease: "easeInOut",
+      },
+    );
   }, [formState, animate, check, checked]);
 
   return (
     <div
       className={
-        "w-full px-10 py-5 space-y-3 border border-neutral-600 rounded-3xl bg-neutral-700 " +
+        "w-full px-10 pb-5 space-y-3 border border-neutral-600 rounded-3xl bg-neutral-700 relative " +
         className
       }
     >
+      {required && (
+        <div className="absolute -top-2 -right-2">
+          <FaAsterisk
+            width={16}
+            height={16}
+            className="text-3xl font-semibold  bg-neutral-600 border-neutral-300 p-2 rounded-2xl"
+          />
+        </div>
+      )}
       <h1 className="text-xl">{title}</h1>
       <div className="space-y-2 relative">
         <motion.div
           initial={{
             y: "0%",
           }}
-          className="absolute w-3 h-3 rounded-full bg-neutral-50 left-2 top-2"
+          className="absolute rounded-full left-2 top-2"
           ref={check}
-        />
+        >
+          <FaCircle size={13} />
+        </motion.div>
         {options?.map((option) => {
           return (
             <div

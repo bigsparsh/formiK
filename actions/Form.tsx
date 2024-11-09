@@ -3,7 +3,7 @@
 import { FormElement } from "@/app/form/create/page";
 import { formResponseState } from "@/classes/FormResponseManager";
 import { prisma } from "@/prisma";
-import { FieldType, FontSize, Form, TextFieldType } from "@prisma/client";
+import { FieldType, FontSize, Form } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
 export const createForm = async ({

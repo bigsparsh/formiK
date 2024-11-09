@@ -88,6 +88,7 @@ export class FormOutputManager {
           this.formJSX.push(
             <TextPromptField
               type={field.text_field_type as TextFieldType}
+              required={field.required}
               key={crypto.randomUUID()}
               id={field.field_id}
               title={field.title}
@@ -100,6 +101,7 @@ export class FormOutputManager {
           this.formJSX.push(
             <OptionOutputField
               key={crypto.randomUUID()}
+              required={field.required}
               title={field.title}
               options={field.options}
               field_id={field.field_id}

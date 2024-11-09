@@ -32,9 +32,9 @@ const NavBar = () => {
   }, [session]);
 
   return (
-    <nav className="p-10 flex justify-between w-full">
+    <nav className="p-3 md:p-5 xl:p-10 flex justify-between items-center w-full">
       <Link
-        className="text-4xl font-semibold tracking-tight text-white"
+        className="text-3xl xl:text-4xl font-semibold tracking-tight text-white"
         href="/"
       >
         formiK
@@ -42,7 +42,7 @@ const NavBar = () => {
       {!userx ? (
         <Link
           className={
-            "bg-neutral-700 px-5 py-2 rounded-full font-semibold border-2 border-white/50 text-white " +
+            "bg-neutral-700 text-xs md:text-sm lg:text-base px-3 py-2 h-fit lg:px-5 rounded-full font-semibold border-2 border-white/50 text-white " +
             (loading ? "animate-pulse pointer-events-none" : "")
           }
           href="/auth"
