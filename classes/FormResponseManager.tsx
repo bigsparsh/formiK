@@ -65,7 +65,6 @@ export class FormResponseManager {
           });
           break;
         default:
-          console.log(field.type);
           throw new Error("Invalid field type");
       }
     });

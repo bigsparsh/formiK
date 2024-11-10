@@ -37,7 +37,7 @@ const OptionOutputField = ({
     animate(
       check.current,
       {
-        y: checked * 275 + "%",
+        y: checked * 250 + "%",
         scale: [1, 2, 1],
       },
       {
@@ -50,7 +50,7 @@ const OptionOutputField = ({
   return (
     <div
       className={
-        "w-full px-10 pb-5 space-y-3 border border-neutral-600 rounded-3xl bg-neutral-700 relative " +
+        "w-full px-3 md:px-7 xl:px-10 pb-5 space-y-3 border border-neutral-600 rounded-3xl bg-neutral-700 relative text-sm md:text-base " +
         className
       }
     >
@@ -63,22 +63,22 @@ const OptionOutputField = ({
           />
         </div>
       )}
-      <h1 className="text-xl">{title}</h1>
-      <div className="space-y-2 relative">
+      <h1 className="text-base md:text-xl">{title}</h1>
+      <div className="space-y-1 md:space-y-2 relative ">
         <motion.div
           initial={{
             y: "0%",
           }}
-          className="absolute rounded-full left-2 top-2"
+          className="absolute rounded-full left-2 top-2  md:top-2"
           ref={check}
         >
-          <FaCircle size={13} />
+          <FaCircle className="text-[0.80rem] md:text-sm" />
         </motion.div>
         {options?.map((option) => {
           return (
             <div
               key={crypto.randomUUID()}
-              className="flex text-lg bg-neutral-600 w-1/4 gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white"
+              className="flex bg-neutral-600 w-3/4 md:w-1/4 gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white"
               onClick={() => {
                 manager.checkRadioField(field_id, option.index);
                 setChecked(option.index);

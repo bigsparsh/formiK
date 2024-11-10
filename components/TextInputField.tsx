@@ -28,7 +28,6 @@ const TextInputField = ({ id }: { id: number }) => {
 
   useEffect(() => {
     manager.editTextFieldType(id, fieldType);
-    console.log(JSON.stringify(manager.formFields));
   }, [fieldType, id, manager]);
 
   useEffect(() => {
@@ -231,7 +230,7 @@ const TextInputField = ({ id }: { id: number }) => {
               <h1 className="text-base md:text-lg mt-2 px-2 font-semibold">
                 Field Type
               </h1>
-              <div className="flex flex-wrap md:gap-2 *:border-neutral-500 *:duration-200 *:text-neutral-50 *:px-3 *:py-1 *:rounded-full *:outline-none *:box-border *:border ">
+              <div className="flex flex-wrap gap-1 md:gap-2 *:border-neutral-500 *:duration-200 *:text-neutral-50 *:px-3 *:py-1 *:rounded-full *:outline-none *:box-border *:border ">
                 <button
                   className={
                     "" +

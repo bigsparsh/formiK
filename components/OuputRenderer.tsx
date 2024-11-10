@@ -10,7 +10,7 @@ const OutputRenderer = ({
 }) => {
   return (
     <>
-      <div className="flex flex-col gap-2 work">{formJSX}</div>
+      <div className="flex flex-col gap-1 md:gap-2 work">{formJSX}</div>
     </>
   );
 };

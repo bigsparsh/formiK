@@ -150,7 +150,7 @@ const CreateForm = () => {
               </div>
               {manager?.formFields.length === 0 ? (
                 <>
-                  <div className="border4 border-neutral-800 border-dashed px-5 py-10 rounded-xl work text-xl font-medium">
+                  <div className="border4 border-neutral-800 border-dashed p-5 rounded-xl work text-base md:text-xl font-medium">
                     <FaArrowLeft className="animate-bounce" />
                     Start adding fields to your form
                   </div>

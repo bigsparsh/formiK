@@ -76,7 +76,6 @@ export const createForm = async ({
       }),
     },
   };
-  console.log(JSON.stringify(data, null, 2));
   const newForm = await prisma.form.create({
     data,
     include: {

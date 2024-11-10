@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const Toast = ({ message }: { message: string }) => {
   return (
-    <div className="w-full top-44  grid place-items-center sticky z-50">
+    <div className="w-full top-44  grid place-items-center fixed z-50">
       <motion.div
         className="text-lg bg-[gray] text-white work px-5 py-2 font-medium rounded-3xl w-fit"
         initial={{
@@ -24,6 +24,7 @@ const Toast = ({ message }: { message: string }) => {
           filter: "blur(10px)",
           scale: 0,
         }}
+        layout
       >
         {message}
       </motion.div>
