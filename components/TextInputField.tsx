@@ -59,7 +59,7 @@ const TextInputField = ({ id }: { id: number }) => {
   }, [fontSize, id, manager]);
 
   return (
-    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl p-2 md:p-3 work gap-2 text-white relative">
+    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl p-2 md:p-3 work gap-2 text-white relative md:text-base text-sm">
       <AnimatePresence>
         {required && (
           <motion.div

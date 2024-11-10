@@ -78,7 +78,7 @@ const CreateForm = () => {
               }}
             >
               <button
-                className="absolute top-2 right-2 text-white z-50 p-2 rounded-xl hover:bg-neutral-600"
+                className="absolute top-1 right-2 text-white z-50 p-2 rounded-xl hover:bg-neutral-600"
                 onClick={() => {
                   setShowNav(false);
                 }}

@@ -5,7 +5,7 @@ import { FaEye } from "react-icons/fa";
 const MyForms = async () => {
   const forms = await getForms();
   return (
-    <div className="bg-neutral-700 flex flex-col p-3 rounded-3xl grow mr-3 gap-2 overflow-auto h-[85vh]">
+    <div className="bg-neutral-700 flex flex-col p-2 md:p-3 rounded-3xl grow md:mr-3 gap-1 md:gap-2 overflow-auto h-[85vh]">
       {forms.map((form) => {
         return (
           <div
@@ -38,9 +38,9 @@ const MyForms = async () => {
             <div className="">
               <Link
                 href={"/form/" + form.form_id}
-                className="bg-neutral-700 px-3 py-1 flex justify-center text-sm md:text-base items-center rounded-full gap-2"
+                className="bg-neutral-700 px-3 py-1 flex justify-center text-sm md:text-base items-center rounded-full gap-2 w-fit"
               >
-                Preview Form <FaEye className="text-xl" />
+                Preview Form <FaEye className="text-base md:text-xl" />
               </Link>
             </div>
           </div>

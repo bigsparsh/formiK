@@ -9,7 +9,7 @@ const ImageInputField = ({ id }: { id: number }) => {
   const fileRef = useRef<HTMLInputElement>(null);
   const manager = FormInputManager.getInstance();
   return (
-    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-3 work gap-3 text-white">
+    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-2 md:p-3 work gap-2 md:gap-3 text-white">
       <input
         ref={fileRef}
         type="file"
@@ -25,7 +25,7 @@ const ImageInputField = ({ id }: { id: number }) => {
         }}
       />
       <div
-        className="aspect-[3/1] bg-neutral-700 rounded-xl flex flex-col  items-center justify-center font-medium text-xl text-white/50 cursor-pointer border border-neutral-500/50 relative overflow-clip"
+        className="aspect-[3/1] bg-neutral-700 rounded-xl flex flex-col  items-center justify-center font-medium text-base md:text-xl text-white/50 cursor-pointer border border-neutral-500/50 relative overflow-clip py-7"
         style={{
           background: fileName
             ? `url('${URL.createObjectURL(fileRef.current?.files?.[0] as File)}') center/cover`
@@ -35,15 +35,15 @@ const ImageInputField = ({ id }: { id: number }) => {
           fileRef.current?.click();
         }}
       >
-        <FaImage className="absolute top-10 left-16 text-neutral-500/50 scale-[10] -rotate-12" />
-        <FaImages className="absolute bottom-10 right-20 text-neutral-500/50 scale-[10] rotate-12" />
-        <FaUpload className="opacity-50 text-4xl mb-4" />
+        <FaImage className="absolute top-5 md:top-10 left-5 md:left-16 text-neutral-500/50 scale-[5] md:scale-[9] -rotate-12" />
+        <FaImages className="absolute bottom-5 md:bottom-10 right-5 md:right-20 text-neutral-500/50 scale-[6] md:scale-[10] rotate-12" />
+        <FaUpload className="opacity-50 text-xl md:text-3xl xl:text-4xl mb-1 md:mb-2 xl:mb-4" />
         {!fileName ? (
-          <p className="leading-4">
+          <p className="leading-4 md:text-base xl:text-xl text-sm">
             {fileName ? fileName : "Upload an Image " + id}
           </p>
         ) : (
-          <p className="bg-neutral-700 text-neutral-200 px-2 py-1 text-base rounded-full ">
+          <p className="bg-neutral-700 text-neutral-200 px-2 py-1 text-xs md:text-base rounded-full ">
             {fileName}
           </p>
         )}

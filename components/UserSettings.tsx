@@ -45,7 +45,7 @@ const UserSettings = ({
         <p>{user.name}</p>
       </div>
       <motion.div
-        className="flex flex-col absolute top-12 left-0  w-full z-60 gap-1"
+        className="flex flex-col absolute top-8 md:top-12 left-0  w-full z-60 gap-1"
         initial="hidden"
         variants={{
           hidden: {

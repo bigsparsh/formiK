@@ -17,7 +17,7 @@ const OptionInputField = ({
   const manager = FormInputManager.getInstance();
 
   return (
-    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl p-3 work gap-3 text-white relative">
+    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl p-2 md:p-3 work gap-2 md:gap-3 text-white relative md:text-base text-sm">
       <AnimatePresence>
         {required && (
           <motion.div
@@ -42,8 +42,8 @@ const OptionInputField = ({
           manager.setTextToField(id, e.target.value);
         }}
       />
-      <div className="flex w-full justify-between">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col md:flex-row w-full gap-2 justify-between">
+        <div className="flex flex-col gap-1 md:gap-2">
           {options?.map((opt) => {
             return (
               <div className="flex gap-3" key={crypto.randomUUID()}>
@@ -68,7 +68,7 @@ const OptionInputField = ({
             );
           })}
         </div>
-        <div className="basis-1/4 self-end p-3 bg-neutral-700 rounded-3xl flex flex-col gap-2">
+        <div className="md:basis-1/4 self-end p-3 bg-neutral-700 rounded-3xl flex flex-col gap-2 w-full">
           <div className="flex flex-col gap-1">
             <label className="font-medium px-2">
               Enter the number of options:
@@ -85,7 +85,7 @@ const OptionInputField = ({
           </div>
           <div className="flex flex-col gap-1">
             <h1 className="font-medium px-2">Attributes:</h1>
-            <div className="flex gap-3 items-center">
+            <div className="flex gap-1 md:gap-3 items-center  flex-wrap">
               <button
                 className={
                   "hover:cursor-pointer rounded-full px-3 py-1 border box-border outline-none " +
