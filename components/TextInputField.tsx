@@ -59,7 +59,7 @@ const TextInputField = ({ id }: { id: number }) => {
   }, [fontSize, id, manager]);
 
   return (
-    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl p-3 work gap-2 text-white relative">
+    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl p-2 md:p-3 work gap-2 text-white relative">
       <AnimatePresence>
         {required && (
           <motion.div
@@ -85,9 +85,9 @@ const TextInputField = ({ id }: { id: number }) => {
           manager.setTextToField(id, e.target.value as string);
         }}
       ></textarea>
-      <div className="flex gap-2">
+      <div className="flex md:flex-row flex-col gap-2">
         <div
-          className="basis-1/2 bg-neutral-700 rounded-3xl flex flex-col justify-center items-center  gap-2"
+          className="basis-1/2 bg-neutral-700 rounded-3xl flex flex-col justify-center items-center py-5 gap-2"
           style={{
             background: (fileName &&
               `url('${URL.createObjectURL(fileRef.current?.files?.[0] as File)}') center/cover`) as string,
@@ -123,7 +123,7 @@ const TextInputField = ({ id }: { id: number }) => {
             }}
           />
         </div>
-        <div className="flex  bg-neutral-700 px-3 pb-3 basis-1/2 rounded-3xl">
+        <div className="flex xl:flex-row flex-col bg-neutral-700 px-3 pb-3 basis-1/2 rounded-3xl">
           <div className="basis-2/3 flex flex-col ">
             <div
               className={
@@ -131,11 +131,13 @@ const TextInputField = ({ id }: { id: number }) => {
                 (!isInput ? "" : "blur-sm pointer-events-none")
               }
             >
-              <h1 className="text-lg mt-2 px-2 font-semibold">Font Size</h1>
-              <div className="flex gap-2">
+              <h1 className="text-base md:text-lg mt-2 px-2 font-semibold">
+                Font Size
+              </h1>
+              <div className="flex flex-wrap gap-1 md:gap-2 text-sm md:text-base *:border-neutral-500 *:duration-200 *:text-neutral-50 *:px-3 *:py-1 *:rounded-full *:outline-none *:box-border *:border">
                 <button
                   className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    " " +
                     (fontSize === FontSize.XL
                       ? "bg-neutral-600"
                       : "bg-neutral-700")
@@ -148,7 +150,7 @@ const TextInputField = ({ id }: { id: number }) => {
                 </button>
                 <button
                   className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    " " +
                     (fontSize === FontSize.LG
                       ? "bg-neutral-600"
                       : "bg-neutral-700")
@@ -161,7 +163,7 @@ const TextInputField = ({ id }: { id: number }) => {
                 </button>
                 <button
                   className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    " " +
                     (fontSize === FontSize.MD
                       ? "bg-neutral-600"
                       : "bg-neutral-700")
@@ -174,7 +176,7 @@ const TextInputField = ({ id }: { id: number }) => {
                 </button>
                 <button
                   className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    " " +
                     (fontSize === FontSize.SM
                       ? "bg-neutral-600"
                       : "bg-neutral-700")
@@ -186,13 +188,12 @@ const TextInputField = ({ id }: { id: number }) => {
                   Small
                 </button>
               </div>
-              <h1 className="text-lg mt-2 px-2 font-semibold">Formatting</h1>
-              <div className="flex gap-2">
+              <h1 className="text-base md:text-lg mt-2 px-2 font-semibold">
+                Formatting
+              </h1>
+              <div className="flex flex-wrap gap-1 md:gap-2 text-sm md:text-base *:border-neutral-500 *:duration-200 *:text-neutral-50 *:px-3 *:py-1 *:rounded-full *:outline-none *:box-border *:border">
                 <button
-                  className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                    (bold ? "bg-neutral-600" : "bg-neutral-700")
-                  }
+                  className={"" + (bold ? "bg-neutral-600" : "bg-neutral-700")}
                   onClick={() => {
                     setBold(!bold);
                   }}
@@ -201,8 +202,7 @@ const TextInputField = ({ id }: { id: number }) => {
                 </button>
                 <button
                   className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                    (italic ? "bg-neutral-600" : "bg-neutral-700")
+                    "" + (italic ? "bg-neutral-600" : "bg-neutral-700")
                   }
                   onClick={() => {
                     setItalic(!italic);
@@ -212,8 +212,7 @@ const TextInputField = ({ id }: { id: number }) => {
                 </button>
                 <button
                   className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
-                    (underline ? "bg-neutral-600" : "bg-neutral-700")
+                    "" + (underline ? "bg-neutral-600" : "bg-neutral-700")
                   }
                   onClick={() => {
                     setUnderline(!underline);
@@ -229,11 +228,13 @@ const TextInputField = ({ id }: { id: number }) => {
                 (isInput ? "" : "blur-sm pointer-events-none")
               }
             >
-              <h1 className="text-lg mt-2 px-2 font-semibold">Field Type</h1>
-              <div className="flex gap-2">
+              <h1 className="text-base md:text-lg mt-2 px-2 font-semibold">
+                Field Type
+              </h1>
+              <div className="flex flex-wrap md:gap-2 *:border-neutral-500 *:duration-200 *:text-neutral-50 *:px-3 *:py-1 *:rounded-full *:outline-none *:box-border *:border ">
                 <button
                   className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    "" +
                     (fieldType === TextFieldType.EMAIL
                       ? "bg-neutral-600"
                       : "bg-neutral-700")
@@ -246,7 +247,7 @@ const TextInputField = ({ id }: { id: number }) => {
                 </button>
                 <button
                   className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    "" +
                     (fieldType === TextFieldType.TEXT
                       ? "bg-neutral-600"
                       : "bg-neutral-700")
@@ -259,7 +260,7 @@ const TextInputField = ({ id }: { id: number }) => {
                 </button>
                 <button
                   className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    "" +
                     (fieldType === TextFieldType.TEXTAREA
                       ? "bg-neutral-600"
                       : "bg-neutral-700")
@@ -272,7 +273,7 @@ const TextInputField = ({ id }: { id: number }) => {
                 </button>
                 <button
                   className={
-                    "border-neutral-500 duration-200 text-neutral-50 px-3 py-1 rounded-full outline-none box-border border " +
+                    "" +
                     (fieldType === TextFieldType.NUMBER
                       ? "bg-neutral-600"
                       : "bg-neutral-700")
@@ -287,10 +288,10 @@ const TextInputField = ({ id }: { id: number }) => {
             </div>
           </div>
 
-          <div className="flex flex-col">
-            <div>
-              <h1 className="text-lg mt-2 px-2 font-semibold">
-                Show as an input
+          <div className="flex xl:flex-col justify-between">
+            <div className="basis-1/2">
+              <h1 className="text-base md:text-lg mt-2 px-2 font-semibold">
+                Input
               </h1>
               <button
                 className={
@@ -308,8 +309,10 @@ const TextInputField = ({ id }: { id: number }) => {
               </button>
             </div>
 
-            <div className={"" + (!isInput ? "blur-sm" : "")}>
-              <h1 className="text-lg mt-2 px-2 font-semibold">Required</h1>
+            <div className={"basis-1/2 " + (!isInput ? "blur-sm" : "")}>
+              <h1 className="text-base md:text-lg mt-2 px-2 font-semibold">
+                Required
+              </h1>
               <button
                 className={
                   "h-4 w-10 rounded-full mx-2 my-1 relative flex items-center outline-none " +
