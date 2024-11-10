@@ -6,8 +6,10 @@ import { formInputElements } from "@/recoil/atoms";
 import { FieldType, FontSize, TextFieldType } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { FaArrowLeft, FaEdit } from "react-icons/fa";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaArrowLeft, FaCaretRight, FaEdit, FaTimes } from "react-icons/fa";
 import { useRecoilState } from "recoil";
+import CreateInventory from "@/components/CreateInventory";
 
 export type FormElement = {
   type: FieldType;
@@ -37,6 +39,7 @@ const CreateForm = () => {
   const [fileName, setFileName] = useState<string | null>(null);
   const fieldContainer = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const [showNav, setShowNav] = useState<boolean>(false);
 
   useEffect(() => {
     if (!manager) {
@@ -53,50 +56,61 @@ const CreateForm = () => {
       }}
     >
       <NavBar />
-      <div className="flex h-fit">
-        <div className="basis-1/6 bg-neutral-600 mb-20 rounded-r-3xl overflow-clip text-white work sticky top-12 h-fit">
-          <h1 className="px-4 py-2 text-center font-medium text-xl bg-neutral-700">
-            Add these to your form
-          </h1>
-          <div className="px-5 py-2 text-lg">
-            <button
-              className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left outline-none"
-              onClick={() => {
-                manager?.addOptionField();
+      <div className="flex h-fit relative grow">
+        <button
+          className="w-10 h-10 apsect-square text-white bg-neutral-700 rounded-full absolute flex md:hidden items-center justify-end p-1 -left-5 z-10"
+          onClick={() => {
+            setShowNav(true);
+          }}
+        >
+          {" "}
+          <FaCaretRight />{" "}
+        </button>
+        <AnimatePresence>
+          {showNav && (
+            <motion.div
+              className="absolute block md:hidden z-50"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{
+                ease: "easeIn",
               }}
             >
-              Options
-            </button>
-            <button
-              className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left outline-none"
-              onClick={() => {
-                manager?.addTextField();
-              }}
-            >
-              Text
-            </button>
-            <button
-              className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left outline-none"
-              onClick={() => {
-                manager?.addImageField();
-              }}
-            >
-              Image
-            </button>
-          </div>
-          <button
-            className="bg-neutral-100 text-neutral-800 py-2 text-lg font-medium self-center w-full"
-            onClick={() => {
-              manager?.finalizeForm(
-                fileRef.current?.files?.[0] as File,
-                router,
-              );
-            }}
-          >
-            Finalize Form
-          </button>
-        </div>
-        <div className="grow p-10 h-[80vh] overflow-y-scroll">
+              <button
+                className="absolute top-2 right-2 text-white z-50 p-2 rounded-xl hover:bg-neutral-600"
+                onClick={() => {
+                  setShowNav(false);
+                }}
+              >
+                {" "}
+                <FaTimes />{" "}
+              </button>
+              {manager && (
+                <CreateInventory
+                  className="bg-neutral-600 mb-20 rounded-r-3xl overflow-clip text-white work sticky top-12 h-fit "
+                  manager={manager}
+                  router={router}
+                  fileRef={fileRef}
+                />
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+        {manager && (
+          <CreateInventory
+            className="hidden md:block basis-1/6 bg-neutral-600 mb-20 rounded-r-3xl overflow-clip text-white work sticky top-12 h-fit "
+            manager={manager}
+            router={router}
+            fileRef={fileRef}
+          />
+        )}
+        <div
+          className={
+            "grow p-3 md:p-7 xl:p-10 h-[90vh] md:h-[80vh] overflow-y-scroll mt-5 md:mt-0 " +
+            (showNav && "pointer-events-none")
+          }
+        >
           <div className="">
             <div className="flex flex-col gap-3" ref={fieldContainer}>
               <div

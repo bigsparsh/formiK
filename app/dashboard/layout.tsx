@@ -17,9 +17,9 @@ const Dashboard = async ({ children }: { children: JSX.Element }) => {
     >
       <div className="flex flex-col h-screen">
         <NavBar />
-        <div className="grow flex relative gap-2">
-          <div className="basis-1/6 bg-neutral-700 p-2 rounded-r-3xl mb-20 h-fit">
-            <div className="flex flex-col gap-2 text-lg font-semibold ma *:bg-neutral-600 text-neutral-200 *:text-left">
+        <div className="grow flex md:flex-row flex-col relative gap-2 p-2 md:p-0">
+          <div className="md:basis-1/4 xl:basis-1/6 bg-neutral-700 p-2 rounded-3xl md:rounded-l-none md:mb-20 h-fit">
+            <div className="flex flex-col gap-2 text-sm md:text-lg font-semibold ma *:bg-neutral-600 text-neutral-200 *:text-left">
               <Link
                 className="border border-neutral-600 px-4 py-1 rounded-full relative overflow-clip group"
                 href="/dashboard"
