@@ -3,13 +3,19 @@
 import { FormInputManager } from "@/classes/FormInputManager";
 import { useRef, useState } from "react";
 import { FaImage, FaImages, FaUpload } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const ImageInputField = ({ id }: { id: number }) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const manager = FormInputManager.getInstance();
   return (
-    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-2 md:p-3 work gap-2 md:gap-3 text-white">
+    <motion.div
+      className="w-full flex flex-col bg-neutral-600 rounded-3xl overflow-hidden p-2 md:p-3 work gap-2 md:gap-3 text-white"
+      initial={{ opacity: 0, filter: "blur(10px)" }}
+      animate={{ opacity: 1, filter: "blur(0px)" }}
+      layout
+    >
       <input
         ref={fileRef}
         type="file"
@@ -49,7 +55,7 @@ const ImageInputField = ({ id }: { id: number }) => {
         )}
         <p className="text-base font-normal"></p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default ImageInputField;

@@ -17,7 +17,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (session.status === "authenticated") {
-      router.push("/dashboard");
+      router.push("/dashboard/myforms");
     }
   }, [session, router]);
 

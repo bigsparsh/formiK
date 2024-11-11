@@ -3,7 +3,7 @@ import { FormElement } from "@/app/form/create/page";
 import { FormInputManager } from "@/classes/FormInputManager";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { FaAsterisk } from "react-icons/fa";
+import { FaAsterisk, FaCog } from "react-icons/fa";
 
 const OptionInputField = ({
   id,
@@ -14,10 +14,16 @@ const OptionInputField = ({
 }) => {
   const [required, setRequired] = useState<boolean>(false);
   const [multiSelect, setMultiSelect] = useState<boolean>(false);
+  const [expand, setExpand] = useState<boolean>(false);
   const manager = FormInputManager.getInstance();
 
   return (
-    <div className="w-full flex flex-col bg-neutral-600 rounded-3xl p-2 md:p-3 work gap-2 md:gap-3 text-white relative md:text-base text-sm">
+    <motion.div
+      className="w-full flex flex-col bg-neutral-600 rounded-3xl p-2 md:p-3 work gap-2 md:gap-3 text-white relative md:text-base text-sm"
+      initial={{ opacity: 0, filter: "blur(10px)" }}
+      animate={{ opacity: 1, filter: "blur(0px)" }}
+      layout
+    >
       <AnimatePresence>
         {required && (
           <motion.div
@@ -34,14 +40,24 @@ const OptionInputField = ({
           </motion.div>
         )}
       </AnimatePresence>
-      <input
-        type="text"
-        className="w-full py-2 bg-neutral-700 rounded-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
-        placeholder="Enter the title of the field"
-        onChange={(e) => {
-          manager.setTextToField(id, e.target.value);
-        }}
-      />
+      <div className="flex gap-1 md:gap-2">
+        <input
+          type="text"
+          className="w-full py-2 bg-neutral-700 rounded-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+          placeholder="Enter the title of the field"
+          onChange={(e) => {
+            manager.setTextToField(id, e.target.value);
+          }}
+        />
+        <button
+          className="md:text-sm p-2 rounded-3xl border bg-neutral-700 border-neutral-500 items-center justify-center outline-none"
+          onClick={() => {
+            setExpand(!expand);
+          }}
+        >
+          <FaCog className="text-sm md:text-xl" />
+        </button>
+      </div>
       <div className="flex flex-col md:flex-row w-full gap-2 justify-between">
         <div className="flex flex-col gap-1 md:gap-2">
           {options?.map((opt) => {
@@ -68,59 +84,69 @@ const OptionInputField = ({
             );
           })}
         </div>
-        <div className="md:basis-1/4 self-end p-3 bg-neutral-700 rounded-3xl flex flex-col gap-2 w-full">
-          <div className="flex flex-col gap-1">
-            <label className="font-medium px-2">
-              Enter the number of options:
-            </label>
-            <input
-              type="range"
-              min={2}
-              max={6}
-              className="w-full  bg-neutral-700 rounded-full px-5 accent-neutral-700 outline-none"
-              onChange={(e) => {
-                manager.editOptionCount(id, parseInt(e.target.value));
-              }}
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <h1 className="font-medium px-2">Attributes:</h1>
-            <div className="flex gap-1 md:gap-3 items-center  flex-wrap">
-              <button
-                className={
-                  "hover:cursor-pointer rounded-full px-3 py-1 border box-border outline-none " +
-                  (required ? "bg-neutral-600" : "border-neutral-600")
-                }
-                onClick={() => {
-                  setRequired((r) => {
-                    r = !r;
-                    manager.setRequired(id, r);
-                    return r;
-                  });
-                }}
-              >
-                Field Required
-              </button>
-              <button
-                className={
-                  "hover:cursor-pointer rounded-full px-3 py-1 border box-border outline-none " +
-                  (multiSelect ? "bg-neutral-600" : "border-neutral-600")
-                }
-                onClick={() => {
-                  setMultiSelect((r) => {
-                    r = !r;
-                    manager.setMultipleChoice(id, r);
-                    return r;
-                  });
-                }}
-              >
-                Multi Select
-              </button>
-            </div>
-          </div>
-        </div>
+        <AnimatePresence mode="popLayout">
+          {expand && (
+            <motion.div
+              className="md:basis-1/4 self-end p-3 bg-neutral-700 rounded-3xl flex flex-col gap-2 w-full"
+              initial={{ opacity: 0, filter: "blur(40px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, filter: "blur(40px)" }}
+              layout
+            >
+              <div className="flex flex-col gap-1">
+                <label className="font-medium px-2">
+                  Enter the number of options:
+                </label>
+                <input
+                  type="range"
+                  min={2}
+                  max={6}
+                  className="w-full  bg-neutral-700 rounded-full px-5 accent-neutral-700 outline-none"
+                  onChange={(e) => {
+                    manager.editOptionCount(id, parseInt(e.target.value));
+                  }}
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <h1 className="font-medium px-2">Attributes:</h1>
+                <div className="flex gap-1 md:gap-3 items-center  flex-wrap">
+                  <button
+                    className={
+                      "hover:cursor-pointer rounded-full px-3 py-1 border box-border outline-none " +
+                      (required ? "bg-neutral-600" : "border-neutral-600")
+                    }
+                    onClick={() => {
+                      setRequired((r) => {
+                        r = !r;
+                        manager.setRequired(id, r);
+                        return r;
+                      });
+                    }}
+                  >
+                    Field Required
+                  </button>
+                  <button
+                    className={
+                      "hover:cursor-pointer rounded-full px-3 py-1 border box-border outline-none " +
+                      (multiSelect ? "bg-neutral-600" : "border-neutral-600")
+                    }
+                    onClick={() => {
+                      setMultiSelect((r) => {
+                        r = !r;
+                        manager.setMultipleChoice(id, r);
+                        return r;
+                      });
+                    }}
+                  >
+                    Multi Select
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default OptionInputField;
