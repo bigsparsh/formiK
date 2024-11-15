@@ -3,17 +3,18 @@ const app = express();
 import http from "http";
 const server = http.createServer(app);
 import { Server } from "socket.io";
-import { Question } from "./LivePoll";
+import { addResponseForQuestion, Question } from "./Question";
 const io = new Server(server, {
   cors: {
     origin: "*",
+    methods: ["GET", "POST"],
   },
 });
 
 io.on("connection", (socket) => {
   socket.emit("credentials", socket.id);
   socket.on(
-    "create newn question",
+    "create new question",
     (option_range: number, question_id: string) => {
       Question.instances.push(
         new Question(question_id, option_range, socket.id),
@@ -21,15 +22,10 @@ io.on("connection", (socket) => {
     },
   );
   socket.on("user response", (option_index: number, question_id: string) => {
-    Question.responses.push({
-      user_id: socket.id,
-      question_id,
-      option_index,
-    });
+    addResponseForQuestion(question_id, option_index, socket.id);
   });
   socket.on("send broadcast", () => {
-    socket.emit("questions", Question.getQuestions());
-    socket.emit("responses", Question.responses);
+    socket.emit("questions", Question.instances);
   });
 });
 

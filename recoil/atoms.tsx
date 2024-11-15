@@ -21,3 +21,8 @@ export const errorAtom = atom<string | null>({
   key: "errorAtom",
   default: null,
 });
+
+export const liveFormAtom = atom<JSX.Element>({
+  key: "liveFormAtom",
+  default: <></>,
+});

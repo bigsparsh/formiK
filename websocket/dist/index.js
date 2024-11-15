@@ -8,27 +8,23 @@ const app = (0, express_1.default)();
 const http_1 = __importDefault(require("http"));
 const server = http_1.default.createServer(app);
 const socket_io_1 = require("socket.io");
-const LivePoll_1 = require("./LivePoll");
+const Question_1 = require("./Question");
 const io = new socket_io_1.Server(server, {
     cors: {
         origin: "*",
+        methods: ["GET", "POST"],
     },
 });
 io.on("connection", (socket) => {
     socket.emit("credentials", socket.id);
-    socket.on("create newn question", (option_range, question_id) => {
-        LivePoll_1.Question.instances.push(new LivePoll_1.Question(question_id, option_range, socket.id));
+    socket.on("create new question", (option_range, question_id) => {
+        Question_1.Question.instances.push(new Question_1.Question(question_id, option_range, socket.id));
     });
     socket.on("user response", (option_index, question_id) => {
-        LivePoll_1.Question.responses.push({
-            user_id: socket.id,
-            question_id,
-            option_index,
-        });
+        (0, Question_1.addResponseForQuestion)(question_id, option_index, socket.id);
     });
     socket.on("send broadcast", () => {
-        socket.emit("questions", LivePoll_1.Question.getQuestions());
-        socket.emit("responses", LivePoll_1.Question.responses);
+        socket.emit("questions", Question_1.Question.instances);
     });
 });
 server.listen(3000, () => {
