@@ -2,7 +2,7 @@ import NavBar from "@/components/NavBar";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { FaClipboardList, FaHome, FaPaperclip } from "react-icons/fa";
+import { FaClipboardList, FaHome, FaListUl, FaPaperclip } from "react-icons/fa";
 
 const Dashboard = async ({ children }: { children: JSX.Element }) => {
   const session = await getServerSession();
@@ -44,10 +44,10 @@ const Dashboard = async ({ children }: { children: JSX.Element }) => {
 
               <Link
                 className="border border-neutral-600 px-4 py-1 rounded-full relative overflow-clip group"
-                href="/dashboard/liveForm"
+                href="/dashboard/liveform"
               >
-                My Forms
-                <FaPaperclip className="opacity-25 scale-[3] absolute top-3 right-5 -rotate-12 group-hover:scale-[4] group-hover:rotate-0 duration-200" />
+                Live Forms
+                <FaListUl className="opacity-25 scale-[3] absolute top-3 right-5 -rotate-12 group-hover:scale-[4] group-hover:rotate-0 duration-200" />
               </Link>
             </div>
           </div>

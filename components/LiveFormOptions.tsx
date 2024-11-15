@@ -1,17 +1,18 @@
-import { LiveFormManager } from "@/classes/LiveFormManager";
+import { LiveFormInputManager } from "@/classes/LiveFormInputManager";
 import { FaPlus, FaTrash } from "react-icons/fa";
 
 const LiveFormOptions = ({
   manager,
   opt,
 }: {
-  manager: LiveFormManager;
+  manager: LiveFormInputManager;
   opt: {
     value: string;
     index: number;
   };
 }) => {
   const handleAddOption = (index: number) => {
+    if (manager.options.length == 6) return;
     manager.options = [
       ...manager.options.filter((opt) => opt.index <= index),
       {
@@ -48,7 +49,7 @@ const LiveFormOptions = ({
     });
   };
   return (
-    <div key={crypto.randomUUID()} className="flex group gap-2">
+    <div className="flex group gap-2">
       <input
         className="w-1/2 py-1 bg-neutral-700 rounded-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 text-white"
         name={opt.index.toString()}

@@ -2,11 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addResponseForQuestion = exports.Question = void 0;
 class Question {
-    constructor(question_id, option_range, user_id) {
+    constructor(question_id, options, question, user_id) {
         this.responses = [];
         this.user_id = user_id;
         this.question_id = question_id;
-        this.option_range = option_range;
+        this.options = options;
+        this.question = question;
+        this.option_range = options.length - 1;
     }
 }
 exports.Question = Question;

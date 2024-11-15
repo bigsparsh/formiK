@@ -1,9 +1,10 @@
 import express from "express";
-const app = express();
 import http from "http";
-const server = http.createServer(app);
 import { Server } from "socket.io";
 import { addResponseForQuestion, Question } from "./Question";
+const app = express();
+const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -15,9 +16,16 @@ io.on("connection", (socket) => {
   socket.emit("credentials", socket.id);
   socket.on(
     "create new question",
-    (option_range: number, question_id: string) => {
+    (
+      options: {
+        value: string;
+        index: number;
+      }[],
+      question_id: string,
+      question: string,
+    ) => {
       Question.instances.push(
-        new Question(question_id, option_range, socket.id),
+        new Question(question_id, options, question, socket.id),
       );
     },
   );
@@ -29,6 +37,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () => {
-  console.log("Server is listening on port 3000");
+server.listen(3003, () => {
+  console.log("Server is listening on port 3003");
 });
