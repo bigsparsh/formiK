@@ -1,5 +1,6 @@
 import LiveFormOptions from "@/components/LiveFormOptions";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { Play } from "next/font/google";
 import { Dispatch, SetStateAction } from "react";
 import { SetterOrUpdater } from "recoil";
 import { Socket } from "socket.io-client";
@@ -57,7 +58,9 @@ export class LiveFormInputManager {
     this.socket.on("analytics", (alts: Analytics[]) => {
       this.setAnalytics(alts);
     });
-    this.socket.emit("send analytics", this.question_id);
+    setInterval(() => {
+      this.socket.emit("send analytics", this.question_id);
+    }, 100);
   }
 
   updateQuestion(text: string) {

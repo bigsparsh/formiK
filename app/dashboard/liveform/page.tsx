@@ -20,7 +20,7 @@ const LiveForm = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setSocket(io(process.env.WEBSOCKET_URL || "ws://localhost:3003"));
+    setSocket(io("https://formik-fv7r.onrender.com/"));
   }, []);
   useEffect(() => {
     if (!socket) return;
@@ -56,33 +56,43 @@ const LiveForm = () => {
       <div className="grow grid place-items-center h-full w-full">
         {formActive ? (
           <>
-            <div className="bg-neutral-600 rounded-3xl border border-neutral-500 w-full max-w-md self-center justify-self-center p-3 flex flex-col gap-2">
-              {JSON.stringify(analytics, null, 2)}
+            <div className="bg-neutral-600 rounded-3xl border border-neutral-500 w-full max-w-md self-center justify-self-center p-3 flex flex-col gap-2 text-neutral-100">
               <h1 className="text-2xl font-semibold">{manager?.question}</h1>
-              {manager?.options.map((opt) => {
-                return (
-                  <div
-                    key={crypto.randomUUID()}
-                    className="flex bg-neutral-700 w-full gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white"
-                  >
-                    <div className="w-16 h-7 bg-neutral-800/90 rounded-r-xl">
-                      {JSON.stringify(analytics, null, 2)}
+              {analytics &&
+                manager?.options.map((opt) => {
+                  const percentage = analytics[opt.index]?.percentage;
+
+                  return (
+                    <div
+                      className="pb-1 rounded-3xl overflow-clip relative"
+                      key={crypto.randomUUID()}
+                    >
+                      <div className="flex bg-neutral-700 w-full gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white z-50">
+                        <div className="w-16 h-7 bg-neutral-800/90 rounded-r-xl text-white font-semibold grid place-items-center">
+                          {Math.round((percentage as number) * 100)} %
+                        </div>
+                        <label className="text-white">{opt.value}</label>
+                      </div>
+
+                      <motion.div
+                        className="absolute bg-neutral-500 rounded-3xl h-1 z-0 bottom-0 duration-300"
+                        style={{ width: `${(percentage as number) * 100}%` }}
+                        layout
+                      />
                     </div>
-                    <label>{opt.value}</label>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
             <button
               className="bg-neutral-600 rounded-3xl px-5 py-1 text-white font-medium text-sm flex gap-3 items-center hover:scale-105 duration-200 active:scale-100 outline-none"
-              onClick={(e) => {
+              onClick={() => {
                 navigator.clipboard.writeText(
-                  (e.target as HTMLDivElement).innerText,
+                  "https://formik.bigsparsh.com/dashboard/liveform/" +
+                  manager?.question_id,
                 );
               }}
             >
-              {"http://localhost:3000/dashboard/liveform/" +
-                manager?.question_id}
+              Copy link for sharing
               <FaCopy className="text-base" />
             </button>
           </>

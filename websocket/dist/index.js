@@ -15,6 +15,7 @@ const io = new socket_io_1.Server(server, {
         methods: ["GET", "POST"],
     },
 });
+let myInterval;
 io.on("connection", (socket) => {
     socket.emit("credentials", socket.id);
     // Creates a new question
@@ -42,13 +43,21 @@ io.on("connection", (socket) => {
                     const percentage = q.responses.filter((r) => r.option_index === opt.index).length /
                         q.responses.length;
                     analytics.push({
-                        option: opt.value,
+                        option: opt.index,
                         percentage,
                     });
                 });
             }
         });
         socket.emit("analytics", analytics);
+    });
+    socket.on("fun", (question_id, option_range) => {
+        myInterval = setInterval(() => {
+            (0, Question_1.addResponseForQuestion)(question_id, Math.round(Math.random() * option_range), socket.id);
+        }, 100);
+    });
+    socket.on("end fun", () => {
+        clearInterval(myInterval);
     });
 });
 server.listen(3003, () => {

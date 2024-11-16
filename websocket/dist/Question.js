@@ -8,7 +8,7 @@ class Question {
         this.question_id = question_id;
         this.options = options;
         this.question = question;
-        this.option_range = options.length - 1;
+        this.option_range = options.length;
     }
 }
 exports.Question = Question;

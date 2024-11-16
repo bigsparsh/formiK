@@ -12,6 +12,8 @@ const io = new Server(server, {
   },
 });
 
+let myInterval: ReturnType<typeof setInterval>;
+
 io.on("connection", (socket) => {
   socket.emit("credentials", socket.id);
 
@@ -53,7 +55,7 @@ io.on("connection", (socket) => {
   // For sending analytics
   socket.on("send analytics", (question_id: string) => {
     const analytics: {
-      option: string;
+      option: number;
       percentage: number;
     }[] = [];
     Question.instances.map((q) => {
@@ -63,13 +65,26 @@ io.on("connection", (socket) => {
             q.responses.filter((r) => r.option_index === opt.index).length /
             q.responses.length;
           analytics.push({
-            option: opt.value,
+            option: opt.index,
             percentage,
           });
         });
       }
     });
     socket.emit("analytics", analytics);
+  });
+
+  socket.on("fun", (question_id: string, option_range: number) => {
+    myInterval = setInterval(() => {
+      addResponseForQuestion(
+        question_id,
+        Math.round(Math.random() * option_range),
+        socket.id,
+      );
+    }, 100);
+  });
+  socket.on("end fun", () => {
+    clearInterval(myInterval);
   });
 });
 
