@@ -14,6 +14,8 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   socket.emit("credentials", socket.id);
+
+  // Creates a new question
   socket.on(
     "create new question",
     (
@@ -29,11 +31,23 @@ io.on("connection", (socket) => {
       );
     },
   );
+
+  // Adds the respose of the user
   socket.on("user response", (option_index: number, question_id: string) => {
     addResponseForQuestion(question_id, option_index, socket.id);
   });
+
+  // For server debugging
   socket.on("send broadcast", () => {
     socket.emit("questions", Question.instances);
+  });
+
+  // For sending a question based on ID
+  socket.on("get question", (question_id: string) => {
+    socket.emit(
+      "get question",
+      Question.instances.find((q) => question_id === q.question_id) || null,
+    );
   });
 });
 
