@@ -7,6 +7,8 @@ import { useRecoilState } from "recoil";
 import { io, Socket } from "socket.io-client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { FaCopy } from "react-icons/fa";
+import { Analytics } from "@/classes/LiveFormInputManager";
 
 const LiveForm = () => {
   const [manager, setManager] = useState<LiveFormInputManager>();
@@ -14,6 +16,7 @@ const LiveForm = () => {
   const [socket, setSocket] = useState<Socket>();
   const [wsId, setWsIs] = useState<string>();
   const [formActive, setFormActive] = useState<boolean>(false);
+  const [analytics, setAnalytics] = useState<Analytics[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -34,6 +37,7 @@ const LiveForm = () => {
           wsId as string,
           router,
           setFormActive,
+          setAnalytics,
         ),
       );
     }
@@ -47,16 +51,41 @@ const LiveForm = () => {
           console.log(manager?.options);
         }}
       >
-        Create your live Poll {formActive ? "Here" : "Not Here"}
+        Create your live Poll
       </h1>
       <div className="grow grid place-items-center h-full w-full">
         {formActive ? (
-          <div>
-            <h1>{manager?.question}</h1>
-            {manager?.options.map((opt) => {
-              return <div key={crypto.randomUUID()}>{opt.value}</div>;
-            })}
-          </div>
+          <>
+            <div className="bg-neutral-600 rounded-3xl border border-neutral-500 w-full max-w-md self-center justify-self-center p-3 flex flex-col gap-2">
+              {JSON.stringify(analytics, null, 2)}
+              <h1 className="text-2xl font-semibold">{manager?.question}</h1>
+              {manager?.options.map((opt) => {
+                return (
+                  <div
+                    key={crypto.randomUUID()}
+                    className="flex bg-neutral-700 w-full gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white"
+                  >
+                    <div className="w-16 h-7 bg-neutral-800/90 rounded-r-xl">
+                      {JSON.stringify(analytics, null, 2)}
+                    </div>
+                    <label>{opt.value}</label>
+                  </div>
+                );
+              })}
+            </div>
+            <button
+              className="bg-neutral-600 rounded-3xl px-5 py-1 text-white font-medium text-sm flex gap-3 items-center hover:scale-105 duration-200 active:scale-100 outline-none"
+              onClick={(e) => {
+                navigator.clipboard.writeText(
+                  (e.target as HTMLDivElement).innerText,
+                );
+              }}
+            >
+              {"http://localhost:3000/dashboard/liveform/" +
+                manager?.question_id}
+              <FaCopy className="text-base" />
+            </button>
+          </>
         ) : (
           <motion.div
             className="bg-neutral-600 rounded-3xl border border-neutral-500 w-full max-w-md self-center justify-self-center p-3 flex flex-col gap-2"

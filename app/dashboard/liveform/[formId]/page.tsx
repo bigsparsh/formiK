@@ -11,6 +11,7 @@ import Toast from "@/components/Toast";
 import { useRecoilState } from "recoil";
 import { errorAtom } from "@/recoil/atoms";
 import { FaCircle } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const LiveFormPage = ({
   params: { formId },
@@ -27,6 +28,7 @@ const LiveFormPage = ({
   const [question, setQuestion] = useState<Question | null>(null);
   const [check, animate] = useAnimate();
   const [checked, setChecked] = useState<number>(0);
+  const router = useRouter();
 
   useEffect(() => {
     if (animate && question)
@@ -59,10 +61,11 @@ const LiveFormPage = ({
       wsId,
       setError,
       setQuestion,
+      router,
     );
     mngr.getQuestion();
     setManager(mngr);
-  }, [formId, setError, socket, wsId]);
+  }, [formId, router, setError, socket, wsId]);
 
   useEffect(() => {
     if (error) {
@@ -123,7 +126,12 @@ const LiveFormPage = ({
                 );
               })}
             </div>
-            <button className="bg-neutral-300 text-neutral-900 rounded-3xl px-3 py-1">
+            <button
+              className="bg-neutral-300 text-neutral-900 rounded-3xl px-3 py-1"
+              onClick={() => {
+                manager?.sendResponse(checked);
+              }}
+            >
               Submit
             </button>
           </motion.div>

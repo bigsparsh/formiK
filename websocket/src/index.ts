@@ -49,6 +49,28 @@ io.on("connection", (socket) => {
       Question.instances.find((q) => question_id === q.question_id) || null,
     );
   });
+
+  // For sending analytics
+  socket.on("send analytics", (question_id: string) => {
+    const analytics: {
+      option: string;
+      percentage: number;
+    }[] = [];
+    Question.instances.map((q) => {
+      if (q.question_id === question_id) {
+        q.options.map((opt) => {
+          const percentage =
+            q.responses.filter((r) => r.option_index === opt.index).length /
+            q.responses.length;
+          analytics.push({
+            option: opt.value,
+            percentage,
+          });
+        });
+      }
+    });
+    socket.emit("analytics", analytics);
+  });
 });
 
 server.listen(3003, () => {

@@ -33,6 +33,23 @@ io.on("connection", (socket) => {
     socket.on("get question", (question_id) => {
         socket.emit("get question", Question_1.Question.instances.find((q) => question_id === q.question_id) || null);
     });
+    // For sending analytics
+    socket.on("send analytics", (question_id) => {
+        const analytics = [];
+        Question_1.Question.instances.map((q) => {
+            if (q.question_id === question_id) {
+                q.options.map((opt) => {
+                    const percentage = q.responses.filter((r) => r.option_index === opt.index).length /
+                        q.responses.length;
+                    analytics.push({
+                        option: opt.value,
+                        percentage,
+                    });
+                });
+            }
+        });
+        socket.emit("analytics", analytics);
+    });
 });
 server.listen(3003, () => {
     console.log("Server is listening on port 3003");

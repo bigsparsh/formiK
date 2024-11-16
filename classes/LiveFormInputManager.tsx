@@ -8,6 +8,11 @@ export type LiveOption = {
   index: number;
   value: string;
 };
+
+export type Analytics = {
+  index: number;
+  percentage: number;
+};
 export class LiveFormInputManager {
   options: LiveOption[] = [];
   formJSX: JSX.Element[] = [];
@@ -18,6 +23,7 @@ export class LiveFormInputManager {
   question_id: string;
   router: AppRouterInstance;
   setFormActive: Dispatch<SetStateAction<boolean>>;
+  setAnalytics: Dispatch<SetStateAction<Analytics[]>>;
 
   constructor(
     setFormJSX: SetterOrUpdater<JSX.Element>,
@@ -25,6 +31,7 @@ export class LiveFormInputManager {
     user_id: string,
     router: AppRouterInstance,
     setFormActive: Dispatch<SetStateAction<boolean>>,
+    setAnalytics: Dispatch<SetStateAction<Analytics[]>>,
   ) {
     this.options.push({ index: 0, value: "" }, { index: 1, value: "" });
     this.setter = setFormJSX;
@@ -33,6 +40,7 @@ export class LiveFormInputManager {
     this.router = router;
     this.question = "";
     this.setFormActive = setFormActive;
+    this.setAnalytics = setAnalytics;
     this.question_id = crypto.randomUUID();
     this.generateFrontend();
   }
@@ -45,7 +53,11 @@ export class LiveFormInputManager {
       this.question,
     );
     this.setFormActive(true);
-    // this.router.push("dashboard/liveform/" + this.question_id);
+
+    this.socket.on("analytics", (alts: Analytics[]) => {
+      this.setAnalytics(alts);
+    });
+    this.socket.emit("send analytics", this.question_id);
   }
 
   updateQuestion(text: string) {
