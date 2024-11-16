@@ -185,3 +185,27 @@ export const submitForm = async (
     },
   });
 };
+export const getStatistics = async () => {
+  const session = await getServerSession();
+  if (!session) throw new Error("User not found");
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
+  if (!user) throw new Error("User not found");
+  const formCount = await prisma.form.count({
+    where: {
+      user_id: user.id,
+    },
+  });
+  const responseCount = await prisma.response.count({
+    where: {
+      user_id: user.id,
+    },
+  });
+  return {
+    formCount,
+    responseCount,
+  };
+};

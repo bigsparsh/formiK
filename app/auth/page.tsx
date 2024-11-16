@@ -54,11 +54,11 @@ const Auth = () => {
         </nav>
         <div
           className={
-            "grow grid place-items-center " +
+            "grow grid place-items-center px-3 md:px-0 " +
             (loading ? "pointer-events-none animate-pulse" : "")
           }
         >
-          <div className="flex flex-col justify-center relative border border-[gray] bg-[gray]/30 sm:rounded-3xl w-full max-w-lg overflow-clip work mb-20">
+          <div className="flex flex-col justify-center relative border border-[gray] bg-[gray]/30 rounded-3xl w-full max-w-lg overflow-clip work mb-20">
             <h1 className="font-bold text-xl md:text-2xl xl:text-3xl text-[gray] bg-white/50 tracking-tight ma px-5 py-3 text-center">
               Enter your credentials
               <span className="text-xs md:text-sm block leading-3 tracking-normal font-medium px-1">

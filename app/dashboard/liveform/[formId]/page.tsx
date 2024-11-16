@@ -82,7 +82,7 @@ const LiveFormPage = ({
         {toastVisibility ? <Toast message={error as string} /> : null}
       </AnimatePresence>
       <h1 className="font-semibold text-lg md:text-2xl text-neutral-50 self-start px-2">
-        Live Poll {wsId}
+        Live Poll
       </h1>
       <div className="grow w-full grid place-items-center duration-200">
         {question && (
