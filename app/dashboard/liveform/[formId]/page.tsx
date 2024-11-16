@@ -77,22 +77,24 @@ const LiveFormPage = ({
   }, [error]);
 
   return (
-    <div className="bg-neutral-700 h-full grow overflow-scroll rounded-tl-3xl p-5 flex flex-col items-center relative">
+    <div className="bg-neutral-700 h-full grow overflow-scroll rounded-tl-3xl p-2 md:p-5 flex flex-col items-center relative md:text-base text-sm">
       <AnimatePresence>
         {toastVisibility ? <Toast message={error as string} /> : null}
       </AnimatePresence>
-      <h1 className="font-semibold text-2xl text-neutral-50 self-start">
+      <h1 className="font-semibold text-lg md:text-2xl text-neutral-50 self-start px-2">
         Live Poll {wsId}
       </h1>
       <div className="grow w-full grid place-items-center duration-200">
         {question && (
           <motion.div
-            className="w-full max-w-md bg-neutral-800/50 rounded-3xl p-5 space-y-5 duration-200 text-neutral-100 work"
+            className="w-full max-w-md bg-neutral-800/50 rounded-3xl p-2 md:p-5 space-y-2 md:space-y-5 duration-200 text-neutral-100 work"
             initial={{ opacity: 0, filter: "blur(50px)", scale: 0.9 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
             layout
           >
-            <h1 className="text-2xl font-semibold">{question.question}</h1>
+            <h1 className="text-lg md:text-2xl font-semibold px-2">
+              {question.question}
+            </h1>
             <div className="space-y-1 md:space-y-2 relative ">
               <motion.div
                 initial={{

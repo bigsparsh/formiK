@@ -44,9 +44,9 @@ const LiveForm = () => {
   }, [router, setFormJSX, socket, wsId]);
 
   return (
-    <div className="bg-neutral-700 h-full grow overflow-scroll rounded-tl-3xl p-5 flex flex-col items-center">
+    <div className="bg-neutral-700 h-full grow overflow-scroll rounded-tl-3xl p-2 md:p-5 flex flex-col items-center">
       <h1
-        className="font-semibold text-2xl text-neutral-50 self-start"
+        className="font-semibold text-lg md:text-2xl text-neutral-50 self-start px-3"
         onClick={() => {
           console.log(manager?.options);
         }}
@@ -56,8 +56,10 @@ const LiveForm = () => {
       <div className="grow grid place-items-center h-full w-full">
         {formActive ? (
           <>
-            <div className="bg-neutral-600 rounded-3xl border border-neutral-500 w-full max-w-md self-center justify-self-center p-3 flex flex-col gap-2 text-neutral-100">
-              <h1 className="text-2xl font-semibold">{manager?.question}</h1>
+            <div className="bg-neutral-600 rounded-3xl border border-neutral-500 w-full max-w-md self-center justify-self-center p-2 md:p-3 flex flex-col gap-1 md:gap-2 text-neutral-100 md:text-base text-sm">
+              <h1 className="text-lg md:text-2xl font-semibold px-2">
+                {manager?.question}
+              </h1>
               {analytics &&
                 manager?.options.map((opt) => {
                   const percentage = analytics[opt.index]?.percentage;
@@ -67,8 +69,8 @@ const LiveForm = () => {
                       className="pb-1 rounded-3xl overflow-clip relative"
                       key={crypto.randomUUID()}
                     >
-                      <div className="flex bg-neutral-700 w-full gap-3 0 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white z-50">
-                        <div className="w-16 h-7 bg-neutral-800/90 rounded-r-xl text-white font-semibold grid place-items-center">
+                      <div className="flex bg-neutral-700 w-full gap-2 md:gap-3 rounded-xl items-center h-full overflow-hidden cursor-pointer text-white z-50">
+                        <div className="w-16 h-7 bg-neutral-800/90 rounded-r-3xl text-white font-semibold grid place-items-center">
                           {Math.round((percentage as number) * 100)} %
                         </div>
                         <label className="text-white">{opt.value}</label>
@@ -84,7 +86,7 @@ const LiveForm = () => {
                 })}
             </div>
             <button
-              className="bg-neutral-600 rounded-3xl px-5 py-1 text-white font-medium text-sm flex gap-3 items-center hover:scale-105 duration-200 active:scale-100 outline-none"
+              className="bg-neutral-600 rounded-3xl px-3 md:px-5 py-1 text-white font-medium text-xs md:text-sm flex gap-3 items-center hover:scale-105 duration-200 active:scale-100 outline-none"
               onClick={() => {
                 navigator.clipboard.writeText(
                   "https://formik.bigsparsh.com/dashboard/liveform/" +
@@ -98,7 +100,7 @@ const LiveForm = () => {
           </>
         ) : (
           <motion.div
-            className="bg-neutral-600 rounded-3xl border border-neutral-500 w-full max-w-md self-center justify-self-center p-3 flex flex-col gap-2"
+            className="bg-neutral-600 rounded-3xl border border-neutral-500 w-full max-w-md self-center justify-self-center p-2 md:p-3 flex flex-col gap-2 md:text-base text-sm"
             layout
           >
             <input
@@ -113,7 +115,7 @@ const LiveForm = () => {
               {formJSX}
             </div>
             <button
-              className="bg-neutral-800 text-neutral-100 rounded-3xl py-1 text-lg font-semibold outline-none focus:ring-2 ring-offset-neutral-600 duration-200 ring-offset-2 ring-neutral-800"
+              className="bg-neutral-800 text-neutral-100 rounded-3xl py-1 text-base md:text-lg font-semibold outline-none focus:ring-2 ring-offset-neutral-600 duration-200 ring-offset-2 ring-neutral-800"
               onClick={() => manager?.startPoll()}
             >
               Start a live poll
