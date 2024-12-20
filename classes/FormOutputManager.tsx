@@ -52,6 +52,9 @@ export class FormOutputManager {
     formFields?: FullFormType,
     setError?: SetterOrUpdater<string | null>,
   ) {
+    if (this.instance && setPc && formFields && setFs && setError) {
+      this.instance = null;
+    }
     if (!this.instance) {
       if (!setPc || !formFields || !setFs || !setError) {
         throw new Error(

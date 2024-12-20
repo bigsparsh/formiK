@@ -34,6 +34,14 @@ const Dashboard = async ({ children }: { children: JSX.Element }) => {
                 Create Form
                 <FaClipboardList className="opacity-25 scale-[3] absolute top-3 right-5 -rotate-12 group-hover:scale-[4] group-hover:rotate-0 duration-200" />
               </Link>
+
+              <Link
+                className="border border-neutral-600 px-4 py-1 rounded-full relative overflow-clip group"
+                href="/dashboard/myforms"
+              >
+                My Responses
+                <FaPaperclip className="opacity-25 scale-[3] absolute top-3 right-5 -rotate-12 group-hover:scale-[4] group-hover:rotate-0 duration-200" />
+              </Link>
               <Link
                 className="border border-neutral-600 px-4 py-1 rounded-full relative overflow-clip group"
                 href="/dashboard/myforms"

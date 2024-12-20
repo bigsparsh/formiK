@@ -59,8 +59,9 @@ const FormPage = ({
   }, [error, setError]);
 
   useEffect(() => {
-    setError("hello");
-    setToastVisibility(true);
+    setFormFields(<></>);
+    // setError("hello");
+    // setToastVisibility(true);
     gets();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
