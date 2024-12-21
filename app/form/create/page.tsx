@@ -40,6 +40,7 @@ const CreateForm = () => {
   const fieldContainer = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [showNav, setShowNav] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!manager) {
@@ -92,6 +93,8 @@ const CreateForm = () => {
                   manager={manager}
                   router={router}
                   fileRef={fileRef}
+                  loading={loading}
+                  setLoading={setLoading}
                 />
               )}
             </motion.div>
@@ -103,12 +106,15 @@ const CreateForm = () => {
             manager={manager}
             router={router}
             fileRef={fileRef}
+            loading={loading}
+            setLoading={setLoading}
           />
         )}
         <div
           className={
             "grow p-3 md:p-7 xl:p-10 h-[90vh] md:h-[80vh] overflow-y-scroll mt-5 md:mt-0 " +
-            (showNav && "pointer-events-none")
+            (showNav && "pointer-events-none") +
+            (loading && " pointer-events-none blur-lg duration-200")
           }
         >
           <div className="">

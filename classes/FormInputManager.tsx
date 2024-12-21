@@ -7,6 +7,7 @@ import { FieldType, FontSize, TextFieldType } from "@prisma/client";
 import { put } from "@vercel/blob";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { SetterOrUpdater } from "recoil";
+import { Sheets } from "./Sheets";
 
 export class FormInputManager {
   formFields: FormElement[];
@@ -17,15 +18,18 @@ export class FormInputManager {
   formJSX: JSX.Element[];
   setParentComponent: SetterOrUpdater<JSX.Element> | null;
   static instance: FormInputManager | null;
+  GoogleSheets: Sheets;
 
   private constructor(setPc: SetterOrUpdater<JSX.Element>) {
     this.formFields = [];
     this.setParentComponent = setPc;
     this.formJSX = [];
     this.formProperties = {};
+    this.GoogleSheets = Sheets.get_instance();
   }
 
   static getInstance(setPc?: SetterOrUpdater<JSX.Element>) {
+    if (this.instance && setPc) this.instance = null;
     if (!this.instance) {
       if (!setPc) {
         throw new Error("Parent component and setter is required");
@@ -248,6 +252,7 @@ export class FormInputManager {
       formProperties: this.formProperties,
       formFields: this.formFields,
     });
+    await this.GoogleSheets.create_sheet(this.formProperties.title as string);
     router.push("/dashboard");
   }
 }

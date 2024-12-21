@@ -1,17 +1,22 @@
 import { FormInputManager } from "@/classes/FormInputManager";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { RefObject } from "react";
+import { Dispatch, RefObject, SetStateAction } from "react";
+import { FaCircleNotch } from "react-icons/fa";
 
 const CreateInventory = ({
   manager,
   router,
   fileRef,
   className,
+  loading,
+  setLoading,
 }: {
   manager: FormInputManager;
   router: AppRouterInstance;
   fileRef: RefObject<HTMLInputElement>;
   className: string;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }) => {
   return (
     <div className={"" + className}>
@@ -45,11 +50,13 @@ const CreateInventory = ({
         </button>
       </div>
       <button
-        className="bg-neutral-100 text-neutral-800 py-2 text-base md:text-lg font-medium self-center w-full"
+        className="bg-neutral-100 text-neutral-800 py-2 text-base md:text-lg font-medium self-center w-full flex justify-center items-center gap-2"
         onClick={() => {
+          setLoading(true);
           manager?.finalizeForm(fileRef.current?.files?.[0] as File, router);
         }}
       >
+        {loading && <FaCircleNotch className="animate-spin" />}
         Finalize Form
       </button>
     </div>
