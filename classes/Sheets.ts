@@ -1,4 +1,5 @@
 import { create_sheet } from "@/actions/GoogleSheet";
+import { FormElement } from "@/app/form/create/page";
 
 export class Sheets {
   static instance: Sheets;
@@ -12,9 +13,11 @@ export class Sheets {
     return this.instance;
   }
 
-  async create_sheet(form_title: string) {
-    console.log("Creating sheet for form: ", form_title);
-    console.log(await create_sheet(form_title));
-    console.log("Created sheet for form: ", form_title);
+  async create_sheet(
+    form_title: string,
+    form_id: string,
+    form_fields: FormElement[],
+  ) {
+    create_sheet(form_title, form_id, form_fields);
   }
 }

@@ -248,11 +248,17 @@ export class FormInputManager {
       return field;
     });
     this.formFields = await Promise.all(updatedFields);
-    createForm({
+    const newForm = await createForm({
       formProperties: this.formProperties,
       formFields: this.formFields,
     });
-    await this.GoogleSheets.create_sheet(this.formProperties.title as string);
+    await Promise.all([
+      this.GoogleSheets.create_sheet(
+        this.formProperties.title as string,
+        newForm.form_id,
+        this.formFields,
+      ),
+    ]);
     router.push("/dashboard");
   }
 }
