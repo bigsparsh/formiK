@@ -25,7 +25,7 @@ export class Sheets {
   async append_response(sheet_id: string, response_state: formResponseState[]) {
     append_response(
       sheet_id,
-      response_state.filter((ele) => ele.option || ele.text),
+      response_state.filter((ele) => ele.option != null || ele.text),
     );
   }
 }

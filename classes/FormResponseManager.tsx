@@ -54,7 +54,7 @@ export class FormResponseManager {
         case FieldType.OPTION:
           this.formResponseState.push({
             ...commonData,
-            option: -1,
+            option: 0,
           });
           break;
         case FieldType.TEXT:

@@ -7,7 +7,10 @@ import { google } from "googleapis";
 import { getServerSession } from "next-auth";
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: "formik-sheets-key.json",
+  credentials: {
+    client_email: process.env.SHEET_CLIENT_EMAIL,
+    private_key: process.env.SHEET_PRIVATE_KEY,
+  },
   scopes: [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
@@ -157,7 +160,7 @@ export const append_response = async (
             if (res.text) {
               return res.text;
             }
-            if (res.option) {
+            if (res.option != null) {
               return res.option;
             }
           }),
