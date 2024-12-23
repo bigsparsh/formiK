@@ -100,6 +100,7 @@ export const getForms = async () => {
       },
     },
     include: {
+      form: true,
       fields: {
         orderBy: {
           index: "asc",
@@ -124,6 +125,7 @@ export const getFormFields = async (formId: string) => {
       form_id: formId,
     },
     include: {
+      form: true,
       fields: {
         orderBy: {
           index: "asc",
@@ -185,6 +187,7 @@ export const submitForm = async (
     },
   });
 };
+
 export const getStatistics = async () => {
   const session = await getServerSession();
   if (!session) throw new Error("User not found");

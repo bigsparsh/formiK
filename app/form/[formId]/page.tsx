@@ -5,7 +5,7 @@ import { FormOutputManager, FormState } from "@/classes/FormOutputManager";
 import NavBar from "@/components/NavBar";
 import Toast from "@/components/Toast";
 import { errorAtom, formOutputElements, formStateAtom } from "@/recoil/atoms";
-import { Field, Form, Option, TextStyle } from "@prisma/client";
+import { Field, Form, GoogleSheet, Option, TextStyle } from "@prisma/client";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,6 +14,8 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 
 export type FullFormType =
   | (Form & {
+    form: GoogleSheet;
+  } & {
     fields: (Field & {
       options: Option[];
       text_style: TextStyle;

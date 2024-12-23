@@ -1,8 +1,10 @@
 "use server";
 import { FormElement } from "@/app/form/create/page";
+import { formResponseState } from "@/classes/FormResponseManager";
 import { prisma } from "@/prisma";
 import { FieldType } from "@prisma/client";
 import { google } from "googleapis";
+import { getServerSession } from "next-auth";
 
 const auth = new google.auth.GoogleAuth({
   keyFile: "formik-sheets-key.json",
@@ -123,4 +125,44 @@ export const create_sheet = async (
     console.log("Google Sheet Creation failed: ", err);
     throw new Error("Google Sheet Creation failed: ");
   }
+};
+
+export const append_response = async (
+  sheet_id: string,
+  response_state: formResponseState[],
+) => {
+  const session = await getServerSession();
+
+  if (!session) throw new Error("User not found: " + session);
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
+
+  if (!user) throw new Error("User not found: " + session);
+
+  await Promise.all([user]);
+
+  googleSheets.spreadsheets.values.append({
+    spreadsheetId: sheet_id,
+    range: "Sheet1",
+    valueInputOption: "USER_ENTERED",
+    requestBody: {
+      values: [
+        [
+          session.user.email,
+          ...response_state.map((res) => {
+            if (res.text) {
+              return res.text;
+            }
+            if (res.option) {
+              return res.option;
+            }
+          }),
+        ],
+      ],
+    },
+  });
 };

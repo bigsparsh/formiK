@@ -4,6 +4,7 @@ import { FieldType, TextFieldType } from "@prisma/client";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { SetterOrUpdater } from "recoil";
 import { z } from "zod";
+import { Sheets } from "./Sheets";
 
 const emailValidator = z.string().email();
 const numberValidator = z.string().regex(/^\d+$/);
@@ -14,10 +15,12 @@ export type formResponseState = {
   option?: number;
   text?: string;
 };
+
 export class FormResponseManager {
   formResponseState: formResponseState[] = [];
   form: FullFormType;
   setError: SetterOrUpdater<string | null>;
+  googleSheets: Sheets;
   static instance: FormResponseManager;
 
   private constructor(
@@ -27,6 +30,7 @@ export class FormResponseManager {
     this.form = form;
     this.generateResponseState();
     this.setError = setError;
+    this.googleSheets = Sheets.get_instance();
   }
 
   static getInstance(
@@ -125,6 +129,12 @@ export class FormResponseManager {
     }
 
     await submitForm(this.form.form_id, this.formResponseState);
+
+    this.googleSheets.append_response(
+      this.form.form.sheet_id,
+      this.formResponseState,
+    );
+
     router.push("/dashboard");
     return null;
   }

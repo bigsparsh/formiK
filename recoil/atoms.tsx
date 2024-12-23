@@ -26,3 +26,8 @@ export const liveFormAtom = atom<JSX.Element>({
   key: "liveFormAtom",
   default: <></>,
 });
+
+export const globalLoadingAtom = atom<boolean>({
+  key: "globalLoadingAtom",
+  default: false,
+});

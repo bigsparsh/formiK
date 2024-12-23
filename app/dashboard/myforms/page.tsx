@@ -1,6 +1,6 @@
 import { getForms } from "@/actions/Form";
 import Link from "next/link";
-import { FaEye } from "react-icons/fa";
+import { FaExternalLinkAlt, FaEye } from "react-icons/fa";
 
 const MyForms = async () => {
   const forms = await getForms();
@@ -35,12 +35,23 @@ const MyForms = async () => {
                 </div>
               </div>
             </div>
-            <div className="">
+            <div className="flex flex-row md:flex-col gap-1 flex-wrap">
               <Link
                 href={"/form/" + form.form_id}
-                className="bg-neutral-700 px-3 py-1 flex justify-center text-sm md:text-base items-center rounded-full gap-2 w-fit"
+                className="bg-neutral-700 px-3 py-1 flex justify-center text-xs md:text-sm items-center rounded-full gap-2 w-fit"
               >
-                Preview Form <FaEye className="text-base md:text-xl" />
+                Preview Form <FaEye className="text-sm md:text-base " />
+              </Link>
+
+              <Link
+                href={
+                  "https://docs.google.com/spreadsheets/d/" +
+                  form.form?.sheet_id
+                }
+                className="bg-neutral-700 px-3 py-1 flex justify-center text-xs md:text-sm items-center rounded-full gap-2 w-fit"
+              >
+                View Responses
+                <FaExternalLinkAlt className="text-sm md:text-base" />
               </Link>
             </div>
           </div>
