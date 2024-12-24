@@ -8,8 +8,8 @@ import { getServerSession } from "next-auth";
 
 const auth = new google.auth.GoogleAuth({
   credentials: {
-    client_email: process.env.SHEET_CLIENT_EMAIL,
     private_key: process.env.SHEET_PRIVATE_KEY,
+    client_email: process.env.SHEET_CLIENT_EMAIL,
   },
   scopes: [
     "https://www.googleapis.com/auth/spreadsheets",
