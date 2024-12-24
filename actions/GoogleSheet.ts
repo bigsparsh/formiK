@@ -148,7 +148,7 @@ export const append_response = async (
 
   await Promise.all([user]);
 
-  googleSheets.spreadsheets.values.append({
+  await googleSheets.spreadsheets.values.append({
     spreadsheetId: sheet_id,
     range: "Sheet1",
     valueInputOption: "USER_ENTERED",

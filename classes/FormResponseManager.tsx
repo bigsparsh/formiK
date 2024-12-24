@@ -130,7 +130,7 @@ export class FormResponseManager {
 
     await submitForm(this.form.form_id, this.formResponseState);
 
-    this.googleSheets.append_response(
+    await this.googleSheets.append_response(
       this.form.form.sheet_id,
       this.formResponseState,
     );
