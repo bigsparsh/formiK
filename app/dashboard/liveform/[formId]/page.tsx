@@ -46,8 +46,8 @@ const LiveFormPage = ({
   }, [animate, check, checked, question]);
 
   useEffect(() => {
-    // const skt = io("https://formik-fv7r.onrender.com/");
-    const skt = io("ws://localhost:3003");
+    const skt = io("https://formik-fv7r.onrender.com/");
+    // const skt = io("ws://localhost:3003");
     skt.on("credentials", (cred: string) => {
       setWsId(cred);
     });

@@ -20,7 +20,7 @@ const LiveForm = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setSocket(io("ws://localhost:3003"));
+    setSocket(io("https://formik-fv7r.onrender.com/"));
   }, []);
   useEffect(() => {
     if (!socket) return;
