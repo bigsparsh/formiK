@@ -1,3 +1,5 @@
+import { Socket } from "socket.io";
+
 export type UserResponse = {
   user_id: string;
   option_index: number;
@@ -5,6 +7,7 @@ export type UserResponse = {
 export class Question {
   responses: UserResponse[] = [];
   user_id: string | null;
+  user: Socket;
   question_id: string | null;
   question: string;
   options: {
@@ -22,12 +25,14 @@ export class Question {
     }[],
     question: string,
     user_id: string,
+    user: Socket,
   ) {
     this.user_id = user_id;
     this.question_id = question_id;
     this.options = options;
     this.question = question;
     this.option_range = options.length;
+    this.user = user;
   }
 }
 
@@ -44,4 +49,27 @@ export const addResponseForQuestion = (
           user_id,
         });
   });
+};
+
+export const sendAnalyticsToCreator = (question_id: string) => {
+  const analytics: {
+    option: number;
+    percentage: number;
+  }[] = [];
+  Question.instances.map((q) => {
+    if (q.question_id === question_id) {
+      q.options.map((opt) => {
+        const percentage =
+          q.responses.filter((r) => r.option_index === opt.index).length /
+          q.responses.length;
+        analytics.push({
+          option: opt.index,
+          percentage,
+        });
+      });
+    }
+  });
+  Question.instances
+    .find((q) => q.question_id === question_id)
+    ?.user.emit("analytics", analytics);
 };

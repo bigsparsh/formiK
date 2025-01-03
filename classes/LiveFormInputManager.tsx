@@ -24,8 +24,9 @@ export class LiveFormInputManager {
   router: AppRouterInstance;
   setFormActive: Dispatch<SetStateAction<boolean>>;
   setAnalytics: Dispatch<SetStateAction<Analytics[]>>;
+  static instance: LiveFormInputManager;
 
-  constructor(
+  private constructor(
     setFormJSX: SetterOrUpdater<JSX.Element>,
     socket: Socket,
     user_id: string,
@@ -45,6 +46,27 @@ export class LiveFormInputManager {
     this.generateFrontend();
   }
 
+  static getInstance(
+    setFormJSX: SetterOrUpdater<JSX.Element>,
+    socket: Socket,
+    user_id: string,
+    router: AppRouterInstance,
+    setFormActive: Dispatch<SetStateAction<boolean>>,
+    setAnalytics: Dispatch<SetStateAction<Analytics[]>>,
+  ) {
+    if (!LiveFormInputManager.instance) {
+      this.instance = new LiveFormInputManager(
+        setFormJSX,
+        socket,
+        user_id,
+        router,
+        setFormActive,
+        setAnalytics,
+      );
+    }
+    return this.instance;
+  }
+
   startPoll() {
     this.socket.emit(
       "create new question",
@@ -57,9 +79,9 @@ export class LiveFormInputManager {
     this.socket.on("analytics", (alts: Analytics[]) => {
       this.setAnalytics(alts);
     });
-    setInterval(() => {
-      this.socket.emit("send analytics", this.question_id);
-    }, 100);
+    // setInterval(() => {
+    //   this.socket.emit("send analytics", this.question_id);
+    // }, 100);
   }
 
   updateQuestion(text: string) {

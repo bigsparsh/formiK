@@ -1,7 +1,11 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
-import { addResponseForQuestion, Question } from "./Question";
+import {
+  addResponseForQuestion,
+  Question,
+  sendAnalyticsToCreator,
+} from "./Question";
 const app = express();
 const server = http.createServer(app);
 
@@ -29,7 +33,7 @@ io.on("connection", (socket) => {
       question: string,
     ) => {
       Question.instances.push(
-        new Question(question_id, options, question, socket.id),
+        new Question(question_id, options, question, socket.id, socket),
       );
     },
   );
@@ -37,18 +41,42 @@ io.on("connection", (socket) => {
   // Adds the respose of the user
   socket.on("user response", (option_index: number, question_id: string) => {
     addResponseForQuestion(question_id, option_index, socket.id);
+    sendAnalyticsToCreator(question_id);
   });
 
   // For server debugging
   socket.on("send broadcast", () => {
-    socket.emit("questions", Question.instances);
+    socket.emit(
+      "questions",
+      Question.instances.map((ele) => {
+        return {
+          question_id: ele.question_id,
+          question: ele.question,
+          options: ele.options,
+          responses: ele.responses,
+          user_id: ele.user_id,
+          option_range: ele.option_range,
+        };
+      }),
+    );
   });
 
   // For sending a question based on ID
   socket.on("get question", (question_id: string) => {
     socket.emit(
       "get question",
-      Question.instances.find((q) => question_id === q.question_id) || null,
+      Question.instances
+        .map((ele) => {
+          return {
+            question_id: ele.question_id,
+            question: ele.question,
+            options: ele.options,
+            responses: ele.responses,
+            user_id: ele.user_id,
+            option_range: ele.option_range,
+          };
+        })
+        .find((q) => question_id === q.question_id) || null,
     );
   });
 
