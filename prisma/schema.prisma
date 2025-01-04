@@ -81,8 +81,28 @@ model Form {
   user        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   responses   Response[]
   fields      Field[]
+  tags        FormTags[]
+  settings    FromSettings?
   form        GoogleSheet?
   @@index([form_id])
+}
+
+model FromSettings {
+  formsettings_id String @id @default(cuid())
+  form_id String @unique
+  form Form @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
+  response_limit Int?
+  response_message String?
+  stars Int?
+  @@index([formsettings_id])
+}
+
+model FormTags {
+  formtag_id String @id @default(cuid())
+  form_id String
+  form Form @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
+  tagname String
+  @@index([formtag_id])
 }
 
 model Field {

@@ -8,6 +8,7 @@ import { put } from "@vercel/blob";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { SetterOrUpdater } from "recoil";
 import { Sheets } from "./Sheets";
+import { draftForm } from "@/actions/Redis";
 
 export class FormInputManager {
   formFields: FormElement[];
@@ -19,6 +20,7 @@ export class FormInputManager {
   setParentComponent: SetterOrUpdater<JSX.Element> | null;
   static instance: FormInputManager | null;
   GoogleSheets: Sheets;
+  draftId: string;
 
   private constructor(setPc: SetterOrUpdater<JSX.Element>) {
     this.formFields = [];
@@ -26,6 +28,31 @@ export class FormInputManager {
     this.formJSX = [];
     this.formProperties = {};
     this.GoogleSheets = Sheets.get_instance();
+    this.draftId = crypto.randomUUID();
+    this.addListeners();
+  }
+
+  addListeners() {
+    let ctrl_pressed: boolean = false;
+    document.onkeydown = (e) => {
+      if (e.ctrlKey) ctrl_pressed = true;
+      else ctrl_pressed = false;
+      if (e.key === "s" && ctrl_pressed) {
+        e.preventDefault();
+        draftForm(
+          {
+            formfields: this.formFields,
+            form_properties: {
+              title: this.formProperties.title || "Untitled Form",
+              cover:
+                this.formProperties.cover || "https://picsum.photos/1920/1080",
+            },
+          },
+          this.draftId,
+        );
+        console.log("Form saved");
+      }
+    };
   }
 
   static getInstance(setPc?: SetterOrUpdater<JSX.Element>) {
