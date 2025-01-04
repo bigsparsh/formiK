@@ -41,7 +41,7 @@ export class FormInputManager {
         e.preventDefault();
         draftForm(
           {
-            formfields: this.formFields,
+            formFields: this.formFields,
             form_properties: {
               title: this.formProperties.title || "Untitled Form",
               cover:
