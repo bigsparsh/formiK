@@ -13,6 +13,10 @@ export const createForm = async ({
   formProperties: {
     title?: string;
     cover?: string;
+    publicVisibility: boolean;
+    tags: string[];
+    responseCount: number;
+    responseMessage: string;
   };
   formFields: FormElement[];
 }): Promise<Form> => {
@@ -28,6 +32,21 @@ export const createForm = async ({
     user_id: user?.id as string,
     title: formProperties.title || "Untitled Form",
     cover_image: formProperties.cover || "https://picsum.photos/1920/1080",
+    tags: {
+      createMany: {
+        data: formProperties.tags.map((tag) => {
+          return {
+            tagname: tag,
+          };
+        }),
+      },
+    },
+    settings: {
+      create: {
+        response_limit: formProperties.responseCount,
+        response_message: formProperties.responseMessage,
+      },
+    },
     fields: {
       create: formFields.map((field) => {
         const commonData = {
@@ -84,6 +103,8 @@ export const createForm = async ({
           options: true,
         },
       },
+      tags: true,
+      settings: true,
     },
   });
 
@@ -101,6 +122,8 @@ export const getForms = async () => {
     },
     include: {
       form: true,
+      tags: true,
+      settings: true,
       fields: {
         orderBy: {
           index: "asc",
@@ -125,6 +148,8 @@ export const getFormFields = async (formId: string) => {
       form_id: formId,
     },
     include: {
+      tags: true,
+      settings: true,
       form: true,
       fields: {
         orderBy: {

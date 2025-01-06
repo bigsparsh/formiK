@@ -13,8 +13,12 @@ import { draftForm } from "@/actions/Redis";
 export class FormInputManager {
   formFields: FormElement[];
   formProperties: {
-    title?: string;
-    cover?: string;
+    title: string;
+    cover: string;
+    publicVisibility: boolean;
+    tags: string[];
+    responseCount: number;
+    responseMessage: string;
   };
   formJSX: JSX.Element[];
   setParentComponent: SetterOrUpdater<JSX.Element> | null;
@@ -26,7 +30,14 @@ export class FormInputManager {
     this.formFields = [];
     this.setParentComponent = setPc;
     this.formJSX = [];
-    this.formProperties = {};
+    this.formProperties = {
+      title: "Untitled Form",
+      cover: "https://picsum.photos/1920/1080",
+      publicVisibility: false,
+      tags: [],
+      responseCount: 1,
+      responseMessage: "Thanks for the response",
+    };
     this.GoogleSheets = Sheets.get_instance();
     this.draftId = crypto.randomUUID();
     this.addListeners();
@@ -34,6 +45,24 @@ export class FormInputManager {
 
   addListeners() {
     let ctrl_pressed: boolean = false;
+    setInterval(() => {
+      draftForm(
+        {
+          formFields: this.formFields,
+          form_properties: {
+            title: this.formProperties.title || "Untitled Form",
+            cover:
+              this.formProperties.cover || "https://picsum.photos/1920/1080",
+            publicVisibility: this.formProperties.publicVisibility,
+            tags: this.formProperties.tags,
+            responseCount: this.formProperties.responseCount,
+            responseMessage: this.formProperties.responseMessage,
+          },
+        },
+        this.draftId,
+      );
+      console.log("Form saved");
+    }, 1000 * 60);
     document.onkeydown = (e) => {
       if (e.ctrlKey) ctrl_pressed = true;
       else ctrl_pressed = false;
@@ -46,6 +75,10 @@ export class FormInputManager {
               title: this.formProperties.title || "Untitled Form",
               cover:
                 this.formProperties.cover || "https://picsum.photos/1920/1080",
+              publicVisibility: this.formProperties.publicVisibility,
+              tags: this.formProperties.tags,
+              responseCount: this.formProperties.responseCount,
+              responseMessage: this.formProperties.responseMessage,
             },
           },
           this.draftId,
@@ -64,6 +97,10 @@ export class FormInputManager {
       this.instance = new FormInputManager(setPc);
     }
     return this.instance;
+  }
+
+  setPublicVisibility(pv: boolean) {
+    this.formProperties.publicVisibility = pv;
   }
 
   // Sets all the options
@@ -266,8 +303,7 @@ export class FormInputManager {
             field.image as File,
             {
               access: "public",
-              token:
-                "vercel_blob_rw_ZPhL3fptqWzBDjqA_Rb3o9O1rDajr2QtBDy4Qpprd57J5sa",
+              token: process.env.BLOB_READ_WRITE_TOKEN,
             },
           )
         ).url;

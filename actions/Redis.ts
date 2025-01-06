@@ -11,6 +11,10 @@ export const draftForm = async (
     form_properties: {
       title: string;
       cover: string;
+      publicVisibility: boolean;
+      tags: string[];
+      responseCount: number;
+      responseMessage: string;
     };
   },
   form_id: string,
@@ -25,6 +29,7 @@ export const draftForm = async (
   });
   if (!user) throw new Error("No user found");
   const keyname = `draft-${user.id}|${form_id}`;
+  console.log(keyname);
   await client.set(keyname, JSON.stringify(form));
   await client.disconnect();
 };
