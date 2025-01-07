@@ -82,12 +82,12 @@ model Form {
   responses   Response[]
   fields      Field[]
   tags        FormTags[]
-  settings    FromSettings?
+  settings    FormSettings?
   form        GoogleSheet?
   @@index([form_id])
 }
 
-model FromSettings {
+model FormSettings {
   formsettings_id String @id @default(cuid())
   form_id String @unique
   form Form @relation(fields: [form_id], references: [form_id], onDelete: Cascade)

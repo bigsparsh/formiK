@@ -27,6 +27,7 @@ const nextConfig = {
   },
   // Configure `pageExtensions` to include MDX files
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
+  reactStrictMode: false,
 };
 
 export default withMDX(nextConfig);

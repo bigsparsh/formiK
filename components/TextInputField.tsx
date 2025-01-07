@@ -11,7 +11,13 @@ export enum FontFormat {
   UNDERLINE = "UNDERLINE",
 }
 
-const TextInputField = ({ id }: { id: number }) => {
+const TextInputField = ({
+  id,
+  defaultValue,
+}: {
+  id: number;
+  defaultValue?: string;
+}) => {
   const manager = FormInputManager.getInstance();
   const textRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -87,6 +93,7 @@ const TextInputField = ({ id }: { id: number }) => {
         <textarea
           className="w-full py-2 bg-neutral-700 rounded-3xl px-5 outline-none focus:ring-4 ring-neutral-700 duration-200 placeholder:px-5 resize-none"
           placeholder={!isInput ? "Enter text here" : "Enter placeholder here"}
+          defaultValue={defaultValue}
           ref={textRef}
           rows={2}
           onChange={(e) => {

@@ -8,7 +8,7 @@ import { put } from "@vercel/blob";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { SetterOrUpdater } from "recoil";
 import { Sheets } from "./Sheets";
-import { draftForm } from "@/actions/Redis";
+import { draftForm, getDraftFromKey } from "@/actions/Redis";
 
 export class FormInputManager {
   formFields: FormElement[];
@@ -88,15 +88,72 @@ export class FormInputManager {
     };
   }
 
-  static getInstance(setPc?: SetterOrUpdater<JSX.Element>) {
+  static getInstance(setPc?: SetterOrUpdater<JSX.Element>, draftId?: string) {
     if (this.instance && setPc) this.instance = null;
     if (!this.instance) {
       if (!setPc) {
         throw new Error("Parent component and setter is required");
       }
       this.instance = new FormInputManager(setPc);
+      if (draftId) {
+        console.log("Shifting to draft mode");
+        this.instance.draftId = draftId;
+        this.instance.loadDraft();
+      }
     }
     return this.instance;
+  }
+
+  async loadDraft() {
+    const draft: {
+      formFields: FormElement[];
+      form_properties: {
+        title: string;
+        cover: string;
+        publicVisibility: boolean;
+        tags: string[];
+        responseCount: number;
+        responseMessage: string;
+      };
+    } = await getDraftFromKey(this.draftId);
+    this.formProperties = {
+      title: draft.form_properties.title,
+      cover: draft.form_properties.cover,
+      publicVisibility: draft.form_properties.publicVisibility,
+      tags: draft.form_properties.tags,
+      responseCount: draft.form_properties.responseCount,
+      responseMessage: draft.form_properties.responseMessage,
+    };
+    this.formFields = draft.formFields;
+
+    this.formJSX.push(
+      ...this.formFields.map((ele) => {
+        switch (ele.type) {
+          case FieldType.TEXT:
+            return (
+              <TextInputField
+                key={crypto.randomUUID()}
+                id={ele.index}
+                defaultValue={ele.title}
+              />
+            );
+          case FieldType.OPTION:
+            return (
+              <OptionInputField
+                key={crypto.randomUUID()}
+                id={ele.index}
+                options={ele.options}
+                defaultValue={ele.title}
+              />
+            );
+          case FieldType.IMAGE:
+            return <ImageInputField key={crypto.randomUUID()} id={ele.index} />;
+          default:
+            return <></>;
+        }
+      }),
+    );
+    this.update();
   }
 
   setPublicVisibility(pv: boolean) {
@@ -163,8 +220,7 @@ export class FormInputManager {
       this.formProperties.cover = (
         await put("form-cover-" + crypto.randomUUID(), image, {
           access: "public",
-          token:
-            "vercel_blob_rw_ZPhL3fptqWzBDjqA_Rb3o9O1rDajr2QtBDy4Qpprd57J5sa",
+          token: process.env.BLOB_READ_WRITE_TOKEN,
         })
       ).url;
   }

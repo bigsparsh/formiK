@@ -4,7 +4,7 @@ import { FormInputManager } from "@/classes/FormInputManager";
 import NavBar from "@/components/NavBar";
 import { formInputElements } from "@/recoil/atoms";
 import { FieldType, FontSize, TextFieldType } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -52,12 +52,14 @@ const CreateForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [tags, setTags] = useState<string[]>([]);
   const settingRef = useRef<HTMLDialogElement>(null);
+  const path = useSearchParams();
 
   useEffect(() => {
+    const draftId = path.get("draftId");
     if (!manager) {
-      setManager(FormInputManager.getInstance(setFormFields));
+      setManager(FormInputManager.getInstance(setFormFields, draftId!));
     }
-  }, [manager, setFormFields]);
+  }, [manager, path, setFormFields]);
 
   return (
     <div
@@ -153,7 +155,7 @@ const CreateForm = () => {
                 <input
                   type="text"
                   className="py-2 text-lg md:text-2xl xl:text-3xl mix-blend-hard-light bg-neutral-700/50 hover:bg-neutral-700 focus:bg-neutral-700 rounded-r-full px-5 outline-none duration-200 w-2/3 md:w-1/2 text-white font-semibold placeholder-neutral-100"
-                  defaultValue={"Untitled Form"}
+                  defaultValue={manager?.formProperties.title}
                   onChange={(e) => {
                     manager?.setFormTitle(e.target.value);
                   }}

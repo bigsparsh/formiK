@@ -9,6 +9,7 @@ const Draft = async () => {
       cover_image: string;
     };
     formFields: FormElement[];
+    draftId: string;
   }[] = await getDrafts();
   return (
     <div className="bg-neutral-700 flex flex-col p-2 md:p-3 rounded-3xl grow md:mr-3 gap-1 md:gap-2 overflow-auto h-[85vh]">
@@ -46,7 +47,7 @@ const Draft = async () => {
             <div className="flex flex-row md:flex-col gap-1 flex-wrap">
               <Link
                 className="bg-neutral-700 px-3 py-1 flex justify-center text-xs md:text-sm items-center rounded-full gap-2 w-fit"
-                href="/form/create"
+                href={`/form/create?draftId=${form.draftId}`}
               >
                 Continue Creation
               </Link>

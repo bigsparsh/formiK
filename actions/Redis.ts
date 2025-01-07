@@ -34,6 +34,23 @@ export const draftForm = async (
   await client.disconnect();
 };
 
+export const getDraftFromKey = async (key: string) => {
+  const session = await getServerSession();
+  if (!session || !session.user) throw new Error("No session found");
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
+  if (!user) throw new Error("No user found");
+  const client = await createClient().connect();
+  const draft = await client.get(`draft-${user.id}|${key}`);
+  await client.disconnect();
+  const res = JSON.parse(draft as string);
+  console.log(res);
+  return res;
+};
+
 export const getDrafts = async () => {
   const session = await getServerSession();
   if (!session || !session.user) throw new Error("No session found");
@@ -52,10 +69,14 @@ export const getDrafts = async () => {
         cover_image: string;
       };
       formFields: FormElement[];
+      draftId: string;
     }[] = await Promise.all(
       drafts.map(async (draft) => {
         const data = await client.get(draft);
-        return JSON.parse(data as string);
+        return {
+          ...JSON.parse(data as string),
+          draftId: draft.split("|")[1],
+        };
       }),
     );
     await client.disconnect();

@@ -8,9 +8,11 @@ import { FaAsterisk, FaCog } from "react-icons/fa";
 const OptionInputField = ({
   id,
   options,
+  defaultValue,
 }: {
   id: number;
   options: FormElement["options"];
+  defaultValue?: string;
 }) => {
   const [required, setRequired] = useState<boolean>(false);
   const [multiSelect, setMultiSelect] = useState<boolean>(false);
@@ -45,6 +47,7 @@ const OptionInputField = ({
           type="text"
           className="w-full py-2 bg-neutral-700 rounded-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
           placeholder="Enter the title of the field"
+          defaultValue={defaultValue}
           onChange={(e) => {
             manager.setTextToField(id, e.target.value);
           }}
@@ -71,6 +74,7 @@ const OptionInputField = ({
                     type="text"
                     className="w-full py-1 bg-neutral-700 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
                     placeholder={"Option"}
+                    defaultValue={opt.value}
                     onChange={(e) => {
                       manager.setTextToOptionField(
                         id,
