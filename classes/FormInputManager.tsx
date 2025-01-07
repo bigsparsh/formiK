@@ -8,7 +8,7 @@ import { put } from "@vercel/blob";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { SetterOrUpdater } from "recoil";
 import { Sheets } from "./Sheets";
-import { draftForm, getDraftFromKey } from "@/actions/Redis";
+import { draftForm, getDraftFromKey, removeDraft } from "@/actions/Redis";
 
 export class FormInputManager {
   formFields: FormElement[];
@@ -25,6 +25,7 @@ export class FormInputManager {
   static instance: FormInputManager | null;
   GoogleSheets: Sheets;
   draftId: string;
+  saveInterval?: NodeJS.Timeout;
 
   private constructor(setPc: SetterOrUpdater<JSX.Element>) {
     this.formFields = [];
@@ -45,7 +46,7 @@ export class FormInputManager {
 
   addListeners() {
     let ctrl_pressed: boolean = false;
-    setInterval(() => {
+    this.saveInterval = setInterval(() => {
       draftForm(
         {
           formFields: this.formFields,
@@ -350,6 +351,7 @@ export class FormInputManager {
   }
 
   async finalizeForm(cover: File, router: AppRouterInstance) {
+    clearInterval(this.saveInterval);
     await this.setFormCover(cover);
     const updatedFields = this.formFields.map(async (field) => {
       if (field.image) {
@@ -366,11 +368,16 @@ export class FormInputManager {
       }
       return field;
     });
+
     this.formFields = await Promise.all(updatedFields);
+
     const newForm = await createForm({
       formProperties: this.formProperties,
       formFields: this.formFields,
     });
+
+    if (this.draftId) await removeDraft(this.draftId);
+
     await Promise.all([
       this.GoogleSheets.create_sheet(
         this.formProperties.title as string,

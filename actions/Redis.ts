@@ -86,3 +86,22 @@ export const getDrafts = async () => {
     return [];
   }
 };
+
+export const removeDraft = async (draftId: string) => {
+  const session = await getServerSession();
+  if (!session || !session.user) throw new Error("No session found");
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
+  if (!user) throw new Error("No user found");
+
+  const draftStr = `draft-${user.id}|${draftId}`;
+  const client = await createClient().connect();
+
+  await client.del(draftStr);
+
+  await client.disconnect();
+};
