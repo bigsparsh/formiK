@@ -121,7 +121,7 @@ const LiveFormPage = ({
                       className="hidden"
                       radioGroup="this"
                       checked={checked === opt.index}
-                      onChange={() => { }}
+                      onChange={() => {}}
                     />
                     <div className="w-7 h-7 bg-neutral-800/90 "> </div>
                     <label>{opt.value}</label>

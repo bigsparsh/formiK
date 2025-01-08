@@ -12,8 +12,11 @@ const numberValidator = z.string().regex(/^\d+$/);
 export type formResponseState = {
   field_id: string;
   text_type?: TextFieldType;
-  option?: number;
+  option?: number[];
   text?: string;
+  required: boolean;
+  max_char?: number;
+  multi_select?: boolean;
 };
 
 export class FormResponseManager {
@@ -48,13 +51,16 @@ export class FormResponseManager {
     this.form?.fields.map((field) => {
       const commonData = {
         field_id: field.field_id,
+        required: field.required,
+        max_char: field.max_char!,
+        multi_select: field.multi_select!,
       };
 
       switch (field.type) {
         case FieldType.OPTION:
           this.formResponseState.push({
             ...commonData,
-            option: 0,
+            option: [],
           });
           break;
         case FieldType.TEXT:
@@ -74,7 +80,7 @@ export class FormResponseManager {
     });
   }
 
-  checkRadioField(field_id: string, opt_index: number) {
+  checkRadioField(field_id: string, opt_index: number[]) {
     this.formResponseState.forEach((state) => {
       if (state.field_id === field_id) {
         state.option = opt_index;
@@ -95,6 +101,7 @@ export class FormResponseManager {
           field_id: state.field_id,
           text_type: state.text_type,
           option: state.option,
+          required: state.required,
         };
       }
       return state;
@@ -105,6 +112,18 @@ export class FormResponseManager {
     if (!this.form) throw new Error("Form is required");
     try {
       this.formResponseState.map((state) => {
+        if (state.required && state.option === undefined) {
+          if (state.text === "" || state.text === undefined) {
+            throw new Error("Field is required");
+          }
+        }
+        if (state.max_char && state.text) {
+          const max_char = z.string().max(state.max_char);
+          if (max_char.safeParse(state.text).success === false) {
+            throw new Error("Exceeded character limit of " + state.max_char);
+          }
+        }
+
         if (state.text_type) {
           switch (state.text_type) {
             case TextFieldType.NUMBER:
@@ -113,6 +132,7 @@ export class FormResponseManager {
               }
               break;
             case TextFieldType.EMAIL:
+              if (state.text === "" && state.required === false) break;
               if (emailValidator.safeParse(state.text).success === false) {
                 throw new Error("Invalid email");
               }
@@ -132,7 +152,21 @@ export class FormResponseManager {
 
     await this.googleSheets.append_response(
       this.form.form.sheet_id,
-      this.formResponseState,
+      // @ts-expect-error "no"
+      this.formResponseState.map((ele) => {
+        if (ele.option) {
+          return {
+            field_id: ele.field_id,
+            text: ele.text,
+            option: JSON.stringify(ele.option),
+            text_type: ele.text_type,
+            required: ele.required,
+            max_char: ele.max_char,
+            multi_select: ele.multi_select,
+          };
+        }
+        return ele;
+      }),
     );
 
     router.push("/dashboard");

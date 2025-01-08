@@ -146,7 +146,7 @@ model FieldResponse {
   field_response_id String @id @default(cuid())
   field_id          String
   response_id       String
-  option_index      Int?
+  option_index      Int[]
   text              String?
   field             Field    @relation(fields: [field_id], references: [field_id], onDelete: Cascade)
   response          Response @relation(fields: [response_id], references: [response_id], onDelete: Cascade)

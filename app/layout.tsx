@@ -31,6 +31,20 @@ const ma_init = Montserrat_Alternates({
 export const metadata: Metadata = {
   title: "Formik",
   description: "Get your form on",
+  keywords: [
+    "Sparsh Singh",
+    "bigSparsh",
+    "bigsparsh",
+    "Sparsh",
+    "big sparsh",
+    "Big Sparsh",
+    "sparsh project",
+    "sparsh github",
+    "formik",
+    "form creator",
+    "create form",
+    "google form",
+  ],
 };
 
 export default function RootLayout({

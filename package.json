@@ -14,6 +14,7 @@
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
     "@next-auth/prisma-adapter": "0.5.2-next.19",
+    "@next/env": "^15.1.4",
     "@next/mdx": "^14.2.15",
     "@prisma/client": "^5.20.0",
     "@radix-ui/react-icons": "^1.3.0",

@@ -147,6 +147,14 @@ export class FormInputManager {
                 defaultValue={ele.title}
               />
             );
+          case FieldType.TEXT_INPUT:
+            return (
+              <TextInputField
+                key={crypto.randomUUID()}
+                id={ele.index}
+                defaultValue={ele.title}
+              />
+            );
           case FieldType.IMAGE:
             return <ImageInputField key={crypto.randomUUID()} id={ele.index} />;
           default:
@@ -221,7 +229,8 @@ export class FormInputManager {
       this.formProperties.cover = (
         await put("form-cover-" + crypto.randomUUID(), image, {
           access: "public",
-          token: process.env.BLOB_READ_WRITE_TOKEN,
+          token:
+            "vercel_blob_rw_ZPhL3fptqWzBDjqA_Rb3o9O1rDajr2QtBDy4Qpprd57J5sa",
         })
       ).url;
   }
@@ -361,7 +370,8 @@ export class FormInputManager {
             field.image as File,
             {
               access: "public",
-              token: process.env.BLOB_READ_WRITE_TOKEN,
+              token:
+                "vercel_blob_rw_ZPhL3fptqWzBDjqA_Rb3o9O1rDajr2QtBDy4Qpprd57J5sa",
             },
           )
         ).url;

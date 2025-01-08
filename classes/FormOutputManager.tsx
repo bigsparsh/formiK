@@ -109,6 +109,7 @@ export class FormOutputManager {
               options={field.options}
               field_id={field.field_id}
               responseManager={this.formResponseManager}
+              multiSelect={field.multi_select!}
               className={""}
             />,
           );
