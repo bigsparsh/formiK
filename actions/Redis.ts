@@ -5,20 +5,8 @@ import { prisma } from "@/prisma";
 import { getServerSession } from "next-auth";
 import { createClient } from "redis";
 
-export const draftForm = async (
-  form: {
-    formFields: FormElement[];
-    form_properties: {
-      title: string;
-      cover: string;
-      publicVisibility: boolean;
-      tags: string[];
-      responseCount: number;
-      responseMessage: string;
-    };
-  },
-  form_id: string,
-) => {
+export const draftForm = async (formJSON: string, form_id: string) => {
+  const form = JSON.parse(formJSON);
   const client = await createClient().connect();
   const session = await getServerSession();
   if (!session || !session.user) throw new Error("No session found");

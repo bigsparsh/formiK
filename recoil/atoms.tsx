@@ -1,3 +1,4 @@
+import { FormElement } from "@/app/form/create/page";
 import { FormState } from "@/classes/FormOutputManager";
 import React from "react";
 import { atom } from "recoil";
@@ -12,8 +13,13 @@ export const formOutputElements = atom<JSX.Element>({
   default: <></>,
 });
 
-export const formStateAtom = atom<FormState[]>({
-  key: "formStateAtom",
+export const formOutputStateAtom = atom<FormState[]>({
+  key: "formOutputStateAtom",
+  default: [],
+});
+
+export const formInputStateAtom = atom<FormElement[]>({
+  key: "formInputStateAtom",
   default: [],
 });
 

@@ -84,8 +84,8 @@ const LiveForm = () => {
               className="bg-neutral-600 rounded-3xl px-3 md:px-5 py-1 text-white font-medium text-xs md:text-sm flex gap-3 items-center hover:scale-105 duration-200 active:scale-100 outline-none"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  // "https://formik.bigsparsh.com/dashboard/liveform/" +
-                  "http://localhost:3000/dashboard/liveform/" +
+                  "https://formik.bigsparsh.com/dashboard/liveform/" +
+                  // "http://localhost:3000/dashboard/liveform/" +
                   manager?.question_id,
                 );
               }}

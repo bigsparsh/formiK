@@ -52,7 +52,7 @@ export class FormResponseManager {
       const commonData = {
         field_id: field.field_id,
         required: field.required,
-        max_char: field.max_char!,
+        max_size: field.max_size!,
         multi_select: field.multi_select!,
       };
 
@@ -65,7 +65,7 @@ export class FormResponseManager {
           break;
         case FieldType.TEXT:
           break;
-        case FieldType.IMAGE:
+        case FieldType.FILE:
           break;
         case FieldType.TEXT_INPUT:
           this.formResponseState.push({

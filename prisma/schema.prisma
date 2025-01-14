@@ -28,6 +28,7 @@ model User {
 
   forms Form[]
   responses Response[]
+  ratingMappings RatingMapping[]
 
   @@index([id])
 }
@@ -111,16 +112,38 @@ model Field {
   type            FieldType  //common
   title           String // common
   required        Boolean // common
-  image           String? // type: image, text
+  url           String? // type: file, text
   index           Int // common
+  extension       FileExtension? // type: file
   text_field_type TextFieldType? // type: text
   multi_select    Boolean? // type: option
-  max_char        Int? // type: text_input
+  max_size        Int? // type: text_input, file
   options         Option[] // type: option
   field_responses FieldResponse[] 
+  rating_group_id String? // type: rating
   text_style      TextStyle? // type: text
   form            Form        @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
+  rating_mapping  RatingMapping? @relation (fields: [rating_group_id], references: [ratingMapping_id], onDelete: Cascade)
   @@index([field_id])
+}
+
+model RatingMapping {
+  ratingMapping_id String @id @default(cuid())
+  group_name        String
+  user_id           String
+  fields          Field[]
+  rating_labels   RatingLabel[]
+  user            User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@index([ratingMapping_id])
+}
+
+model RatingLabel {
+  ratingLabel_id String @id @default(cuid())
+  label String
+  index Int
+  rating_group_id String
+  ratingGroup RatingMapping @relation(fields: [rating_group_id], references: [ratingMapping_id], onDelete: Cascade)
+  @@index([ratingLabel_id])
 }
 
 model Option {
@@ -175,9 +198,17 @@ model GoogleSheet {
 enum FieldType {
   OPTION
   TEXT
-  TEXT_IMAGE
   TEXT_INPUT
-  IMAGE
+  RATING_GROUP
+  FILE
+}
+
+enum FileExtension {
+  PDF
+  PPT
+  XLSX
+  JPEG
+  PNG
 }
 
 enum TextFieldType {

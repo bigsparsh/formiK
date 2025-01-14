@@ -2,8 +2,13 @@
 
 import { FormInputManager } from "@/classes/FormInputManager";
 import NavBar from "@/components/NavBar";
-import { formInputElements } from "@/recoil/atoms";
-import { FieldType, FontSize, TextFieldType } from "@prisma/client";
+import { formInputElements, formInputStateAtom } from "@/recoil/atoms";
+import {
+  FieldType,
+  FileExtension,
+  FontSize,
+  TextFieldType,
+} from "@prisma/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -15,7 +20,7 @@ import {
   FaTimes,
   FaTrashAlt,
 } from "react-icons/fa";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import CreateInventory from "@/components/CreateInventory";
 import { Input } from "@/components/ui/input";
 
@@ -25,15 +30,17 @@ export type FormElement = {
   required: boolean;
   index: number;
   multi_select?: boolean;
-  max_chars?: number;
+  max_size?: number;
+  url?: string | File;
+  extension?: FileExtension;
   text_style?: {
     bold: boolean;
     italic: boolean;
     underline: boolean;
     size: FontSize;
   };
+  group_id?: string;
   text_field_type?: TextFieldType;
-  image?: string | File;
   options?: {
     value: string;
     index: number;
@@ -42,6 +49,7 @@ export type FormElement = {
 
 const CreateForm = () => {
   const [formFields, setFormFields] = useRecoilState(formInputElements);
+  const formInputState = useSetRecoilState(formInputStateAtom);
   const [manager, setManager] = useState<FormInputManager | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -57,9 +65,11 @@ const CreateForm = () => {
   useEffect(() => {
     const draftId = path.get("draftId");
     if (!manager) {
-      setManager(FormInputManager.getInstance(setFormFields, draftId!));
+      setManager(
+        FormInputManager.getInstance(setFormFields, draftId!, formInputState),
+      );
     }
-  }, [manager, path, setFormFields]);
+  }, [formInputState, manager, path, setFormFields]);
 
   return (
     <div
@@ -263,11 +273,6 @@ const CreateForm = () => {
                       }}
                     />
                   </div>
-                  {
-                    // <button className="work text-xl w-full cursor-pointer py-2 font-semibold">
-                    //   Save Settings
-                    // </button>
-                  }
                 </dialog>
                 <div className="self-start m-4 text-white text-lg md:text-xl xl:text-2xl  flex gap-3">
                   <FaCog
@@ -288,7 +293,15 @@ const CreateForm = () => {
                 <>
                   <div className="border4 border-neutral-800 border-dashed p-5 rounded-xl work text-base md:text-xl font-medium">
                     <FaArrowLeft className="animate-bounce" />
-                    Start adding fields to your form
+                    <li>Start adding fields to your form</li>
+                    <li>
+                      Press{" "}
+                      <div className="px-2 bg-neutral-700 text-neutral-50 inline rounded-xl">
+                        Ctrl + S
+                      </div>{" "}
+                      to save as draft
+                    </li>
+                    <li>Every 1 minute draft will be saved automatically</li>
                   </div>
                 </>
               ) : (

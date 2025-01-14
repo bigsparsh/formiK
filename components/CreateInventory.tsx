@@ -48,6 +48,14 @@ const CreateInventory = ({
         >
           Image
         </button>
+        <button
+          className="rounded-xl px-2 py-1 hover:bg-neutral-700 w-full text-left outline-none"
+          onClick={() => {
+            manager?.addRatingField();
+          }}
+        >
+          Rating
+        </button>
       </div>
       <button
         className="bg-neutral-100 text-neutral-800 py-2 text-base md:text-lg font-medium self-center w-full flex justify-center items-center gap-2"

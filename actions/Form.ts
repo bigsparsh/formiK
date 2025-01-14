@@ -1,14 +1,16 @@
 "use server";
 
 import { FormElement } from "@/app/form/create/page";
+import { RatingGroup } from "@/classes/FormInputManager";
 import { formResponseState } from "@/classes/FormResponseManager";
 import { prisma } from "@/prisma";
-import { FieldType, FontSize, Form } from "@prisma/client";
+import { FieldType, FileExtension, FontSize, Form } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
 export const createForm = async ({
   formProperties,
   formFields,
+  ratingGroups,
 }: {
   formProperties: {
     title?: string;
@@ -19,6 +21,7 @@ export const createForm = async ({
     responseMessage: string;
   };
   formFields: FormElement[];
+  ratingGroups: RatingGroup[];
 }): Promise<Form> => {
   const session = await getServerSession();
   if (!session) throw new Error("User not found: " + session);
@@ -28,75 +31,116 @@ export const createForm = async ({
       email: session.user.email,
     },
   });
-  const data = {
-    user_id: user?.id as string,
-    title: formProperties.title || "Untitled Form",
-    cover_image: formProperties.cover || "https://picsum.photos/1920/1080",
-    tags: {
-      createMany: {
-        data: formProperties.tags.map((tag) => {
-          return {
-            tagname: tag,
+
+  if (!user) throw new Error("User not found: " + session);
+
+  await Promise.all([
+    await prisma.ratingMapping.createManyAndReturn({
+      data: ratingGroups.map((ele) => ({
+        user_id: user.id,
+        group_name: ele.group_name,
+        rating_labels: {
+          createMany: {
+            data: ele.rating_labels.map((ratingGroup) => {
+              return {
+                label: ratingGroup.label,
+                index: ratingGroup.index,
+              };
+            }),
+          },
+        },
+      })),
+    }),
+  ]);
+
+  const newForm = await prisma.form.create({
+    data: {
+      user_id: user?.id as string,
+      title: formProperties.title || "Untitled Form",
+      cover_image: formProperties.cover || "https://picsum.photos/1920/1080",
+      tags: {
+        createMany: {
+          data: formProperties.tags.map((tag) => {
+            return {
+              tagname: tag,
+            };
+          }),
+        },
+      },
+      settings: {
+        create: {
+          response_limit: formProperties.responseCount,
+          response_message: formProperties.responseMessage,
+        },
+      },
+      fields: {
+        create: formFields.map((field) => {
+          const commonData = {
+            index: field.index,
+            title: field.title,
+            required: field.required,
+            type: field.type as FieldType,
           };
+
+          switch (field.type) {
+            case FieldType.TEXT:
+              return {
+                ...commonData,
+                url: field.url as string,
+                text_style: {
+                  create: {
+                    size: field.text_style
+                      ? field.text_style.size
+                      : FontSize.MD,
+                    bold: field.text_style?.bold,
+                    italic: field.text_style?.italic,
+                    underline: field.text_style?.underline,
+                  },
+                },
+              };
+            case FieldType.TEXT_INPUT:
+              return {
+                ...commonData,
+                text_field_type: field.text_field_type,
+                max_size: field.max_size,
+                url: field.url as string,
+                extenstion: field.extension as FileExtension,
+              };
+            case FieldType.FILE:
+              return {
+                ...commonData,
+                url: field.url as string,
+              };
+            case FieldType.OPTION:
+              return {
+                ...commonData,
+                multi_select: field.multi_select,
+                options: {
+                  create: field.options,
+                },
+              };
+            case FieldType.RATING_GROUP:
+              const group_name = ratingGroups.find(
+                (r) => r.group_id === field.group_id,
+              )?.group_name;
+
+              return {
+                ...commonData,
+                rating_group_name: group_name,
+                rating_mapping: {
+                  connect: {
+                    where: {
+                      group_name: group_name,
+                    },
+                  },
+                },
+              };
+            default:
+              throw new Error("Invalid field type: " + field.type);
+          }
         }),
       },
     },
-    settings: {
-      create: {
-        response_limit: formProperties.responseCount,
-        response_message: formProperties.responseMessage,
-      },
-    },
-    fields: {
-      create: formFields.map((field) => {
-        const commonData = {
-          index: field.index,
-          title: field.title,
-          required: field.required,
-          type: field.type as FieldType,
-        };
-
-        switch (field.type) {
-          case FieldType.TEXT:
-            return {
-              ...commonData,
-              image: field.image as string,
-              text_style: {
-                create: {
-                  size: field.text_style ? field.text_style.size : FontSize.MD,
-                  bold: field.text_style?.bold,
-                  italic: field.text_style?.italic,
-                  underline: field.text_style?.underline,
-                },
-              },
-            };
-          case FieldType.TEXT_INPUT:
-            return {
-              ...commonData,
-              text_field_type: field.text_field_type,
-              image: field.image as string,
-            };
-          case FieldType.IMAGE:
-            return {
-              ...commonData,
-              image: field.image as string,
-            };
-          case FieldType.OPTION:
-            return {
-              ...commonData,
-              multi_select: field.multi_select,
-              options: {
-                create: field.options,
-              },
-            };
-          default:
-            throw new Error("Invalid field type: " + field.type);
-        }
-      }),
-    },
-  };
-  const newForm = await prisma.form.create({
-    data,
     include: {
       fields: {
         include: {

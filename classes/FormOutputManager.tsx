@@ -77,7 +77,7 @@ export class FormOutputManager {
             <TextOutputField
               key={crypto.randomUUID()}
               title={field.title}
-              image={field.image as string}
+              image={field.url as string}
               size={field.text_style.size}
               bold={field.text_style.bold}
               italic={field.text_style.italic}
@@ -95,7 +95,7 @@ export class FormOutputManager {
               key={crypto.randomUUID()}
               id={field.field_id}
               title={field.title}
-              image={field.image as string}
+              image={field.url as string}
               className={""}
             />,
           );
@@ -126,11 +126,11 @@ export class FormOutputManager {
           ];
           this.setFormStateSetter();
           break;
-        case FieldType.IMAGE:
+        case FieldType.FILE:
           this.formJSX.push(
             <ImageOutputField
               key={crypto.randomUUID()}
-              src={(field.image as string) || ""}
+              src={(field.url as string) || ""}
               alt={field.title}
               width={500}
               height={500}

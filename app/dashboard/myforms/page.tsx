@@ -16,7 +16,7 @@ const MyForms = async () => {
             <div
               className="flex flex-col gap-0 md:gap-2 h-hull w-full rounded-3xl basis-3/5"
               style={{
-                background: `linear-gradient(135deg, #1e1e1e, transparent), url(${form.cover_image || form.fields.find((field) => field.image)?.image}) ${form.cover_image?.split("/")[2] !== "picsum.photos" ? "center/cover" : "center/cover fixed"}`,
+                background: `linear-gradient(135deg, #1e1e1e, transparent), url(${form.cover_image || form.fields.find((field) => field.url)?.url}) ${form.cover_image?.split("/")[2] !== "picsum.photos" ? "center/cover" : "center/cover fixed"}`,
               }}
             >
               <h1 className="text-xl md:text-2xl font-bold p-3 md:p-5 md:font-medium md:mr-3 mr-10 leading-3 tracking-tight">
@@ -26,7 +26,7 @@ const MyForms = async () => {
             <div className="flex gap-1 items-center justify-evenly basis-1/5 w-full rounded-3xl  border-b border-neutral-500">
               <div className="flex gap-1 md:gap-2 work flex-wrap">
                 <div className="flex gap-2 bg-neutral-700 px-2  rounded-full text-xs md:text-sm">
-                  Images: {form.fields.filter((field) => field.image).length}
+                  Images: {form.fields.filter((field) => field.url).length}
                 </div>
                 <div className="flex gap-2 bg-neutral-700 px-2  rounded-full text-xs md:text-sm">
                   Options:{" "}

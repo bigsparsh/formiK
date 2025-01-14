@@ -9,9 +9,20 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { SetterOrUpdater } from "recoil";
 import { Sheets } from "./Sheets";
 import { draftForm, getDraftFromKey, removeDraft } from "@/actions/Redis";
+import RatingInputField from "@/components/RatingInputField";
+
+export type RatingGroup = {
+  group_id: string;
+  group_name: string;
+  rating_labels: {
+    label: string;
+    index: number;
+  }[];
+};
 
 export class FormInputManager {
   formFields: FormElement[];
+  ratingGroups: RatingGroup[];
   formProperties: {
     title: string;
     cover: string;
@@ -26,11 +37,17 @@ export class FormInputManager {
   GoogleSheets: Sheets;
   draftId: string;
   saveInterval?: NodeJS.Timeout;
+  setInputState: SetterOrUpdater<FormElement[]>;
 
-  private constructor(setPc: SetterOrUpdater<JSX.Element>) {
+  private constructor(
+    setPc: SetterOrUpdater<JSX.Element>,
+    setInputState: SetterOrUpdater<FormElement[]>,
+  ) {
     this.formFields = [];
+    this.ratingGroups = [];
     this.setParentComponent = setPc;
     this.formJSX = [];
+    this.setInputState = setInputState;
     this.formProperties = {
       title: "Untitled Form",
       cover: "https://picsum.photos/1920/1080",
@@ -47,30 +64,9 @@ export class FormInputManager {
   addListeners() {
     let ctrl_pressed: boolean = false;
     this.saveInterval = setInterval(() => {
-      draftForm(
-        {
-          formFields: this.formFields,
-          form_properties: {
-            title: this.formProperties.title || "Untitled Form",
-            cover:
-              this.formProperties.cover || "https://picsum.photos/1920/1080",
-            publicVisibility: this.formProperties.publicVisibility,
-            tags: this.formProperties.tags,
-            responseCount: this.formProperties.responseCount,
-            responseMessage: this.formProperties.responseMessage,
-          },
-        },
-        this.draftId,
-      );
-      console.log("Form saved");
-    }, 1000 * 60);
-    document.onkeydown = (e) => {
-      if (e.ctrlKey) ctrl_pressed = true;
-      else ctrl_pressed = false;
-      if (e.key === "s" && ctrl_pressed) {
-        e.preventDefault();
+      if (this.formFields.length > 0)
         draftForm(
-          {
+          JSON.stringify({
             formFields: this.formFields,
             form_properties: {
               title: this.formProperties.title || "Untitled Form",
@@ -81,21 +77,47 @@ export class FormInputManager {
               responseCount: this.formProperties.responseCount,
               responseMessage: this.formProperties.responseMessage,
             },
-          },
+          }),
           this.draftId,
         );
-        console.log("Form saved");
+    }, 240000);
+    document.onkeydown = (e) => {
+      if (e.ctrlKey) ctrl_pressed = true;
+      else ctrl_pressed = false;
+      if (e.key === "s" && ctrl_pressed) {
+        e.preventDefault();
+        draftForm(
+          JSON.stringify({
+            formFields: this.formFields,
+            form_properties: {
+              title: this.formProperties.title || "Untitled Form",
+              cover:
+                this.formProperties.cover || "https://picsum.photos/1920/1080",
+              publicVisibility: this.formProperties.publicVisibility,
+              tags: this.formProperties.tags,
+              responseCount: this.formProperties.responseCount,
+              responseMessage: this.formProperties.responseMessage,
+            },
+          }),
+          this.draftId,
+        );
       }
     };
   }
 
-  static getInstance(setPc?: SetterOrUpdater<JSX.Element>, draftId?: string) {
+  static getInstance(
+    setPc?: SetterOrUpdater<JSX.Element>,
+    draftId?: string,
+    setInputState?: SetterOrUpdater<FormElement[]>,
+  ) {
     if (this.instance && setPc) this.instance = null;
     if (!this.instance) {
-      if (!setPc) {
-        throw new Error("Parent component and setter is required");
+      if (!setPc || !setInputState) {
+        throw new Error(
+          "Parent component, setter and input state setter is required",
+        );
       }
-      this.instance = new FormInputManager(setPc);
+      this.instance = new FormInputManager(setPc, setInputState);
       if (draftId) {
         console.log("Shifting to draft mode");
         this.instance.draftId = draftId;
@@ -155,7 +177,7 @@ export class FormInputManager {
                 defaultValue={ele.title}
               />
             );
-          case FieldType.IMAGE:
+          case FieldType.FILE:
             return <ImageInputField key={crypto.randomUUID()} id={ele.index} />;
           default:
             return <></>;
@@ -187,10 +209,10 @@ export class FormInputManager {
   // Sets the Image in a field
   setImagePathToField(index: number, file?: File) {
     if (!file) {
-      delete this.formFields[index].image;
+      delete this.formFields[index].url;
       return;
     }
-    this.formFields[index].image = file;
+    this.formFields[index].url = file;
   }
 
   // Sets the size of the text i.e SM, MD, LG, XL
@@ -280,6 +302,109 @@ export class FormInputManager {
     this.update();
   }
 
+  addRatingLabel(group_id: string, index: number) {
+    const rating = this.ratingGroups.find((r) => r.group_id === group_id);
+
+    if (!rating) return;
+
+    rating.rating_labels.push({
+      label: "UT Rating",
+      index: rating.rating_labels.length,
+    });
+
+    this.formJSX[index] = (
+      <RatingInputField
+        key={`rating-${group_id}-${index}`}
+        id={index}
+        group_id={group_id}
+        group_name={rating.group_name as string}
+        rating_labels={rating.rating_labels}
+        rating_headings={this.formFields.filter(
+          (r) => r.group_id === rating.group_id,
+        )}
+      />
+    );
+    this.update();
+  }
+
+  addRatingHeading(group_id: string) {
+    const rating: RatingGroup | undefined = this.ratingGroups.find(
+      (r) => r.group_id === group_id,
+    );
+
+    if (!rating) return;
+
+    const index = this.formFields.length;
+    this.formFields = [
+      ...this.formFields,
+      {
+        group_id,
+        title: "Untitled Rating Heading",
+        required: false,
+        index,
+        type: FieldType.RATING_GROUP,
+      },
+    ];
+
+    this.formJSX = this.formJSX.map((ele) => {
+      if (ele.props.id === index) {
+        return (
+          <RatingInputField
+            key={`rating-${group_id}-${index}`}
+            id={index}
+            group_id={group_id}
+            group_name={rating.group_name}
+            rating_labels={rating.rating_labels}
+            rating_headings={this.formFields.filter(
+              (r) => r.group_id === group_id,
+            )}
+          />
+        );
+      }
+      return ele;
+    });
+    this.update();
+  }
+
+  addRatingField() {
+    const group_id = crypto.randomUUID();
+    this.ratingGroups.push({
+      group_name: "Untitled Rating group",
+      rating_labels: [
+        {
+          index: 0,
+          label: "Rating",
+        },
+      ],
+      group_id,
+    });
+
+    this.formFields.push({
+      type: FieldType.RATING_GROUP,
+      index: this.formFields.length,
+      title: "Untitled Rating Group",
+      group_id,
+      required: false,
+    });
+
+    this.formJSX?.push(
+      <RatingInputField
+        key={this.formFields.length}
+        id={this.formFields.length - 1}
+        group_id={group_id}
+        group_name={"Untitled Rating Group"}
+        rating_labels={[
+          {
+            index: 0,
+            label: "Rating",
+          },
+        ]}
+        rating_headings={[this.formFields[this.formFields.length - 1]]}
+      />,
+    );
+    this.update();
+  }
+
   addOptionField() {
     this.formFields.push({
       type: FieldType.OPTION,
@@ -301,7 +426,7 @@ export class FormInputManager {
 
     this.formJSX?.push(
       <OptionInputField
-        key={crypto.randomUUID()}
+        key={this.formFields.length}
         id={this.formFields.length - 1}
         options={this.formFields[this.formFields.length - 1].options}
       />,
@@ -313,6 +438,7 @@ export class FormInputManager {
     if (!this.setParentComponent) {
       throw new Error("Parent component and setter is required");
     }
+    this.setInputState(() => this.formFields);
     this.setParentComponent(() => <>{this.formJSX?.map((jsx) => jsx)}</>);
   }
 
@@ -333,9 +459,9 @@ export class FormInputManager {
 
     this.formJSX?.push(
       <TextInputField
-        key={crypto.randomUUID()}
+        key={this.formFields.length}
         id={this.formFields.length - 1}
-      ></TextInputField>,
+      />,
     );
 
     this.update();
@@ -343,7 +469,7 @@ export class FormInputManager {
 
   addImageField() {
     this.formFields.push({
-      type: FieldType.IMAGE,
+      type: FieldType.FILE,
       index: this.formFields.length,
       title: "",
       required: false,
@@ -351,9 +477,9 @@ export class FormInputManager {
 
     this.formJSX?.push(
       <ImageInputField
-        key={crypto.randomUUID()}
+        key={this.formFields.length}
         id={this.formFields.length - 1}
-      ></ImageInputField>,
+      />,
     );
 
     this.update();
@@ -363,11 +489,11 @@ export class FormInputManager {
     clearInterval(this.saveInterval);
     await this.setFormCover(cover);
     const updatedFields = this.formFields.map(async (field) => {
-      if (field.image) {
-        field.image = (
+      if (field.url) {
+        field.url = (
           await put(
             "form-image-" + field.index + crypto.randomUUID(),
-            field.image as File,
+            field.url as File,
             {
               access: "public",
               token:
@@ -384,6 +510,7 @@ export class FormInputManager {
     const newForm = await createForm({
       formProperties: this.formProperties,
       formFields: this.formFields,
+      ratingGroups: this.ratingGroups,
     });
 
     if (this.draftId) await removeDraft(this.draftId);

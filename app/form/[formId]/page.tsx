@@ -4,7 +4,11 @@ import { getFormFields } from "@/actions/Form";
 import { FormOutputManager, FormState } from "@/classes/FormOutputManager";
 import NavBar from "@/components/NavBar";
 import Toast from "@/components/Toast";
-import { errorAtom, formOutputElements, formStateAtom } from "@/recoil/atoms";
+import {
+  errorAtom,
+  formOutputElements,
+  formOutputStateAtom,
+} from "@/recoil/atoms";
 import { Field, Form, GoogleSheet, Option, TextStyle } from "@prisma/client";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -35,7 +39,7 @@ const FormPage = ({
   const [manager, setManager] = useState<FormOutputManager>();
   const [toastVisibility, setToastVisibility] = useState<boolean>(false);
   const [error, setError] = useRecoilState<string | null>(errorAtom);
-  const setFormState = useSetRecoilState<FormState[]>(formStateAtom);
+  const setFormState = useSetRecoilState<FormState[]>(formOutputStateAtom);
   const router = useRouter();
 
   const gets = async () => {

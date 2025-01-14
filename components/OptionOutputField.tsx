@@ -2,7 +2,7 @@
 import { FormElement } from "@/app/form/create/page";
 import { FormOutputManager } from "@/classes/FormOutputManager";
 import { FormResponseManager } from "@/classes/FormResponseManager";
-import { formStateAtom } from "@/recoil/atoms";
+import { formOutputStateAtom } from "@/recoil/atoms";
 import { useAnimate, motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaAsterisk, FaCheck, FaCircle } from "react-icons/fa";
@@ -28,7 +28,7 @@ const OptionOutputField = ({
   const [check, animate] = useAnimate();
   const [checked, setChecked] = useState<number[]>([]);
   const manager = FormOutputManager.getInstance();
-  const formState = useRecoilValue(formStateAtom);
+  const formState = useRecoilValue(formOutputStateAtom);
 
   useEffect(() => {
     responseManager.checkRadioField(field_id, checked);
