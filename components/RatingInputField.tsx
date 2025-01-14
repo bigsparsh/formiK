@@ -1,12 +1,10 @@
 "use client";
 import { FormElement } from "@/app/form/create/page";
 import { FormInputManager } from "@/classes/FormInputManager";
-import { formInputStateAtom, formOutputStateAtom } from "@/recoil/atoms";
-import { group } from "console";
+import { formInputStateAtom } from "@/recoil/atoms";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { any } from "zod";
+import { useRecoilValue } from "recoil";
 
 const RatingInputField = ({
   rating_labels,
