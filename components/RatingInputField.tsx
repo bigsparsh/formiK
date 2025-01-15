@@ -33,7 +33,14 @@ const RatingInputField = ({
 
   return (
     <div className="bg-neutral-600 p-5 rounded-3xl work text-white space-y-3">
-      <h1 className="text-2xl font-semibold">{group_name}</h1>
+      <input
+        type="text"
+        className="w-full py-1 bg-neutral-700 rounded-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+        defaultValue={group_name}
+        onChange={(e) => {
+          manager?.setRatingGroupName(group_id, e.target.value);
+        }}
+      />
       {rating_labels && (
         <div
           className="grid place-items-center bg-neutral-700 rounded-3xl border border-neutral-500 "

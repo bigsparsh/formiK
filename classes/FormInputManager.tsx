@@ -11,6 +11,7 @@ import { Sheets } from "./Sheets";
 import { draftForm, getDraftFromKey, removeDraft } from "@/actions/Redis";
 import RatingInputField from "@/components/RatingInputField";
 import cuid from "cuid";
+import { Play } from "next/font/google";
 
 export type RatingGroup = {
   group_id: string;
@@ -186,6 +187,11 @@ export class FormInputManager {
       }),
     );
     this.update();
+  }
+
+  setRatingGroupName(group_id: string, title: string) {
+    const currRating = this.ratingGroups.find((r) => r.group_id === group_id);
+    if (currRating) currRating.group_name = title;
   }
 
   setPublicVisibility(pv: boolean) {
