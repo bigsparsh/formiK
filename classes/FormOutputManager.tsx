@@ -8,6 +8,7 @@ import { SetterOrUpdater } from "recoil";
 import { FormResponseManager } from "./FormResponseManager";
 import TextPromptField from "@/components/TextPromptField";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import RatingOutputField from "@/components/RatingOutputField";
 
 export type FormState = {
   index: number;
@@ -100,6 +101,7 @@ export class FormOutputManager {
             />,
           );
           break;
+
         case FieldType.OPTION:
           this.formJSX.push(
             <OptionOutputField
@@ -126,6 +128,7 @@ export class FormOutputManager {
           ];
           this.setFormStateSetter();
           break;
+
         case FieldType.FILE:
           this.formJSX.push(
             <ImageOutputField
@@ -137,7 +140,21 @@ export class FormOutputManager {
               className={""}
             />,
           );
+          break;
       }
+    });
+
+    console.log(this.formFields);
+    this.formFields.ratingMappings.map((rating) => {
+      this.formJSX.push(
+        <RatingOutputField
+          key={rating.ratingMapping_id}
+          group_id={rating.ratingMapping_id}
+          group_name={rating.group_name}
+          ratingHeadings={rating.fields}
+          ratingLabels={rating.rating_labels}
+        />,
+      );
     });
     this.update();
   }

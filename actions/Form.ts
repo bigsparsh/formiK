@@ -34,34 +34,6 @@ export const createForm = async ({
 
   if (!user) throw new Error("User not found: " + session);
 
-  const [ratingMapping] = await Promise.all([
-    await prisma.ratingMapping.createManyAndReturn({
-      skipDuplicates: true,
-      data: ratingGroups.map((ele) => ({
-        user_id: user.id,
-        group_name: ele.group_name,
-        ratingMapping_id: ele.group_id,
-      })),
-    }),
-  ]);
-
-  ratingGroups.map(async (ele) => {
-    const mapping = ratingMapping.find(
-      (r) => r.ratingMapping_id === ele.group_id,
-    );
-    if (!mapping) return;
-    await prisma.ratingMapping.update({
-      where: {
-        ratingMapping_id: ele.group_id,
-      },
-      data: {
-        rating_labels: {
-          create: ele.rating_labels,
-        },
-      },
-    });
-  });
-
   const newForm = await prisma.form.create({
     data: {
       user_id: user?.id as string,
@@ -81,6 +53,18 @@ export const createForm = async ({
           response_limit: formProperties.responseCount,
           response_message: formProperties.responseMessage,
         },
+      },
+      ratingMappings: {
+        create: ratingGroups.map((ele) => {
+          return {
+            user_id: user.id,
+            group_name: ele.group_name,
+            ratingMapping_id: ele.group_id,
+            rating_labels: {
+              create: ele.rating_labels,
+            },
+          };
+        }),
       },
       fields: {
         create: formFields.map((field) => {
@@ -170,7 +154,26 @@ export const getForms = async () => {
       form: true,
       tags: true,
       settings: true,
+      ratingMappings: {
+        include: {
+          fields: {
+            orderBy: {
+              index: "asc",
+            },
+          },
+          rating_labels: {
+            orderBy: {
+              index: "asc",
+            },
+          },
+        },
+      },
       fields: {
+        where: {
+          NOT: {
+            type: FieldType.RATING_GROUP,
+          },
+        },
         orderBy: {
           index: "asc",
         },
@@ -197,7 +200,26 @@ export const getFormFields = async (formId: string) => {
       tags: true,
       settings: true,
       form: true,
+      ratingMappings: {
+        include: {
+          fields: {
+            orderBy: {
+              index: "asc",
+            },
+          },
+          rating_labels: {
+            orderBy: {
+              index: "asc",
+            },
+          },
+        },
+      },
       fields: {
+        where: {
+          NOT: {
+            type: FieldType.RATING_GROUP,
+          },
+        },
         orderBy: {
           index: "asc",
         },

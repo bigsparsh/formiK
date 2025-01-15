@@ -85,6 +85,7 @@ model Form {
   tags        FormTags[]
   settings    FormSettings?
   form        GoogleSheet?
+  ratingMappings RatingMapping[]
   @@index([form_id])
 }
 
@@ -133,6 +134,8 @@ model RatingMapping {
   user_id           String
   fields          Field[]
   rating_labels   RatingLabel[]
+  form_id         String
+  form            Form @relation(fields: [form_id], references: [form_id], onDelete: Cascade)
   user            User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   @@index([ratingMapping_id])
 }

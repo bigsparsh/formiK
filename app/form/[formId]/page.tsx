@@ -9,7 +9,17 @@ import {
   formOutputElements,
   formOutputStateAtom,
 } from "@/recoil/atoms";
-import { Field, Form, GoogleSheet, Option, TextStyle } from "@prisma/client";
+import {
+  Field,
+  Form,
+  FormSettings,
+  FormTags,
+  GoogleSheet,
+  Option,
+  RatingLabel,
+  RatingMapping,
+  TextStyle,
+} from "@prisma/client";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,11 +29,16 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 export type FullFormType =
   | (Form & {
     form: GoogleSheet;
-  } & {
+    ratingMappings: (RatingMapping & {
+      fields: Field[];
+      rating_labels: RatingLabel[];
+    })[];
     fields: (Field & {
       options: Option[];
       text_style: TextStyle;
     })[];
+    tags: FormTags[];
+    settings: FormSettings;
   })
   | null;
 

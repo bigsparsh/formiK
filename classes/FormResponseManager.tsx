@@ -75,7 +75,7 @@ export class FormResponseManager {
           });
           break;
         default:
-          throw new Error("Invalid field type");
+        // throw new Error("Invalid field type");
       }
     });
   }
