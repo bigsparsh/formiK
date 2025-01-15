@@ -34,24 +34,33 @@ export const createForm = async ({
 
   if (!user) throw new Error("User not found: " + session);
 
-  await Promise.all([
+  const [ratingMapping] = await Promise.all([
     await prisma.ratingMapping.createManyAndReturn({
+      skipDuplicates: true,
       data: ratingGroups.map((ele) => ({
         user_id: user.id,
         group_name: ele.group_name,
-        rating_labels: {
-          createMany: {
-            data: ele.rating_labels.map((ratingGroup) => {
-              return {
-                label: ratingGroup.label,
-                index: ratingGroup.index,
-              };
-            }),
-          },
-        },
+        ratingMapping_id: ele.group_id,
       })),
     }),
   ]);
+
+  ratingGroups.map(async (ele) => {
+    const mapping = ratingMapping.find(
+      (r) => r.ratingMapping_id === ele.group_id,
+    );
+    if (!mapping) return;
+    await prisma.ratingMapping.update({
+      where: {
+        ratingMapping_id: ele.group_id,
+      },
+      data: {
+        rating_labels: {
+          create: ele.rating_labels,
+        },
+      },
+    });
+  });
 
   const newForm = await prisma.form.create({
     data: {
@@ -120,18 +129,11 @@ export const createForm = async ({
                 },
               };
             case FieldType.RATING_GROUP:
-              const group_name = ratingGroups.find(
-                (r) => r.group_id === field.group_id,
-              )?.group_name;
-
               return {
                 ...commonData,
-                rating_group_name: group_name,
                 rating_mapping: {
                   connect: {
-                    where: {
-                      group_name: group_name,
-                    },
+                    ratingMapping_id: field.group_id,
                   },
                 },
               };

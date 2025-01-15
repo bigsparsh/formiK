@@ -10,6 +10,7 @@ import { SetterOrUpdater } from "recoil";
 import { Sheets } from "./Sheets";
 import { draftForm, getDraftFromKey, removeDraft } from "@/actions/Redis";
 import RatingInputField from "@/components/RatingInputField";
+import cuid from "cuid";
 
 export type RatingGroup = {
   group_id: string;
@@ -260,6 +261,13 @@ export class FormInputManager {
   setTextToField(index: number, text: string) {
     this.formFields[index].title = text;
   }
+
+  setRatingLabel(group_id: string, index: number, text: string) {
+    const rating = this.ratingGroups.find((r) => r.group_id === group_id);
+    if (!rating) return;
+    rating.rating_labels[index].label = text;
+  }
+
   editTextFieldType(index: number, fieldType: TextFieldType) {
     this.formFields[index].text_field_type = fieldType;
   }
@@ -367,7 +375,7 @@ export class FormInputManager {
   }
 
   addRatingField() {
-    const group_id = crypto.randomUUID();
+    const group_id = cuid();
     this.ratingGroups.push({
       group_name: "Untitled Rating group",
       rating_labels: [
@@ -438,7 +446,9 @@ export class FormInputManager {
     if (!this.setParentComponent) {
       throw new Error("Parent component and setter is required");
     }
-    this.setInputState(() => this.formFields);
+    this.setInputState(() => {
+      return JSON.parse(JSON.stringify(this.formFields));
+    });
     this.setParentComponent(() => <>{this.formJSX?.map((jsx) => jsx)}</>);
   }
 

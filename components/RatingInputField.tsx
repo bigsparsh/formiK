@@ -52,7 +52,18 @@ const RatingInputField = ({
                         key={ele.index}
                         className="font-semibold w-full h-full border-r border-b border-neutral-500 text-center p-2 rounded-ee-3xl"
                       >
-                        {ele.label}
+                        <input
+                          type="text"
+                          className="w-full py-1 bg-neutral-600 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+                          defaultValue={ele.label}
+                          onChange={(e) => {
+                            manager?.setRatingLabel(
+                              group_id,
+                              ele.index,
+                              e.target.value,
+                            );
+                          }}
+                        />
                       </div>
                     );
                   })}
@@ -65,7 +76,14 @@ const RatingInputField = ({
                     />
                   </button>
                   <div className="font-semibold w-full h-full border-r border-b border-neutral-500 text-center p-2 rounded-ee-3xl">
-                    {heading.title}
+                    <input
+                      type="text"
+                      className="w-full py-1 bg-neutral-600 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+                      defaultValue={heading.title}
+                      onChange={(e) => {
+                        manager?.setTextToField(heading.index, e.target.value);
+                      }}
+                    />
                   </div>
                   {rating_labels.map((ele) => {
                     return (
@@ -88,7 +106,14 @@ const RatingInputField = ({
                     "font-semibold w-full h-full border-r border-b text-center border-neutral-500 rounded-ee-3xl p-2"
                   }
                 >
-                  {heading.title}
+                  <input
+                    type="text"
+                    className="w-full py-1 bg-neutral-600 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+                    defaultValue={heading.title}
+                    onChange={(e) => {
+                      manager?.setTextToField(heading.index, e.target.value);
+                    }}
+                  />
                 </div>
                 {rating_labels.map((ele) => {
                   return (
