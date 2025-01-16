@@ -19,7 +19,7 @@ const Draft = async () => {
             className="bg-neutral-600 rounded-3xl text-neutral-50 px-2 md:px-4 py-2 flex md:flex-row flex-col justify-between md:items-center border border-neutral-500 gap-2"
             key={crypto.randomUUID()}
             style={{
-              background: `linear-gradient(90deg, gray, gray, transparent), url(${form.form_properties.cover_image || (form.formFields.length != 0 && form.formFields.find((field) => field.image)?.image)}) ${form.form_properties.cover_image?.split("/")[2] !== "picsum.photos" ? "center/cover" : "center/cover fixed"}`,
+              background: `linear-gradient(90deg, gray, gray, transparent), url(${form.form_properties.cover_image || (form.formFields.length != 0 && form.formFields.find((field) => field.url)?.url)}) ${form.form_properties.cover_image?.split("/")[2] !== "picsum.photos" ? "center/cover" : "center/cover fixed"}`,
             }}
           >
             <div className="flex flex-col gap-0 md:gap-2">
@@ -28,8 +28,7 @@ const Draft = async () => {
               </h1>
               <div className="flex gap-1 md:gap-2 work flex-wrap">
                 <div className="flex gap-2 bg-neutral-700 px-2  rounded-full text-xs md:text-sm">
-                  Images:{" "}
-                  {form.formFields.filter((field) => field.image).length}
+                  Images: {form.formFields.filter((field) => field.url).length}
                 </div>
                 <div className="flex gap-2 bg-neutral-700 px-2  rounded-full text-xs md:text-sm">
                   Options:{" "}
