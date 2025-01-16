@@ -16,6 +16,7 @@ export type formResponseState = {
   text?: string;
   required: boolean;
   max_char?: number;
+  group_id?: string;
   multi_select?: boolean;
 };
 
@@ -74,8 +75,15 @@ export class FormResponseManager {
             text: "",
           });
           break;
+        case FieldType.RATING_GROUP:
+          this.formResponseState.push({
+            ...commonData,
+            group_id: field.rating_group_id as string,
+            option: [],
+          });
+          break;
         default:
-        // throw new Error("Invalid field type");
+          throw new Error("Invalid field type: " + field.type);
       }
     });
   }
@@ -158,7 +166,10 @@ export class FormResponseManager {
           return {
             field_id: ele.field_id,
             text: ele.text,
-            option: JSON.stringify(ele.option),
+            option:
+              ele.option.length > 1
+                ? JSON.stringify(ele.option)
+                : ele.option[0],
             text_type: ele.text_type,
             required: ele.required,
             max_char: ele.max_char,

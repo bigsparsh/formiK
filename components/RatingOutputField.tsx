@@ -1,7 +1,10 @@
+"use client";
+import { FormResponseManager } from "@/classes/FormResponseManager";
 import { Field, RatingLabel } from "@prisma/client";
 
 const RatingOutputField = ({
-  _group_id,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  group_id,
   group_name,
   ratingHeadings,
   ratingLabels,
@@ -11,6 +14,7 @@ const RatingOutputField = ({
   ratingHeadings: Field[];
   ratingLabels: RatingLabel[];
 }) => {
+  const manager = FormResponseManager.getInstance();
   return (
     <div className="flex flex-col rounded-3xl overflow-clip border border-neutral-700 bg-neutral-700">
       <h1
@@ -48,6 +52,13 @@ const RatingOutputField = ({
                       type="radio"
                       name={heading.field_id}
                       className="accent-neutral-300"
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          manager.checkRadioField(heading.field_id, [
+                            label.index,
+                          ]);
+                        }
+                      }}
                     />
                   </div>
                 );

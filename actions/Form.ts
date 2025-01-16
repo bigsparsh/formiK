@@ -215,11 +215,6 @@ export const getFormFields = async (formId: string) => {
         },
       },
       fields: {
-        where: {
-          NOT: {
-            type: FieldType.RATING_GROUP,
-          },
-        },
         orderBy: {
           index: "asc",
         },

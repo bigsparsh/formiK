@@ -57,16 +57,25 @@ const CreateInventory = ({
           Rating
         </button>
       </div>
-      <button
-        className="bg-neutral-100 text-neutral-800 py-2 text-base md:text-lg font-medium self-center w-full flex justify-center items-center gap-2"
-        onClick={() => {
-          setLoading(true);
-          manager?.finalizeForm(fileRef.current?.files?.[0] as File, router);
-        }}
-      >
-        {loading && <FaCircleNotch className="animate-spin" />}
-        Finalize Form
-      </button>
+      {loading ? (
+        <button
+          className="bg-neutral-100 text-neutral-800 py-2 text-base md:text-lg font-medium self-center w-full flex justify-center items-center gap-2"
+          disabled
+        >
+          <FaCircleNotch className="animate-spin" />
+          Finalize Form
+        </button>
+      ) : (
+        <button
+          className="bg-neutral-100 text-neutral-800 py-2 text-base md:text-lg font-medium self-center w-full flex justify-center items-center gap-2"
+          onClick={() => {
+            setLoading(true);
+            manager?.finalizeForm(fileRef.current?.files?.[0] as File, router);
+          }}
+        >
+          Finalize Form
+        </button>
+      )}
     </div>
   );
 };

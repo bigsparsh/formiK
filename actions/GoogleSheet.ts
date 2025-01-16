@@ -55,14 +55,16 @@ export const create_sheet = async (
               .filter(
                 (ele) =>
                   ele.type === FieldType.OPTION ||
-                  ele.type === FieldType.TEXT_INPUT,
+                  ele.type === FieldType.TEXT_INPUT ||
+                  ele.type === FieldType.RATING_GROUP,
               )
               .map((ele) => {
-                switch (ele.type) {
-                  case FieldType.TEXT_INPUT:
-                  case FieldType.OPTION:
-                    return `${ele.title.slice(0, 10)} [${ele.type} ${ele.index}]`;
-                }
+                // switch (ele.type) {
+                //   case FieldType.TEXT_INPUT:
+                //   case FieldType.RATING_GROUP:
+                //   case FieldType.OPTION:
+                return `${ele.title.slice(0, 10)} [${ele.type} ${ele.index}]`;
+                // }
               }),
           ],
         ],
