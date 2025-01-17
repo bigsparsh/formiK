@@ -91,8 +91,9 @@ body {
 }
 ::-webkit-scrollbar {
   @apply w-2;
+  @apply h-2;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-neutral-700;
+  @apply bg-neutral-800;
   @apply rounded-xl;
 }

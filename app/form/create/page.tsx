@@ -112,7 +112,7 @@ const CreateForm = () => {
               </button>
               {manager && (
                 <CreateInventory
-                  className="bg-neutral-600 mb-20 rounded-r-3xl overflow-clip text-white work sticky top-12 h-fit "
+                  className="bg-neutral-600 mb-20 rounded-r-3xl overflow-clip text-white work sticky top-12 h-fit min-w-[200px] "
                   manager={manager}
                   router={router}
                   fileRef={fileRef}
@@ -125,7 +125,7 @@ const CreateForm = () => {
         </AnimatePresence>
         {manager && (
           <CreateInventory
-            className="hidden md:block basis-1/6 bg-neutral-600 mb-20 rounded-r-3xl overflow-clip text-white work sticky top-12 h-fit "
+            className="hidden md:block basis-1/6 bg-neutral-600 mb-20 rounded-r-3xl overflow-clip text-white work sticky top-12 h-fit min-w-[200px] "
             manager={manager}
             router={router}
             fileRef={fileRef}

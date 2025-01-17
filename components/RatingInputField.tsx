@@ -32,36 +32,35 @@ const RatingInputField = ({
   }, [formElements, group_id, manager, rating_headings]);
 
   return (
-    <div className="bg-neutral-600 p-5 rounded-3xl work text-white space-y-3">
-      <input
-        type="text"
-        className="w-full py-1 bg-neutral-700 rounded-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+    <div className="bg-neutral-600 p-2 md:p-3 rounded-3xl work text-white flex flex-col gap-2 md:gap-3">
+      <textarea
+        className="w-full py-1 bg-neutral-700 rounded-3xl px-5 text-sm md:text-base outline-none focus:ring-4 ring-neutral-700 duration-200"
         defaultValue={group_name}
         onChange={(e) => {
           manager?.setRatingGroupName(group_id, e.target.value);
         }}
-      />
+      ></textarea>
       {rating_labels && (
         <div
-          className="grid place-items-center bg-neutral-700 rounded-3xl border border-neutral-500 "
+          className="flex flex-col bg-neutral-700 rounded-3xl  overflow-x-auto"
           style={{
             gridTemplateColumns: `repeat(${rating_labels.length + 2}, minmax(0, 1fr))`,
           }}
         >
           {headings.map((heading, index) => {
-            if (index === 0) {
-              return (
-                <>
-                  <div className="w-full h-full border-r border-b border-neutral-500 rounded-ee-3xl"></div>
+            return index === 0 ? (
+              <>
+                <div className="flex group relative">
+                  <div className="w-full h-full p-2 rounded-ee-3xl min-w-[150px] max-w-[200px]"></div>
                   {rating_labels.map((ele) => {
                     return (
                       <div
                         key={ele.index}
-                        className="font-semibold w-full h-full border-r border-b border-neutral-500 text-center p-2 rounded-ee-3xl"
+                        className="font-semibold w-full h-full border-r border-b border-neutral-500 text-center p-2 rounded-ee-3xl min-w-[150px] max-w-[200px]"
                       >
                         <input
                           type="text"
-                          className="w-full py-1 bg-neutral-600 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+                          className="text-sm md:text-base w-full py-1 bg-neutral-600 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
                           defaultValue={ele.label}
                           onChange={(e) => {
                             manager?.setRatingLabel(
@@ -74,18 +73,20 @@ const RatingInputField = ({
                       </div>
                     );
                   })}
-                  <button className="p-2">
+                  <button className="sticky group-hover:grid p-2 min-w-[50px] hidden right-0 top-0 place-items-center">
                     <FaPlus
-                      className={` text-3xl rounded-xl p-2 bg-neutral-600`}
+                      className={` text-3xl rounded-xl p-2 bg-neutral-800`}
                       onClick={() => {
                         manager?.addRatingLabel(group_id, id);
                       }}
                     />
                   </button>
-                  <div className="font-semibold w-full h-full border-r border-b border-neutral-500 text-center p-2 rounded-ee-3xl">
+                </div>
+                <div className="flex">
+                  <div className="font-semibold w-full h-full border-r border-b border-neutral-500 text-center p-2 rounded-ee-3xl min-w-[150px] max-w-[200px]">
                     <input
                       type="text"
-                      className="w-full py-1 bg-neutral-600 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+                      className="text-sm md:text-base w-full py-1 bg-neutral-600 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
                       defaultValue={heading.title}
                       onChange={(e) => {
                         manager?.setTextToField(heading.index, e.target.value);
@@ -96,26 +97,21 @@ const RatingInputField = ({
                     return (
                       <div
                         key={ele.index}
-                        className="w-full h-full text-center border-r border-b border-neutral-500 p-2 rounded-ee-3xl"
+                        className="w-full h-full p-2 md:p-3 text-center border-r border-b border-neutral-500 rounded-ee-3xl min-w-[150px] max-w-[200px]"
                       >
                         <input type="radio" disabled />
                       </div>
                     );
                   })}
                   <div></div>
-                </>
-              );
-            }
-            return (
-              <>
-                <div
-                  className={
-                    "font-semibold w-full h-full border-r border-b text-center border-neutral-500 rounded-ee-3xl p-2"
-                  }
-                >
+                </div>
+              </>
+            ) : (
+              <div className="flex">
+                <div className="peer font-semibold w-full h-full border-r border-b border-neutral-500 text-center p-2 rounded-ee-3xl min-w-[150px] max-w-[200px]">
                   <input
                     type="text"
-                    className="w-full py-1 bg-neutral-600 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
+                    className="text-sm md:text-base w-full py-1 bg-neutral-600 rounded-r-full px-5 outline-none focus:ring-4 ring-neutral-700 duration-200"
                     defaultValue={heading.title}
                     onChange={(e) => {
                       manager?.setTextToField(heading.index, e.target.value);
@@ -126,24 +122,23 @@ const RatingInputField = ({
                   return (
                     <div
                       key={ele.index}
-                      className="w-full h-full text-center border-r border-b border-neutral-500 p-2 rounded-ee-3xl"
+                      className="w-full h-full p-2 md:p-3 text-center border-r border-b border-neutral-500 rounded-ee-3xl min-w-[150px] max-w-[200px]"
                     >
                       <input type="radio" disabled />
                     </div>
                   );
                 })}
-                <div></div>
-              </>
+              </div>
             );
           })}
-          <button className="p-2">
+          <div className="sticky grid p-2 min-w-[50px] left-0 bottom-0 place-items-center">
             <FaPlus
-              className="text-3xl rounded-xl p-2 bg-neutral-600 "
+              className="text-3xl rounded-xl p-2 bg-neutral-600 cursor-pointer"
               onClick={() => {
                 manager?.addRatingHeading(group_id);
               }}
             />
-          </button>
+          </div>
         </div>
       )}
     </div>
