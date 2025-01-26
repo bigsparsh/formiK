@@ -175,11 +175,11 @@ const CreateForm = () => {
                   className="rounded-3xl bg-neutral-700 outline-none text-white max-w-md w-full border-4 border-neutral-700 shadow-2xl shadow-black duration-200"
                 >
                   <div className="flex justify-between items-center bg-neutral-700 px-3 md:px-5 py-2 md:py-3">
-                    <div className="text-xl md:text-2xl font-semibold flex gap-2 items-center">
+                    <div className="text-base md:text-xl font-semibold flex gap-2 items-center">
                       <FaCog /> Form Settings
                     </div>
                     <FaTimes
-                      className="text-2xl cursor-pointer opacity-50"
+                      className="md:text-2xl text-xl cursor-pointer opacity-50"
                       onClick={() => {
                         settingRef.current?.close();
                       }}
@@ -212,7 +212,7 @@ const CreateForm = () => {
                         {tags.map((tag, index) => {
                           return (
                             <div
-                              className="text-neutral-50 bg-neutral-700 rounded-full px-2 flex gap-2 items-center group border border-transparent hover:border-red-500 cursor-pointer hover:text-red-500"
+                              className="text-neutral-50 text-xs md:text-sm bg-neutral-700 rounded-full px-2 flex gap-2 items-center group border border-transparent hover:border-red-500 cursor-pointer hover:text-red-500"
                               key={index}
                               onClick={() => {
                                 const r = tags.filter((r) => r !== tag);

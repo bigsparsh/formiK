@@ -9,13 +9,13 @@ const Dashboard = async ({ children }: { children: JSX.Element }) => {
   if (!session) redirect("/auth");
   return (
     <div
-      className="ma h-screen overflow-hidden"
+      className="ma h-screen overflow-clip"
       style={{
         background:
           "linear-gradient(#ffffff10 10%, transparent 10%) 0 0/ 15px 15px , linear-gradient(90deg, #ffffff10 10%, transparent 10%) 0 0/ 15px 15px, radial-gradient(120% 150% at 50% 50%,transparent, #ffffff50), linear-gradient(60deg, gray 10% 40%, transparent 50% 60%, gray 70% 100%) ,radial-gradient(25% 100% at 50% 10%, lightgray, gray)",
       }}
     >
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col">
         <NavBar />
         <div className="grow flex md:flex-row flex-col relative gap-2 p-2 md:p-0">
           <div className="md:basis-1/4 xl:basis-1/6 bg-neutral-700 p-2 rounded-3xl md:rounded-l-none md:mb-20 h-fit">

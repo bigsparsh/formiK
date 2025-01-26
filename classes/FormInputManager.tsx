@@ -11,7 +11,6 @@ import { Sheets } from "./Sheets";
 import { draftForm, getDraftFromKey, removeDraft } from "@/actions/Redis";
 import RatingInputField from "@/components/RatingInputField";
 import cuid from "cuid";
-import { Play } from "next/font/google";
 
 export type RatingGroup = {
   group_id: string;
@@ -256,7 +255,7 @@ export class FormInputManager {
     if (!image) this.formProperties.cover = "https://picsum.photos/1920/1080";
     else
       this.formProperties.cover = (
-        await put("form-cover-" + crypto.randomUUID(), image, {
+        await put("formik/form-cover-" + crypto.randomUUID(), image, {
           access: "public",
           token:
             "vercel_blob_rw_ZPhL3fptqWzBDjqA_Rb3o9O1rDajr2QtBDy4Qpprd57J5sa",
@@ -508,7 +507,7 @@ export class FormInputManager {
       if (field.url) {
         field.url = (
           await put(
-            "form-image-" + field.index + crypto.randomUUID(),
+            "formik/form-image-" + field.index + crypto.randomUUID(),
             field.url as File,
             {
               access: "public",
