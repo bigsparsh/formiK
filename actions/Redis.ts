@@ -3,13 +3,11 @@
 import { FormElement } from "@/app/form/create/page";
 import { prisma } from "@/prisma";
 import { getServerSession } from "next-auth";
-import { createClient } from "redis";
+import valkey from "ioredis";
 
 export const draftForm = async (formJSON: string, form_id: string) => {
   const form = JSON.parse(formJSON);
-  const client = await createClient({
-    url: process.env.REDIS_URL,
-  }).connect();
+  const client = new valkey(process.env.REDIS_URL as string);
   const session = await getServerSession();
   if (!session || !session.user) throw new Error("No session found");
   const user = await prisma.user.findUnique({
@@ -21,7 +19,6 @@ export const draftForm = async (formJSON: string, form_id: string) => {
   const keyname = `draft-${user.id}|${form_id}`;
   console.log(keyname);
   await client.set(keyname, JSON.stringify(form));
-  await client.disconnect();
 };
 
 export const getDraftFromKey = async (key: string) => {
@@ -33,11 +30,8 @@ export const getDraftFromKey = async (key: string) => {
     },
   });
   if (!user) throw new Error("No user found");
-  const client = await createClient({
-    url: process.env.REDIS_URL,
-  }).connect();
+  const client = new valkey(process.env.REDIS_URL as string);
   const draft = await client.get(`draft-${user.id}|${key}`);
-  await client.disconnect();
   const res = JSON.parse(draft as string);
   console.log(res);
   return res;
@@ -52,9 +46,7 @@ export const getDrafts = async () => {
     },
   });
   if (!user) throw new Error("No user found");
-  const client = await createClient({
-    url: process.env.REDIS_URL,
-  }).connect();
+  const client = new valkey(process.env.REDIS_URL as string);
   const drafts = await client.keys(`draft-${user.id}|*`);
   try {
     const draftsData: {
@@ -73,10 +65,8 @@ export const getDrafts = async () => {
         };
       }),
     );
-    await client.disconnect();
     return draftsData;
   } catch (_) {
-    await client.disconnect();
     return [];
   }
 };
@@ -93,11 +83,7 @@ export const removeDraft = async (draftId: string) => {
   if (!user) throw new Error("No user found");
 
   const draftStr = `draft-${user.id}|${draftId}`;
-  const client = await createClient({
-    url: process.env.REDIS_URL,
-  }).connect();
+  const client = new valkey(process.env.REDIS_URL as string);
 
   await client.del(draftStr);
-
-  await client.disconnect();
 };
