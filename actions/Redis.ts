@@ -33,7 +33,9 @@ export const getDraftFromKey = async (key: string) => {
     },
   });
   if (!user) throw new Error("No user found");
-  const client = await createClient().connect();
+  const client = await createClient({
+    url: process.env.REDIS_URL,
+  }).connect();
   const draft = await client.get(`draft-${user.id}|${key}`);
   await client.disconnect();
   const res = JSON.parse(draft as string);
@@ -50,7 +52,9 @@ export const getDrafts = async () => {
     },
   });
   if (!user) throw new Error("No user found");
-  const client = await createClient().connect();
+  const client = await createClient({
+    url: process.env.REDIS_URL,
+  }).connect();
   const drafts = await client.keys(`draft-${user.id}|*`);
   try {
     const draftsData: {
@@ -89,7 +93,9 @@ export const removeDraft = async (draftId: string) => {
   if (!user) throw new Error("No user found");
 
   const draftStr = `draft-${user.id}|${draftId}`;
-  const client = await createClient().connect();
+  const client = await createClient({
+    url: process.env.REDIS_URL,
+  }).connect();
 
   await client.del(draftStr);
 
