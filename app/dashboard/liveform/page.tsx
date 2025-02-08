@@ -44,7 +44,7 @@ const LiveForm = () => {
   }, [router, setFormJSX, socket, wsId]);
 
   return (
-    <div className="bg-neutral-700 h-full grow overflow-scroll rounded-tl-3xl p-2 md:p-5 flex flex-col items-center">
+    <div className="bg-neutral-700 h-screen grow overflow-scroll rounded-tl-3xl p-2 md:p-5 flex flex-col items-center">
       <h1 className="font-semibold text-lg md:text-2xl text-neutral-50 self-start px-3">
         Create your live Poll
       </h1>

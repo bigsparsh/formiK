@@ -22,11 +22,6 @@ const ma_init = Montserrat_Alternates({
   variable: "--font-ma",
   display: "block",
 });
-// const ibmSerif = IBM_Plex_Serif({
-//   subsets: ["latin"],
-//   weight: ["100", "200", "300", "400", "500", "600", "700"],
-//   variable: "--font-ibm-serif",
-// });
 
 export const metadata: Metadata = {
   title: "Formik",
@@ -41,6 +36,7 @@ export const metadata: Metadata = {
     "sparsh project",
     "sparsh github",
     "formik",
+    "formik bigsparsh",
     "form creator",
     "create form",
     "google form",
