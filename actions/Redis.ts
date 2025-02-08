@@ -7,7 +7,9 @@ import { createClient } from "redis";
 
 export const draftForm = async (formJSON: string, form_id: string) => {
   const form = JSON.parse(formJSON);
-  const client = await createClient().connect();
+  const client = await createClient({
+    url: process.env.REDIS_URL,
+  }).connect();
   const session = await getServerSession();
   if (!session || !session.user) throw new Error("No session found");
   const user = await prisma.user.findUnique({
